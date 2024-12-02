@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Catamaran } from "next/font/google";
+import SidePanel from "@/components/shared/SidePanel";
+import NextTopLoader from "nextjs-toploader";
 import "../globals.css";
+import MobileHeader from "@/components/shared/MobileHeader";
 
 const catamaran = Catamaran({
 	subsets: ["latin"],
@@ -20,8 +23,15 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body className={` ${catamaran.variable} font-catamaran antialiased`}>
-				{children}
+			<body
+				className={` ${catamaran.variable} font-catamaran antialiased flex flex-col lg:flex-row`}>
+				<NextTopLoader
+					color="#ED3237"
+					shadow="0 0 10px #ED3237,0 0 5px #ED3237"
+				/>
+				<MobileHeader />
+				<SidePanel />
+				<main className="grow px-5 md:px-[25px] bg-[#F6F6F6]">{children}</main>
 			</body>
 		</html>
 	);
