@@ -7,13 +7,13 @@ import React from "react";
 export default function CampaignHeader() {
 	return (
 		<section className="w-full h-[10rem] flex items-center justify-between">
-			<h4 className="text-[2.5rem] md:text-[3rem] font-black">All Campaigns</h4>
-			<div className="w-[200px]">
+			<h4 className="text-[2rem] md:text-[3rem] font-black">All Campaigns</h4>
+			<div className="w-[150px] md:w-[200px]">
 				<Link href={"/campaigns/create"}>
 					<AppButton fullyRounded>
-						<div className="flex items-center gap-x-5">
+						<div className="flex items-center gap-x-2 md:gap-x-5">
 							<PlusIcon />
-							<span className="text-[1.7rem] font-medium">New Campaign</span>
+							<span className="md:text-[1.7rem] font-medium">New Campaign</span>
 						</div>
 					</AppButton>
 				</Link>

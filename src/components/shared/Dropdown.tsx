@@ -17,6 +17,11 @@ type DropdownProps<T> = {
 	renderItem: (val: RenderItemParams<T>) => React.JSX.Element;
 	renderButton: (val: RenderButtonParams) => React.JSX.Element;
 	dropdownWidth?: string;
+	bordered?: boolean;
+	top?: number;
+	left?: number;
+	right?: number;
+	bottom?: number;
 };
 
 export default function Dropdown<T>({
@@ -24,6 +29,11 @@ export default function Dropdown<T>({
 	renderItem,
 	renderButton,
 	dropdownWidth = "100%",
+	bordered,
+	top = 115,
+	left,
+	right,
+	bottom,
 }: DropdownProps<T>) {
 	const [open, setOpen] = useState(false);
 	const containerRef = useRef(null);
@@ -38,8 +48,16 @@ export default function Dropdown<T>({
 			className="relative h-full flex items-center justify-center">
 			{renderButton({ open, setOpen })}
 			<div
-				style={{ width: dropdownWidth }}
-				className={`absolute top-[115%] h-max overflow-visible rounded-lg bg-white shadow-lg transition-all duration-200 before:border-transparent before:border-[8px]  z-[99999999999] flex items-center justify-center ${
+				style={{
+					width: dropdownWidth,
+					top: `${top}%`,
+					bottom: `${bottom}%`,
+					left: `${left}%`,
+					right: `${right}%`,
+				}}
+				className={`absolute  h-max overflow-visible rounded-lg bg-white shadow-lg transition-all duration-200  z-[99999999999] flex items-center justify-center ${
+					bordered ? "border border-gray-200" : "border-0"
+				} ${
 					open
 						? "scale-100 opacity-100 pointer-events-auto"
 						: "scale-75 opacity-0 pointer-events-none"

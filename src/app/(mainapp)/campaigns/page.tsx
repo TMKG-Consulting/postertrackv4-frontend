@@ -6,7 +6,7 @@ export default function page() {
 	return (
 		<>
 			<CampaignHeader />
-			<section className="bg-white rounded-2xl border border-[#E2E2E2]">
+			<section className="bg-white rounded-2xl border border-[#E2E2E2] h-[70vh] max-h-[70vh]">
 				<CampaignsTable />
 			</section>
 		</>

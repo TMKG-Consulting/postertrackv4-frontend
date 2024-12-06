@@ -6,7 +6,7 @@ import HamburgerIcon from "./icons/HamburgerIcon";
 
 export default function MobileHeader() {
 	return (
-		<header className="bg-appBlack h-[7rem] flex items-center justify-between lg:hidden px-8 sticky top-0">
+		<header className="bg-appBlack h-[7rem] flex items-center justify-between lg:hidden px-8 sticky top-0 z-[2]">
 			<div className="flex items-center gap-x-5">
 				<Image
 					src={"/poster-track-logo.png"}
