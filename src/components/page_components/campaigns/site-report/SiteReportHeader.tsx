@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import Link from "next/link";
 import AppButton from "@/components/shared/AppButton";
@@ -7,7 +8,7 @@ export default function SiteReportHeader() {
 	return (
 		<section className="w-full h-[15rem] md:h-[10rem] flex flex-col md:flex-row md:items-center justify-center gap-y-10 md:justify-between border-b border-b-[#C7C7C7">
 			<div className="w-full flex items-center justify-between md:justify-start gap-5">
-				<Link href="/campaigns">
+				<Link href="/campaigns/details/fhfhf">
 					<AppButton
 						fullyRounded
 						className="!w-[82px] !h-[39px] gap-x-3 !bg-transparent border-appBlack border-[1.5px]">
