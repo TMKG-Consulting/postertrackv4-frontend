@@ -26,6 +26,7 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body
+				id="body"
 				className={` ${catamaran.variable} font-catamaran antialiased flex flex-col lg:flex-row`}>
 				<RootProvider>
 					<NextTopLoader

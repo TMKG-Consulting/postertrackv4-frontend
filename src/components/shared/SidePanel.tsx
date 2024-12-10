@@ -50,7 +50,7 @@ export default function SidePanel() {
 					<span className="text-white text-3xl font-medium">Campaigns</span>
 				</Link>
 				<Link
-					href={"/campaigns"}
+					href={"/advertisers"}
 					className={`flex items-center gap-5 h-[40px] rounded-lg px-5 ${
 						isAdvertisers ? "bg-[#2A2625D4]" : "bg-transparent"
 					}`}>
@@ -58,7 +58,7 @@ export default function SidePanel() {
 					<span className="text-white text-3xl font-medium">Advertisers</span>
 				</Link>
 				<Link
-					href={"/campaigns"}
+					href={"/account-managers"}
 					className={`flex items-center gap-5 h-[40px] rounded-lg px-5 ${
 						isAccountManagers ? "bg-[#2A2625D4]" : "bg-transparent"
 					}`}>
@@ -68,7 +68,7 @@ export default function SidePanel() {
 					</span>
 				</Link>
 				<Link
-					href={"/campaigns"}
+					href={"/field-auditors"}
 					className={`flex items-center gap-5 h-[40px] rounded-lg px-5 ${
 						isFieldAuditors ? "bg-[#2A2625D4]" : "bg-transparent"
 					}`}>
@@ -78,7 +78,7 @@ export default function SidePanel() {
 					</span>
 				</Link>
 				<Link
-					href={"/campaigns"}
+					href={"/reports"}
 					className={`flex items-center gap-5 h-[40px] rounded-lg px-5 ${
 						isReports ? "bg-[#2A2625D4]" : "bg-transparent"
 					}`}>

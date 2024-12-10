@@ -55,7 +55,7 @@ export default function Dropdown<T>({
 					left: `${left}%`,
 					right: `${right}%`,
 				}}
-				className={`absolute  h-max overflow-visible rounded-lg bg-white shadow-lg transition-all duration-200  z-[99999999999] flex items-center justify-center ${
+				className={`absolute  h-max overflow-visible rounded-lg bg-white shadow-lg transition-all duration-200  z-[999999] flex items-center justify-center ${
 					bordered ? "border border-gray-200" : "border-0"
 				} ${
 					open

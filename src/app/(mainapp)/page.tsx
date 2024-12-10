@@ -1,8 +1,11 @@
 import DashboardHeader from "@/components/page_components/dashboard/DashboardHeader";
 import PendingSiteUploads from "@/components/page_components/dashboard/PendingSiteUploads";
 import ClientsIcon from "@/components/shared/icons/ClientsIcon";
+import AdvertisersIcon from "@/components/shared/icons/AdvertisersIcon";
 import Link from "next/link";
 import React from "react";
+import TotalSitesIcon from "@/components/shared/icons/TotalSitesIcon";
+import TotalCampaignsIcon from "@/components/shared/icons/TotalCampaignsIcon";
 
 export default function page() {
 	return (
@@ -12,7 +15,7 @@ export default function page() {
 				<div className="w-full h-[128px] rounded-2xl bg-white p-8">
 					<div className="flex items-center justify-between">
 						<span className="text-[1.8rem] font-semibold text-appBlack">
-							Clients
+							Advertisers
 						</span>
 						<ClientsIcon />
 					</div>
@@ -21,45 +24,45 @@ export default function page() {
 				<div className="w-full h-[128px] rounded-2xl bg-white p-8">
 					<div className="flex items-center justify-between">
 						<span className="text-[1.8rem] font-semibold text-appBlack">
-							Clients
+							Brands
 						</span>
-						<ClientsIcon />
+						<ClientsIcon fill="#3632ED" />
 					</div>
 					<span className="text-[4rem] font-extrabold text-appBlack">500</span>
 				</div>
 				<div className="w-full h-[128px] rounded-2xl bg-white p-8">
 					<div className="flex items-center justify-between">
 						<span className="text-[1.8rem] font-semibold text-appBlack">
-							Clients
+							Media Owners
 						</span>
-						<ClientsIcon />
+						<ClientsIcon fill="#139B9B" />
 					</div>
 					<span className="text-[4rem] font-extrabold text-appBlack">500</span>
 				</div>
 				<div className="w-full h-[128px] rounded-2xl bg-white p-8">
 					<div className="flex items-center justify-between">
 						<span className="text-[1.8rem] font-semibold text-appBlack">
-							Clients
+							Field Auditors
 						</span>
-						<ClientsIcon />
+						<ClientsIcon fill="#ED3D05" />
 					</div>
 					<span className="text-[4rem] font-extrabold text-appBlack">500</span>
 				</div>
 				<div className="w-full h-[128px] rounded-2xl bg-white p-8">
 					<div className="flex items-center justify-between">
 						<span className="text-[1.8rem] font-semibold text-appBlack">
-							Clients
+							Total Sites
 						</span>
-						<ClientsIcon />
+						<TotalSitesIcon />
 					</div>
 					<span className="text-[4rem] font-extrabold text-appBlack">500</span>
 				</div>
 				<div className="w-full h-[128px] rounded-2xl bg-white p-8">
 					<div className="flex items-center justify-between">
 						<span className="text-[1.8rem] font-semibold text-appBlack">
-							Clients
+							Campaigns
 						</span>
-						<ClientsIcon />
+						<TotalCampaignsIcon />
 					</div>
 					<span className="text-[4rem] font-extrabold text-appBlack">500</span>
 				</div>

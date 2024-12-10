@@ -6,7 +6,7 @@ import PlusIcon from "@/components/shared/icons/PlusIcon";
 export default function AddMoreSites() {
 	return (
 		<Link
-			href={"/campaigns/details/fhfhf"}
+			href={"/campaigns/more-sites/fhfhf"}
 			className="w-full flex items-center gap-x-5 text-2xl py-3 border-b-[#E3E3E3] border-b">
 			<PlusIcon fill="black" />
 			Add more sites
