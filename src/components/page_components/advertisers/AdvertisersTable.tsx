@@ -5,6 +5,9 @@ import Dropdown from "@/components/shared/Dropdown";
 import Kebab from "@/components/shared/icons/Kebab";
 import AppCheckbox from "@/components/shared/AppCheckbox";
 import AdvertiserTableActions from "./AdvertiserTableActions";
+import EditAdvertiserInfo from "./EditAdvertiserInfo";
+import DeactivateAdvertiser from "./DeactivateAdvertiser";
+import ResetAdvertiserPassword from "./ResetAdvertiserPassword";
 
 export default function AdvertisersTable() {
 	return (
@@ -79,7 +82,11 @@ export default function AdvertisersTable() {
 											<Kebab />
 										</button>
 									)}
-									items={[]}
+									items={[
+										<EditAdvertiserInfo />,
+										<DeactivateAdvertiser />,
+										<ResetAdvertiserPassword />,
+									]}
 									renderItem={({ item, index }) => (
 										<div className="w-full" key={index}>
 											{item}
@@ -129,7 +136,11 @@ export default function AdvertisersTable() {
 											<Kebab />
 										</button>
 									)}
-									items={[]}
+									items={[
+										<EditAdvertiserInfo />,
+										<DeactivateAdvertiser />,
+										<ResetAdvertiserPassword />,
+									]}
 									renderItem={({ item, index }) => (
 										<div className="w-full" key={index}>
 											{item}
@@ -179,7 +190,65 @@ export default function AdvertisersTable() {
 											<Kebab />
 										</button>
 									)}
-									items={[]}
+									items={[
+										<EditAdvertiserInfo />,
+										<DeactivateAdvertiser />,
+										<ResetAdvertiserPassword />,
+									]}
+									renderItem={({ item, index }) => (
+										<div className="w-full" key={index}>
+											{item}
+										</div>
+									)}
+								/>
+							</td>
+						</tr>
+						<tr
+							className="border-b-[#E6E6E6] border-b 
+                        ">
+							<td className="text-center">
+								<div>
+									<AppCheckbox name="check-all" />
+								</div>
+							</td>
+							<td className="text-center">
+								<span className="text-2xl font-medium">ABC Limited</span>
+							</td>
+							<td className="">
+								<span className="text-2xl font-medium">
+									Along adeniran ogunsanya street surulere ftt bode thomas and
+									shoprite
+								</span>
+							</td>
+							<td className="text-center">
+								<span className="text-2xl font-medium">John Doe</span>
+							</td>
+							<td className="text-center">
+								<span className="text-2xl font-medium">09450234586</span>
+							</td>
+							<td className="">
+								<span className="block text-2xl font-medium w-max max-w-[130px] truncate">
+									adam@email.comalksakdskdsklsdlkdsklsalksdlk
+								</span>
+							</td>
+							<td className="text-center">
+								<Dropdown
+									bordered
+									dropdownWidth="180px"
+									right={0}
+									top={100}
+									renderButton={({ setOpen, open }) => (
+										<button
+											onClick={() => setOpen(!open)}
+											className="w-[35px] h-[35px] rounded-full flex items-center justify-center">
+											<Kebab />
+										</button>
+									)}
+									items={[
+										<EditAdvertiserInfo />,
+										<DeactivateAdvertiser />,
+										<ResetAdvertiserPassword />,
+									]}
 									renderItem={({ item, index }) => (
 										<div className="w-full" key={index}>
 											{item}

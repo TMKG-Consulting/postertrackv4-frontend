@@ -16,10 +16,10 @@ export default function SidePanel() {
 
 	const isDashboard = pathname === "/";
 	const isCampaigns = pathname.startsWith("/campaigns");
-	const isAdvertisers = pathname === "/advertisers";
-	const isAccountManagers = pathname === "/account-managers";
-	const isFieldAuditors = pathname === "/field-auditors";
-	const isReports = pathname === "/reports";
+	const isAdvertisers = pathname.startsWith("/advertisers");
+	const isAccountManagers = pathname.startsWith("/account-managers");
+	const isFieldAuditors = pathname.startsWith("/field-auditors");
+	const isReports = pathname.startsWith("/reports");
 
 	return (
 		<aside className="shrink-0 w-[300px] bg-appBlack h-screen sticky top-0 py-10 px-8 hidden lg:block">
