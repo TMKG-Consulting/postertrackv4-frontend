@@ -5,13 +5,13 @@ import Dropdown from "@/components/shared/Dropdown";
 import ChevronIcon from "@/components/shared/icons/ChevronIcon";
 import AppButton from "@/components/shared/AppButton";
 import AppInput from "@/components/shared/AppInput";
-import AccountManagerPermission from "./AccountManagerPermissions";
+import StatesCovered from "./StatesCovered";
 
-export default function CreateAccountManagerForm() {
+export default function CreateFieldAuditorForm() {
 	return (
 		<div className="w-full md:w-[85%] xl:w-[60%] bg-white rounded-2xl border border-[#E2E2E2]">
 			<div className="p-5 md:p-12">
-				<h1 className="text-[2.8rem] font-extrabold">Add Account Manager</h1>
+				<h1 className="text-[2.8rem] font-extrabold">Add Field Auditor</h1>
 			</div>
 
 			<Formik initialValues={{ name: "" }} onSubmit={() => {}}>
@@ -65,7 +65,7 @@ export default function CreateAccountManagerForm() {
 								"ABC Limited",
 								"ABC Limited",
 							]}
-							renderButton={({ setOpen, open }) => <AccountManagerPermission />}
+							renderButton={({ setOpen, open }) => <StatesCovered />}
 							renderItem={({ item, index }) => (
 								<button
 									key={index}

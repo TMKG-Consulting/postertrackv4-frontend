@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import Link from "next/link";
 import EditIcon from "@/components/shared/icons/EditIcon";
 import Modal from "@/components/shared/Modal";
 import { Form, Formik } from "formik";
@@ -8,9 +7,9 @@ import Dropdown from "@/components/shared/Dropdown";
 import ChevronIcon from "@/components/shared/icons/ChevronIcon";
 import AppInput from "@/components/shared/AppInput";
 import AppButton from "@/components/shared/AppButton";
-import AdditionalEmailAddresses from "./create/AdditionalEmailAddresses";
+import AccountManagerPermission from "./create/AccountManagerPermissions";
 
-export default function EditAdvertiserInfo() {
+export default function EditAccountManager() {
 	const [showEdit, setShowEdit] = useState(false);
 
 	return (
@@ -20,16 +19,16 @@ export default function EditAdvertiserInfo() {
 				onClick={() => setShowEdit(true)}
 				className="w-full flex items-center gap-x-5 text-2xl py-3 border-b-[#E3E3E3] border-b">
 				<EditIcon />
-				Edit Advertiser Info
+				Edit Account Info
 			</button>
 			<Modal showModal={showEdit} hideModal={() => setShowEdit(false)}>
-				<EditAdvertiserForm />
+				<EditAccountManagerForm />
 			</Modal>
 		</>
 	);
 }
 
-const EditAdvertiserForm = function () {
+const EditAccountManagerForm = function () {
 	return (
 		<Formik initialValues={{ name: "" }} onSubmit={() => {}}>
 			{() => (
@@ -37,32 +36,34 @@ const EditAdvertiserForm = function () {
 					<div className="grid md:grid-cols-2 gap-10">
 						<div className="w-full">
 							<AppInput
-								label="Name"
+								label="First Name"
 								name="name"
-								placeholder="Advertiser name"
+								placeholder="First Name"
 							/>
 						</div>
 						<div className="w-full">
-							<AppInput label="Address" name="name" placeholder="Address" />
+							<AppInput label="Last Name" name="name" placeholder="Last Name" />
 						</div>
 					</div>
 					<div className="grid md:grid-cols-2 gap-10">
 						<div className="w-full">
 							<AppInput
-								label="Contact Email"
+								label="Email Address"
 								name="name"
-								placeholder="Contact Email"
+								placeholder="Email Address"
 							/>
 						</div>
 						<div className="w-full">
 							<AppInput
-								label="Contact Phone"
+								label="Phone Number"
 								name="name"
-								placeholder="Contact Phone"
+								placeholder="Phone Number"
 							/>
 						</div>
 					</div>
-					<AdditionalEmailAddresses />
+					<div className="w-full">
+						<AppInput label="Address" name="name" placeholder="Address" />
+					</div>
 					<Dropdown
 						top={-100}
 						items={[
@@ -76,20 +77,7 @@ const EditAdvertiserForm = function () {
 							"ABC Limited",
 							"ABC Limited",
 						]}
-						renderButton={({ setOpen, open }) => (
-							<div className="w-full flex flex-col gap-y-5">
-								<span className="text-2xl font-semibold">Industry</span>
-								<button
-									type="button"
-									onClick={() => setOpen(!open)}
-									className="w-full h-[50px] rounded-xl bg-[#F5F5F5] px-8 flex items-center justify-between">
-									<span className="text-2xl text-[#8D8D8D]">
-										Select Industry
-									</span>
-									<ChevronIcon fill={"#8D8D8D"} />
-								</button>
-							</div>
-						)}
+						renderButton={({ setOpen, open }) => <AccountManagerPermission />}
 						renderItem={({ item, index }) => (
 							<button
 								key={index}
@@ -99,7 +87,11 @@ const EditAdvertiserForm = function () {
 							</button>
 						)}
 					/>
-					<AppButton className="font-semibold" fullyRounded label={"Update"} />
+					<AppButton
+						className="font-semibold"
+						fullyRounded
+						label={"Create Account Manager"}
+					/>
 				</Form>
 			)}
 		</Formik>

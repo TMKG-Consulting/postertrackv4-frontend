@@ -9,6 +9,7 @@ type AppButtonProps = {
 	type?: "submit" | "button" | "reset";
 	fullyRounded?: boolean;
 	className?: string;
+	onClick?: () => void;
 } & PropsWithChildren;
 
 function AppButton({
@@ -18,12 +19,14 @@ function AppButton({
 	fullyRounded = false,
 	className,
 	children,
+	onClick,
 	...otherProps
 }: AppButtonProps) {
 	return (
 		<motion.button
 			whileTap={{ scale: 0.87, transition: { ease: "linear" } }}
 			type={type}
+			onClick={onClick}
 			{...otherProps}
 			className={`w-full ${
 				fullyRounded ? "rounded-full" : "rounded-2xl"

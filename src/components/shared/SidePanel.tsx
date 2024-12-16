@@ -8,8 +8,8 @@ import CampaignIcon from "./icons/CampaignIcon";
 import { usePathname } from "next/navigation";
 import AccountManagerIcon from "./icons/AccountManagerIcon";
 import ReportsIcon from "./icons/ReportsIcon";
-import ClientsIcon from "./icons/ClientsIcon";
 import AdvertisersIcon from "./icons/AdvertisersIcon";
+import LocationIcon from "./icons/LocationIcon";
 
 export default function SidePanel() {
 	const pathname = usePathname();
@@ -20,6 +20,7 @@ export default function SidePanel() {
 	const isAccountManagers = pathname.startsWith("/account-managers");
 	const isFieldAuditors = pathname.startsWith("/field-auditors");
 	const isReports = pathname.startsWith("/reports");
+	const isRegions = pathname.startsWith("/regions-states");
 
 	return (
 		<aside className="shrink-0 w-[300px] bg-appBlack h-screen sticky top-0 py-10 px-8 hidden lg:block">
@@ -84,6 +85,16 @@ export default function SidePanel() {
 					}`}>
 					<ReportsIcon />
 					<span className="text-white text-3xl font-medium">Reports</span>
+				</Link>
+				<Link
+					href={"/regions-states"}
+					className={`flex items-center gap-5 h-[40px] rounded-lg px-5 ${
+						isRegions ? "bg-[#2A2625D4]" : "bg-transparent"
+					}`}>
+					<LocationIcon />
+					<span className="text-white text-3xl font-medium">
+						Regions & States
+					</span>
 				</Link>
 			</div>
 		</aside>

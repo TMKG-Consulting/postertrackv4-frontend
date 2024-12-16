@@ -4,17 +4,17 @@ import Pagination from "@/components/shared/Pagination";
 import Dropdown from "@/components/shared/Dropdown";
 import Kebab from "@/components/shared/icons/Kebab";
 import AppCheckbox from "@/components/shared/AppCheckbox";
-import AccountManagersTableActions from "./AccountManagersTableActions";
 import Image from "next/image";
 import Switch from "@/components/shared/Switch";
-import EditAccountManager from "./EditAccountManager";
-import DeactivateAccountManager from "./DeactivateAccountManager";
-import ResetAccountManagerPassword from "./ResetAccountManagerPassword";
+import FieldAuditorsTableActions from "./FieldAuditorsTableActions";
+import EditFieldAuditor from "./EditFieldAuditor";
+import DeactivateFieldAuditor from "./DeactivatefieldAuditor";
+import ResetFieldAuditorPassword from "./ResetFieldAuditorPassword";
 
-export default function AccountManagersTable() {
+export default function FieldAuditorsTable() {
 	return (
 		<div className="h-full flex flex-col">
-			<AccountManagersTableActions />
+			<FieldAuditorsTableActions />
 			<div className="grow w-full overflow-auto xl:overflow-visible">
 				<table className="w-[250%] md:w-[150%] xl:w-full" cellPadding={15}>
 					<thead className="border-b border-t border-[#C7C7C7] border-t-[#C7C7C7] bg-[#f5f5f5]">
@@ -94,9 +94,9 @@ export default function AccountManagersTable() {
 										</button>
 									)}
 									items={[
-										<EditAccountManager />,
-										<DeactivateAccountManager />,
-										<ResetAccountManagerPassword />,
+										<EditFieldAuditor />,
+										<DeactivateFieldAuditor />,
+										<ResetFieldAuditorPassword />,
 									]}
 									renderItem={({ item, index }) => (
 										<div className="w-full" key={index}>
@@ -157,9 +157,9 @@ export default function AccountManagersTable() {
 										</button>
 									)}
 									items={[
-										<EditAccountManager />,
-										<DeactivateAccountManager />,
-										<ResetAccountManagerPassword />,
+										<EditFieldAuditor />,
+										<DeactivateFieldAuditor />,
+										<ResetFieldAuditorPassword />,
 									]}
 									renderItem={({ item, index }) => (
 										<div className="w-full" key={index}>
@@ -220,9 +220,9 @@ export default function AccountManagersTable() {
 										</button>
 									)}
 									items={[
-										<EditAccountManager />,
-										<DeactivateAccountManager />,
-										<ResetAccountManagerPassword />,
+										<EditFieldAuditor />,
+										<DeactivateFieldAuditor />,
+										<ResetFieldAuditorPassword />,
 									]}
 									renderItem={({ item, index }) => (
 										<div className="w-full" key={index}>
