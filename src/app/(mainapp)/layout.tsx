@@ -36,7 +36,7 @@ export default function RootLayout({
 					<Alert />
 					<MobileHeader />
 					<SidePanel />
-					<main className="grow px-5 md:px-[25px] bg-[#F6F6F6]">
+					<main className="grow px-5 md:px-[25px] bg-[#F6F6F6] overflow-hidden">
 						{children}
 					</main>
 				</RootProvider>

@@ -1,16 +1,14 @@
-"use client";
-import SearchInput from "@/components/shared/SearchInput";
 import React from "react";
-import Image from "next/image";
 import Link from "next/link";
+import Image from "next/image";
+import SearchInput from "@/components/shared/SearchInput";
+import BrandHeader from "@/components/page_components/brands/BrandHeader";
 
-export default function AdvertisersForCompetitiveReport() {
+export default function page() {
 	return (
 		<>
-			<section className="flex flex-col gap-y-5 md:flex-row md:items-center justify-between">
-				<span className="text-[17px] font-medium text-[#4F4F4F">
-					Select an advertiser to view their competitive report
-				</span>
+			<BrandHeader />
+			<section className="flex items-center justify-end">
 				<SearchInput background="transparent" borderColor="#B3B3B3" />
 			</section>
 			<section className="grid md:grid-cols-3 gap-7 my-10">
@@ -26,7 +24,10 @@ export default function AdvertisersForCompetitiveReport() {
 							alt="poster-track"
 							src="https://plus.unsplash.com/premium_photo-1671656349218-5218444643d8?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
 						/>
-						<span className="text-[15px] font-semibold">ABC Company</span>
+						<div className="flex flex-col gap-y-1">
+							<span className="text-[17px] font-semibold">ABC Company</span>
+							<span className="text-[15px]">Nigerian Brewery</span>
+						</div>
 					</Link>
 				))}
 			</section>

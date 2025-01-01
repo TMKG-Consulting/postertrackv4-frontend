@@ -21,6 +21,7 @@ export default function SidePanel() {
 	const isFieldAuditors = pathname.startsWith("/field-auditors");
 	const isReports = pathname.startsWith("/reports");
 	const isRegions = pathname.startsWith("/regions-states");
+	const isBrands = pathname.startsWith("/brands");
 
 	return (
 		<aside className="shrink-0 w-[300px] bg-appBlack h-screen sticky top-0 py-10 px-8 hidden lg:block">
@@ -57,6 +58,14 @@ export default function SidePanel() {
 					}`}>
 					<AdvertisersIcon />
 					<span className="text-white text-3xl font-medium">Advertisers</span>
+				</Link>
+				<Link
+					href={"/brands"}
+					className={`flex items-center gap-5 h-[40px] rounded-lg px-5 ${
+						isBrands ? "bg-[#2A2625D4]" : "bg-transparent"
+					}`}>
+					<AdvertisersIcon />
+					<span className="text-white text-3xl font-medium">Brands</span>
 				</Link>
 				<Link
 					href={"/account-managers"}
