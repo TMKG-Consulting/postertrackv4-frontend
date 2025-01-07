@@ -8,8 +8,24 @@ import AdvertiserTableActions from "./AdvertiserTableActions";
 import EditAdvertiserInfo from "./EditAdvertiserInfo";
 import DeactivateAdvertiser from "./DeactivateAdvertiser";
 import ResetAdvertiserPassword from "./ResetAdvertiserPassword";
-
+import useUserManagement from "@/hooks/useUserManagement";
+import { useQuery } from "@tanstack/react-query";
+import AccountManagerPlaceholder from "@/app/AccountManagerPlaceholder";
 export default function AdvertisersTable() {
+	const { getUsers } = useUserManagement();
+
+	const { data, isLoading, error, isFetching } = useQuery({
+		queryKey: ["accountManagers"],
+		queryFn: async () => {
+			const response = await getUsers();
+
+			return response.filter(
+				//@ts-ignore
+				(u) => u.role === "CLIENT_USER_AGENCY"
+			);
+		},
+	});
+
 	return (
 		<div className="h-full flex flex-col">
 			<AdvertiserTableActions />
@@ -29,7 +45,7 @@ export default function AdvertisersTable() {
 								<span className="text-2xl font-semibold w-full">Address</span>
 							</th>
 							<th className="">
-								<span className="text-2xl font-semibold">Contact Person</span>
+								<span className="text-2xl font-semibold">Industry</span>
 							</th>
 							<th className="">
 								<span className="text-2xl font-semibold">Contact Phone</span>
@@ -41,222 +57,64 @@ export default function AdvertisersTable() {
 						</tr>
 					</thead>
 					<tbody>
-						<tr
-							className="border-b-[#E6E6E6] border-b 
+						{isLoading || isFetching
+							? Array(5)
+									.fill("")
+									.map((d, index) => <AccountManagerPlaceholder key={index} />)
+							: //@ts-ignore
+							  data.map((d, index) => (
+									<tr
+										className="border-b-[#E6E6E6] border-b 
                         ">
-							<td className="text-center">
-								<div>
-									<AppCheckbox name="check-all" />
-								</div>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">ABC Limited</span>
-							</td>
-							<td className="">
-								<span className="text-2xl font-medium">
-									Along adeniran ogunsanya street surulere ftt bode thomas and
-									shoprite
-								</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">John Doe</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">09450234586</span>
-							</td>
-							<td className="">
-								<span className="block text-2xl font-medium w-max max-w-[130px] truncate">
-									adam@email.comalksakdskdsklsdlkdsklsalksdlk
-								</span>
-							</td>
-							<td className="text-center">
-								<Dropdown
-									bordered
-									dropdownWidth="180px"
-									right={0}
-									top={100}
-									renderButton={({ setOpen, open }) => (
-										<button
-											onClick={() => setOpen(!open)}
-											className="w-[35px] h-[35px] rounded-full flex items-center justify-center">
-											<Kebab />
-										</button>
-									)}
-									items={[
-										<EditAdvertiserInfo />,
-										<DeactivateAdvertiser />,
-										<ResetAdvertiserPassword />,
-									]}
-									renderItem={({ item, index }) => (
-										<div className="w-full" key={index}>
-											{item}
-										</div>
-									)}
-								/>
-							</td>
-						</tr>
-						<tr
-							className="border-b-[#E6E6E6] border-b 
-                        ">
-							<td className="text-center">
-								<div>
-									<AppCheckbox name="check-all" />
-								</div>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">ABC Limited</span>
-							</td>
-							<td className="">
-								<span className="text-2xl font-medium">
-									Along adeniran ogunsanya street surulere ftt bode thomas and
-									shoprite
-								</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">John Doe</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">09450234586</span>
-							</td>
-							<td className="">
-								<span className="block text-2xl font-medium w-max max-w-[130px] truncate">
-									adam@email.comalksakdskdsklsdlkdsklsalksdlk
-								</span>
-							</td>
-							<td className="text-center">
-								<Dropdown
-									bordered
-									dropdownWidth="180px"
-									right={0}
-									top={100}
-									renderButton={({ setOpen, open }) => (
-										<button
-											onClick={() => setOpen(!open)}
-											className="w-[35px] h-[35px] rounded-full flex items-center justify-center">
-											<Kebab />
-										</button>
-									)}
-									items={[
-										<EditAdvertiserInfo />,
-										<DeactivateAdvertiser />,
-										<ResetAdvertiserPassword />,
-									]}
-									renderItem={({ item, index }) => (
-										<div className="w-full" key={index}>
-											{item}
-										</div>
-									)}
-								/>
-							</td>
-						</tr>
-						<tr
-							className="border-b-[#E6E6E6] border-b 
-                        ">
-							<td className="text-center">
-								<div>
-									<AppCheckbox name="check-all" />
-								</div>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">ABC Limited</span>
-							</td>
-							<td className="">
-								<span className="text-2xl font-medium">
-									Along adeniran ogunsanya street surulere ftt bode thomas and
-									shoprite
-								</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">John Doe</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">09450234586</span>
-							</td>
-							<td className="">
-								<span className="block text-2xl font-medium w-max max-w-[130px] truncate">
-									adam@email.comalksakdskdsklsdlkdsklsalksdlk
-								</span>
-							</td>
-							<td className="text-center">
-								<Dropdown
-									bordered
-									dropdownWidth="180px"
-									right={0}
-									top={100}
-									renderButton={({ setOpen, open }) => (
-										<button
-											onClick={() => setOpen(!open)}
-											className="w-[35px] h-[35px] rounded-full flex items-center justify-center">
-											<Kebab />
-										</button>
-									)}
-									items={[
-										<EditAdvertiserInfo />,
-										<DeactivateAdvertiser />,
-										<ResetAdvertiserPassword />,
-									]}
-									renderItem={({ item, index }) => (
-										<div className="w-full" key={index}>
-											{item}
-										</div>
-									)}
-								/>
-							</td>
-						</tr>
-						<tr
-							className="border-b-[#E6E6E6] border-b 
-                        ">
-							<td className="text-center">
-								<div>
-									<AppCheckbox name="check-all" />
-								</div>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">ABC Limited</span>
-							</td>
-							<td className="">
-								<span className="text-2xl font-medium">
-									Along adeniran ogunsanya street surulere ftt bode thomas and
-									shoprite
-								</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">John Doe</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">09450234586</span>
-							</td>
-							<td className="">
-								<span className="block text-2xl font-medium w-max max-w-[130px] truncate">
-									adam@email.comalksakdskdsklsdlkdsklsalksdlk
-								</span>
-							</td>
-							<td className="text-center">
-								<Dropdown
-									bordered
-									dropdownWidth="180px"
-									right={0}
-									top={100}
-									renderButton={({ setOpen, open }) => (
-										<button
-											onClick={() => setOpen(!open)}
-											className="w-[35px] h-[35px] rounded-full flex items-center justify-center">
-											<Kebab />
-										</button>
-									)}
-									items={[
-										<EditAdvertiserInfo />,
-										<DeactivateAdvertiser />,
-										<ResetAdvertiserPassword />,
-									]}
-									renderItem={({ item, index }) => (
-										<div className="w-full" key={index}>
-											{item}
-										</div>
-									)}
-								/>
-							</td>
-						</tr>
+										<td className="text-center">
+											<div>
+												<AppCheckbox name="check-all" />
+											</div>
+										</td>
+										<td className="text-center">
+											<span className="text-2xl font-medium">{d.name}</span>
+										</td>
+										<td className="">
+											<span className="text-2xl font-medium">{d.address}</span>
+										</td>
+										<td className="text-center">
+											<span className="text-2xl font-medium">John Doe</span>
+										</td>
+										<td className="text-center">
+											<span className="text-2xl font-medium">{d.phone}</span>
+										</td>
+										<td className="">
+											<span className="block text-2xl font-medium w-max max-w-[130px] truncate">
+												adam@email.comalksakdskdsklsdlkdsklsalksdlk
+											</span>
+										</td>
+										<td className="text-center">
+											<Dropdown
+												bordered
+												dropdownWidth="180px"
+												right={0}
+												top={100}
+												renderButton={({ setOpen, open }) => (
+													<button
+														onClick={() => setOpen(!open)}
+														className="w-[35px] h-[35px] rounded-full flex items-center justify-center">
+														<Kebab />
+													</button>
+												)}
+												items={[
+													// <EditAdvertiserInfo advertiser={} />,
+													<DeactivateAdvertiser />,
+													<ResetAdvertiserPassword />,
+												]}
+												renderItem={({ item, index }) => (
+													<div className="w-full" key={index}>
+														{item}
+													</div>
+												)}
+											/>
+										</td>
+									</tr>
+							  ))}
 					</tbody>
 				</table>
 			</div>

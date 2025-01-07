@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Catamaran } from "next/font/google";
 import "../globals.css";
+import RootProvider from "@/components/shared/providers/RootProvider";
+import Alert from "@/components/shared/Alert";
 
 const catamaran = Catamaran({
 	subsets: ["latin"],
@@ -21,7 +23,10 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body className={` ${catamaran.variable} font-catamaran antialiased`}>
-				{children}
+				<RootProvider >
+					<Alert />
+					{children}
+				</RootProvider>
 			</body>
 		</html>
 	);

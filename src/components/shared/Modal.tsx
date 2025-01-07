@@ -18,8 +18,8 @@ export default function Modal({ children, showModal, hideModal }: ModalProps) {
 	}, [showModal]);
 
 	return (
-		<Portal>
-			<AnimatePresence>
+		<AnimatePresence>
+			<Portal>
 				{showModal && (
 					<motion.div
 						className="fixed top-[5%] drop-shadow-lg right-0 left-0 m-auto h-[70vh] w-[600px] bg-white rounded-xl  z-[99999999] overflow-auto pb-12"
@@ -34,7 +34,7 @@ export default function Modal({ children, showModal, hideModal }: ModalProps) {
 						onClick={hideModal}
 						className="z-[999999] w-screen h-screen bg-primary opacity-20 fixed top-0 right-0 cursor-pointer"></div>
 				)}
-			</AnimatePresence>
-		</Portal>
+			</Portal>
+		</AnimatePresence>
 	);
 }

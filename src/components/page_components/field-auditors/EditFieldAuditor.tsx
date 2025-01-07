@@ -8,9 +8,21 @@ import ChevronIcon from "@/components/shared/icons/ChevronIcon";
 import AppInput from "@/components/shared/AppInput";
 import AppButton from "@/components/shared/AppButton";
 import StatesCovered from "./create/StatesCovered";
+import { FieldAuditor } from "@/types";
+import { useRootStore } from "@/components/shared/providers/RootProvider";
+import CreateFieldAuditorForm from "./create/CreateFieldAuditorForm";
+export default function EditFieldAuditor({
+	fieldAuditor,
+}: {
+	fieldAuditor: FieldAuditor;
+}) {
+	const { userDetails } = useRootStore();
 
-export default function EditFieldAuditor() {
 	const [showEdit, setShowEdit] = useState(false);
+
+	if (!["SUPER_ADMIN", "CHIEF_ACCOUNT_MANAGER"].includes(userDetails?.role!)) {
+		return;
+	}
 
 	return (
 		<>
@@ -22,78 +34,16 @@ export default function EditFieldAuditor() {
 				Edit Account Info
 			</button>
 			<Modal showModal={showEdit} hideModal={() => setShowEdit(false)}>
-				<EditFieldAuditorForm />
+				<CreateFieldAuditorForm
+					initialValues={{
+						...fieldAuditor,
+						//@ts-ignore
+						statesCovered: fieldAuditor.statesCovered.map((d) => d.id),
+						phone: fieldAuditor.phone ?? "",
+					}}
+					isEditing
+				/>
 			</Modal>
 		</>
 	);
 }
-
-const EditFieldAuditorForm = function () {
-	return (
-		<Formik initialValues={{ name: "" }} onSubmit={() => {}}>
-			{() => (
-				<Form className="w-full flex flex-col gap-y-10 mt-8 px-12 pb-12">
-					<div className="grid md:grid-cols-2 gap-10">
-						<div className="w-full">
-							<AppInput
-								label="First Name"
-								name="name"
-								placeholder="First Name"
-							/>
-						</div>
-						<div className="w-full">
-							<AppInput label="Last Name" name="name" placeholder="Last Name" />
-						</div>
-					</div>
-					<div className="grid md:grid-cols-2 gap-10">
-						<div className="w-full">
-							<AppInput
-								label="Email Address"
-								name="name"
-								placeholder="Email Address"
-							/>
-						</div>
-						<div className="w-full">
-							<AppInput
-								label="Phone Number"
-								name="name"
-								placeholder="Phone Number"
-							/>
-						</div>
-					</div>
-					<div className="w-full">
-						<AppInput label="Address" name="name" placeholder="Address" />
-					</div>
-					<Dropdown
-						top={-100}
-						items={[
-							"ABC Limited",
-							"ABC Limited",
-							"ABC Limited",
-							"ABC Limited",
-							"ABC Limited",
-							"ABC Limited",
-							"ABC Limited",
-							"ABC Limited",
-							"ABC Limited",
-						]}
-						renderButton={({ setOpen, open }) => <StatesCovered />}
-						renderItem={({ item, index }) => (
-							<button
-								key={index}
-								className="text-left py-5 text-2xl px-8 border-b border-b-[#cacaca] font-medium last:border-b-0"
-								type="button">
-								{item}
-							</button>
-						)}
-					/>
-					<AppButton
-						className="font-semibold"
-						fullyRounded
-						label={"Create Account Manager"}
-					/>
-				</Form>
-			)}
-		</Formik>
-	);
-};

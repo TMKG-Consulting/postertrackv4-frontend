@@ -7,10 +7,22 @@ import Dropdown from "@/components/shared/Dropdown";
 import ChevronIcon from "@/components/shared/icons/ChevronIcon";
 import AppInput from "@/components/shared/AppInput";
 import AppButton from "@/components/shared/AppButton";
-import AccountManagerPermission from "./create/AccountManagerPermissions";
+import { useRootStore } from "@/components/shared/providers/RootProvider";
+import { AccountManager } from "@/types";
+import CreateAccountManagerForm from "./create/CreateAccountManagerForm";
 
-export default function EditAccountManager() {
+export default function EditAccountManager({
+	accountManager,
+}: {
+	accountManager: AccountManager;
+}) {
+	const { userDetails } = useRootStore();
+
 	const [showEdit, setShowEdit] = useState(false);
+
+	if (!["SUPER_ADMIN", "CHIEF_ACCOUNT_MANAGER"].includes(userDetails?.role!)) {
+		return;
+	}
 
 	return (
 		<>
@@ -22,78 +34,8 @@ export default function EditAccountManager() {
 				Edit Account Info
 			</button>
 			<Modal showModal={showEdit} hideModal={() => setShowEdit(false)}>
-				<EditAccountManagerForm />
+				<CreateAccountManagerForm initialValues={accountManager} isEditing />
 			</Modal>
 		</>
 	);
 }
-
-const EditAccountManagerForm = function () {
-	return (
-		<Formik initialValues={{ name: "" }} onSubmit={() => {}}>
-			{() => (
-				<Form className="w-full flex flex-col gap-y-10 mt-8 px-12 pb-12">
-					<div className="grid md:grid-cols-2 gap-10">
-						<div className="w-full">
-							<AppInput
-								label="First Name"
-								name="name"
-								placeholder="First Name"
-							/>
-						</div>
-						<div className="w-full">
-							<AppInput label="Last Name" name="name" placeholder="Last Name" />
-						</div>
-					</div>
-					<div className="grid md:grid-cols-2 gap-10">
-						<div className="w-full">
-							<AppInput
-								label="Email Address"
-								name="name"
-								placeholder="Email Address"
-							/>
-						</div>
-						<div className="w-full">
-							<AppInput
-								label="Phone Number"
-								name="name"
-								placeholder="Phone Number"
-							/>
-						</div>
-					</div>
-					<div className="w-full">
-						<AppInput label="Address" name="name" placeholder="Address" />
-					</div>
-					<Dropdown
-						top={-100}
-						items={[
-							"ABC Limited",
-							"ABC Limited",
-							"ABC Limited",
-							"ABC Limited",
-							"ABC Limited",
-							"ABC Limited",
-							"ABC Limited",
-							"ABC Limited",
-							"ABC Limited",
-						]}
-						renderButton={({ setOpen, open }) => <AccountManagerPermission />}
-						renderItem={({ item, index }) => (
-							<button
-								key={index}
-								className="text-left py-5 text-2xl px-8 border-b border-b-[#cacaca] font-medium last:border-b-0"
-								type="button">
-								{item}
-							</button>
-						)}
-					/>
-					<AppButton
-						className="font-semibold"
-						fullyRounded
-						label={"Create Account Manager"}
-					/>
-				</Form>
-			)}
-		</Formik>
-	);
-};
