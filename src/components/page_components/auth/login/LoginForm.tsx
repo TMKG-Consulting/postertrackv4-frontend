@@ -50,8 +50,10 @@ export default function LoginForm() {
 			console.log(err);
 
 			showAndHideAlert({
-				//@ts-ignore
-				message: err?.response?.data?.error,
+				message:
+					//@ts-ignore
+					err?.response?.data?.error ??
+					"An error occurred! Try again or check internet connection",
 				type: "error",
 			});
 			setSubmitting(false);
@@ -88,12 +90,7 @@ export default function LoginForm() {
 								label="Password"
 								placeholder="Password"
 							/>
-							<div className="flex flex-row items-center justify-between">
-								<div>
-									<AppCheckbox name="remember-me">
-										<span className="text-2xl text-[#8D8D8D]">Remember Me</span>
-									</AppCheckbox>
-								</div>
+							<div className="flex flex-row items-center justify-end">
 								<Link
 									href={"/auth/forgot-password"}
 									className="text-primary text-2xl">

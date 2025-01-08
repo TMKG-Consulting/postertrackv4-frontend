@@ -2,7 +2,7 @@
 import DeactivateIcon from "@/components/shared/icons/DeactivateIcon";
 import React from "react";
 
-export default function DeactivateAdvertiser() {
+export default function DeactivateClient() {
 	return (
 		<button
 			type="button"

@@ -10,7 +10,7 @@ export interface User {
 	phone: string;
 	address: string;
 	password?: string;
-	name?: string;
+	name?: string | number;
 	id?: number;
 }
 
@@ -23,7 +23,7 @@ export interface FieldAuditor extends User {
 	statesCovered: number[] | State[];
 }
 
-export interface Advertiser extends User {
+export interface Client extends User {
 	role: "CLIENT_AGENCY_USER";
 	industry: string | Industry;
 	additionalEmail: string[];
@@ -35,18 +35,35 @@ export interface Industry {
 }
 
 export interface State {
-	id: number;
+	id?: number;
 	name: string;
-	regionId: number;
+	regionId: number | string;
 }
 
 export interface Region {
-	id: number;
+	id?: number;
 	name: string;
 }
 
 export interface City {
-	id: number;
+	id?: number;
 	name: string;
-	stateId: number;
+	stateId: number | string;
+}
+
+export interface Advertiser {
+	id?: number;
+	name: string;
+}
+
+export interface Category {
+	id?: number;
+	name: string;
+}
+
+export interface Brand {
+	id?: number;
+	name: string;
+	advertiserId: number | string;
+	categoryId: number | string;
 }

@@ -10,6 +10,7 @@ import AccountManagerIcon from "./icons/AccountManagerIcon";
 import ReportsIcon from "./icons/ReportsIcon";
 import AdvertisersIcon from "./icons/AdvertisersIcon";
 import LocationIcon from "./icons/LocationIcon";
+import CategoryIcon from "./icons/CategoryIcon";
 
 export default function SidePanel() {
 	const pathname = usePathname();
@@ -17,10 +18,12 @@ export default function SidePanel() {
 	const isDashboard = pathname === "/";
 	const isCampaigns = pathname.startsWith("/campaigns");
 	const isAdvertisers = pathname.startsWith("/advertisers");
+	const isClients = pathname.startsWith("/clients");
 	const isAccountManagers = pathname.startsWith("/account-managers");
 	const isFieldAuditors = pathname.startsWith("/field-auditors");
 	const isReports = pathname.startsWith("/reports");
 	const isRegions = pathname.startsWith("/regions-states");
+	const isCategories = pathname.startsWith("/categories");
 	const isBrands = pathname.startsWith("/brands");
 
 	return (
@@ -52,12 +55,12 @@ export default function SidePanel() {
 					<span className="text-white text-3xl font-medium">Campaigns</span>
 				</Link>
 				<Link
-					href={"/advertisers"}
+					href={"/clients"}
 					className={`flex items-center gap-5 h-[40px] rounded-lg px-5 ${
-						isAdvertisers ? "bg-[#2A2625D4]" : "bg-transparent"
+						isClients ? "bg-[#2A2625D4]" : "bg-transparent"
 					}`}>
 					<AdvertisersIcon />
-					<span className="text-white text-3xl font-medium">Advertisers</span>
+					<span className="text-white text-3xl font-medium">Clients</span>
 				</Link>
 				<Link
 					href={"/brands"}
@@ -96,6 +99,14 @@ export default function SidePanel() {
 					<span className="text-white text-3xl font-medium">Reports</span>
 				</Link>
 				<Link
+					href={"/advertisers"}
+					className={`flex items-center gap-5 h-[40px] rounded-lg px-5 ${
+						isAdvertisers ? "bg-[#2A2625D4]" : "bg-transparent"
+					}`}>
+					<AdvertisersIcon />
+					<span className="text-white text-3xl font-medium">Advertisers</span>
+				</Link>
+				<Link
 					href={"/regions-states"}
 					className={`flex items-center gap-5 h-[40px] rounded-lg px-5 ${
 						isRegions ? "bg-[#2A2625D4]" : "bg-transparent"
@@ -104,6 +115,14 @@ export default function SidePanel() {
 					<span className="text-white text-3xl font-medium">
 						Regions & States
 					</span>
+				</Link>
+				<Link
+					href={"/categories"}
+					className={`flex items-center gap-5 h-[40px] rounded-lg px-5 ${
+						isCategories ? "bg-[#2A2625D4]" : "bg-transparent"
+					}`}>
+					<CategoryIcon />
+					<span className="text-white text-3xl font-medium">Categories</span>
 				</Link>
 			</div>
 		</aside>

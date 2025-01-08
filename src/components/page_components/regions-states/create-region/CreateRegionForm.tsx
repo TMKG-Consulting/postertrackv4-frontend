@@ -3,52 +3,56 @@ import React from "react";
 import { Form, Formik, FormikHelpers } from "formik";
 import AppButton from "@/components/shared/AppButton";
 import AppInput from "@/components/shared/AppInput";
-import { Advertiser } from "@/types";
+import { Region } from "@/types";
 import useAlert from "@/hooks/useAlert";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import * as Yup from "yup";
 import { ApiInstance } from "@/utils";
 import useCredentials from "@/hooks/useCredentials";
+import { useLocationsStore } from "@/components/shared/providers/LocationsProvider";
 
 const schema = Yup.object().shape({
 	name: Yup.string().required().label("Name"),
 });
 
-interface AdvertiserFormProps {
+interface RegionFormProps {
 	isEditing?: boolean;
-	initialValues?: Advertiser;
+	initialValues?: Region;
 }
 
-export default function CreateAdvertiserForm({
+export default function CreateRegionForm({
 	isEditing,
 	initialValues = {
 		name: "",
 	},
-}: AdvertiserFormProps) {
+}: RegionFormProps) {
 	const { showAndHideAlert } = useAlert();
 	const router = useRouter();
 	const { accessToken } = useCredentials();
+	const { setRegions, regions } = useLocationsStore();
 
 	const submitHandler = async (
-		values: Advertiser,
-		{ setSubmitting }: FormikHelpers<Advertiser>
+		values: Region,
+		{ setSubmitting }: FormikHelpers<Region>
 	) => {
 		try {
-			await ApiInstance.post("/api/advertisers", values, {
+			const res = await ApiInstance.post("/api/regions", values, {
 				headers: {
 					"auth-token": accessToken,
 				},
 			});
 
 			showAndHideAlert({
-				message: "Advertiser created successfully.",
+				message: "Region created successfully.",
 				type: "success",
 			});
 
 			setSubmitting(false);
 
-			router.push("/advertisers");
+			setRegions([...regions, res.data]);
+
+			router.push("/regions-states");
 		} catch (error) {
 			const err = error as AxiosError;
 			console.log(err);
@@ -68,7 +72,7 @@ export default function CreateAdvertiserForm({
 				!isEditing ? "md:w-[85%] xl:w-[60%]" : ""
 			} bg-white rounded-2xl border border-[#E2E2E2]`}>
 			<div className="p-5 md:p-12">
-				<h1 className="text-[2.8rem] font-extrabold">Add New Advertiser</h1>
+				<h1 className="text-[2.8rem] font-extrabold">Add New Region</h1>
 			</div>
 
 			<Formik
@@ -85,7 +89,7 @@ export default function CreateAdvertiserForm({
 						<AppButton
 							className="font-semibold"
 							fullyRounded
-							label={"Create Advertiser"}
+							label={"Create Region"}
 							showLoading={!isValidating && isSubmitting}
 						/>
 					</Form>

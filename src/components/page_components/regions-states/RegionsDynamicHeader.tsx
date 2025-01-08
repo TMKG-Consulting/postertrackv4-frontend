@@ -7,7 +7,7 @@ import PlusIcon from "@/components/shared/icons/PlusIcon";
 import Link from "next/link";
 import Dropdown from "@/components/shared/Dropdown";
 import AppCheckbox from "@/components/shared/AppCheckbox";
-import { Region } from "@/types";
+import { City, Region, State } from "@/types";
 
 export default function RegionsDynamicHeader() {
 	const {
@@ -27,15 +27,27 @@ export default function RegionsDynamicHeader() {
 
 	const filterByRegionHandler = (val: boolean, item: Region) => {
 		if (val) {
-			const isAlreadyChecked = statesToShowByRegion.includes(item.id);
+			const isAlreadyChecked = statesToShowByRegion.includes(item.id!);
 
 			if (!isAlreadyChecked) {
-				setStatesToShowByRegion([...statesToShowByRegion, item.id]);
+				setStatesToShowByRegion([...statesToShowByRegion, item.id!]);
 			}
 		} else {
 			setStatesToShowByRegion(
 				statesToShowByRegion.filter((r) => r !== item.id)
 			);
+		}
+	};
+
+	const filterByStateHandler = (val: boolean, item: State) => {
+		if (val) {
+			const isAlreadyChecked = citiesToShowByState.includes(item.id!);
+
+			if (!isAlreadyChecked) {
+				setCitiesToShowByState([...citiesToShowByState, item.id!]);
+			}
+		} else {
+			setCitiesToShowByState(citiesToShowByState.filter((r) => r !== item.id));
 		}
 	};
 
@@ -78,7 +90,7 @@ export default function RegionsDynamicHeader() {
 			</div>
 
 			{isRegions && (
-				<Link href={"/campaigns/create"}>
+				<Link href={"/regions-states/create-region"}>
 					<AppButton className="!w-[150px]" fullyRounded>
 						<div className="flex items-center gap-x-2 md:gap-x-5">
 							<PlusIcon />
@@ -106,7 +118,7 @@ export default function RegionsDynamicHeader() {
 						renderItem={({ item }) => (
 							<div key={item.id} className="py-[7px]">
 								<AppCheckbox
-									defaultValue={statesToShowByRegion.includes(item.id)}
+									defaultValue={statesToShowByRegion.includes(item.id!)}
 									onChange={(val) => filterByRegionHandler(val, item)}
 									name={item.name}>
 									<span className="text-2xl font-medium">{item.name}</span>
@@ -114,7 +126,7 @@ export default function RegionsDynamicHeader() {
 							</div>
 						)}
 					/>
-					<Link href={"/campaigns/create"}>
+					<Link href={"/regions-states/create-state"}>
 						<AppButton className="!w-[150px]" fullyRounded>
 							<div className="flex items-center gap-x-2 md:gap-x-5">
 								<PlusIcon />
@@ -146,8 +158,8 @@ export default function RegionsDynamicHeader() {
 								key={item.id}
 								className="py-[10px] border-b border-b-gray-100">
 								<AppCheckbox
-									defaultValue={true}
-									onChange={(val) => {}}
+									defaultValue={citiesToShowByState.includes(item.id!)}
+									onChange={(val) => filterByStateHandler(val, item)}
 									name={item.name}>
 									<span className="text-2xl font-medium">{item.name}</span>
 								</AppCheckbox>
@@ -155,7 +167,7 @@ export default function RegionsDynamicHeader() {
 						)}
 					/>
 
-					<Link href={"/campaigns/create"}>
+					<Link href={"/regions-states/create-city"}>
 						<AppButton className="!w-[150px]" fullyRounded>
 							<div className="flex items-center gap-x-2 md:gap-x-5">
 								<PlusIcon />

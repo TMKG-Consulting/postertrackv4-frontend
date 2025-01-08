@@ -1,10 +1,16 @@
+"use client";
 import React from "react";
 import Image from "next/image";
+import { useRootStore } from "@/components/shared/providers/RootProvider";
 
 export default function DashboardHeader() {
+	const { userDetails } = useRootStore();
+
 	return (
 		<section className="w-full h-[10rem] flex items-center justify-between">
-			<h4 className="text-[2.5rem] md:text-[3rem] font-black">Hello, Emmanuel</h4>
+			<h4 className="text-[2.5rem] md:text-[3rem] font-black">
+				Hello, {userDetails?.firstname}
+			</h4>
 			<Image
 				className="w-[50px] h-[50px] rounded-full object-cover"
 				width={50}

@@ -3,7 +3,7 @@ import React from "react";
 import { Form, Formik, FormikHelpers } from "formik";
 import AppButton from "@/components/shared/AppButton";
 import AppInput from "@/components/shared/AppInput";
-import { Advertiser } from "@/types";
+import { Category } from "@/types";
 import useAlert from "@/hooks/useAlert";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
@@ -15,40 +15,40 @@ const schema = Yup.object().shape({
 	name: Yup.string().required().label("Name"),
 });
 
-interface AdvertiserFormProps {
+interface CategoryFormProps {
 	isEditing?: boolean;
-	initialValues?: Advertiser;
+	initialValues?: Category;
 }
 
-export default function CreateAdvertiserForm({
+export default function CreateACategoryForm({
 	isEditing,
 	initialValues = {
 		name: "",
 	},
-}: AdvertiserFormProps) {
+}: CategoryFormProps) {
 	const { showAndHideAlert } = useAlert();
 	const router = useRouter();
 	const { accessToken } = useCredentials();
 
 	const submitHandler = async (
-		values: Advertiser,
-		{ setSubmitting }: FormikHelpers<Advertiser>
+		values: Category,
+		{ setSubmitting }: FormikHelpers<Category>
 	) => {
 		try {
-			await ApiInstance.post("/api/advertisers", values, {
+			await ApiInstance.post("/api/categories", values, {
 				headers: {
 					"auth-token": accessToken,
 				},
 			});
 
 			showAndHideAlert({
-				message: "Advertiser created successfully.",
+				message: "Category created successfully.",
 				type: "success",
 			});
 
 			setSubmitting(false);
 
-			router.push("/advertisers");
+			router.push("/categories");
 		} catch (error) {
 			const err = error as AxiosError;
 			console.log(err);
@@ -68,7 +68,7 @@ export default function CreateAdvertiserForm({
 				!isEditing ? "md:w-[85%] xl:w-[60%]" : ""
 			} bg-white rounded-2xl border border-[#E2E2E2]`}>
 			<div className="p-5 md:p-12">
-				<h1 className="text-[2.8rem] font-extrabold">Add New Advertiser</h1>
+				<h1 className="text-[2.8rem] font-extrabold">Add New Category</h1>
 			</div>
 
 			<Formik
@@ -85,7 +85,7 @@ export default function CreateAdvertiserForm({
 						<AppButton
 							className="font-semibold"
 							fullyRounded
-							label={"Create Advertiser"}
+							label={"Create Category"}
 							showLoading={!isValidating && isSubmitting}
 						/>
 					</Form>

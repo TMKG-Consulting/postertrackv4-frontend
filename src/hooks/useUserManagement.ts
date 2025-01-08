@@ -1,13 +1,11 @@
 import { ApiInstance } from "@/utils";
-import { AccountManager, Advertiser, FieldAuditor } from "@/types";
+import { AccountManager, Advertiser, Client, FieldAuditor } from "@/types";
 import useCredentials from "./useCredentials";
 
 export default function useUserManagement() {
 	const { accessToken } = useCredentials();
 
-	const createUser = async (
-		data: AccountManager | FieldAuditor | Advertiser
-	) => {
+	const createUser = async (data: AccountManager | FieldAuditor | Client) => {
 		try {
 			const response = await ApiInstance.post("/users/create", data, {
 				headers: {
@@ -35,7 +33,7 @@ export default function useUserManagement() {
 
 	const updateUser = async (
 		userId: number,
-		data: AccountManager | FieldAuditor | Advertiser
+		data: AccountManager | FieldAuditor | Client
 	) => {
 		try {
 			const response = await ApiInstance.put("/api/users/" + userId, data, {

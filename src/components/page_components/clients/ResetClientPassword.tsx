@@ -1,7 +1,7 @@
 import LockIcon from "@/components/shared/icons/LockIcon";
 import React from "react";
 
-export default function ResetAdvertiserPassword() {
+export default function ResetClientPassword() {
 	return (
 		<button
 			type="button"
