@@ -5,16 +5,42 @@ import AppButton from "@/components/shared/AppButton";
 import FiltersIcon from "@/components/shared/icons/FiltersIcon";
 import PlusIcon from "@/components/shared/icons/PlusIcon";
 import Link from "next/link";
+import Dropdown from "@/components/shared/Dropdown";
+import AppCheckbox from "@/components/shared/AppCheckbox";
+import { Region } from "@/types";
 
 export default function RegionsDynamicHeader() {
-	const { currentTab, setCurrentTab } = useLocationsStore();
+	const {
+		currentTab,
+		setCurrentTab,
+		regions,
+		states,
+		statesToShowByRegion,
+		setStatesToShowByRegion,
+		citiesToShowByState,
+		setCitiesToShowByState,
+	} = useLocationsStore();
 
 	const isRegions = currentTab === "regions";
 	const isStates = currentTab === "states";
 	const isCities = currentTab === "cities";
 
+	const filterByRegionHandler = (val: boolean, item: Region) => {
+		if (val) {
+			const isAlreadyChecked = statesToShowByRegion.includes(item.id);
+
+			if (!isAlreadyChecked) {
+				setStatesToShowByRegion([...statesToShowByRegion, item.id]);
+			}
+		} else {
+			setStatesToShowByRegion(
+				statesToShowByRegion.filter((r) => r !== item.id)
+			);
+		}
+	};
+
 	return (
-		<section className="flex flex-col md:flex-row md:items-center justify-between gap-y-10">
+		<section className="flex flex-col md:flex-row md:items-center justify-between gap-y-10 sticky top-0">
 			<div className="bg-[#ED323729] w-[300px] h-[50px] rounded-[10px] px-[7px] grid grid-cols-3">
 				<div className="w-full h-full flex items-center">
 					<AppButton
@@ -64,14 +90,30 @@ export default function RegionsDynamicHeader() {
 
 			{isStates && (
 				<div className="flex items-center gap-8">
-					<AppButton
-						fullyRounded
-						className="!bg-white border border-[#BFBFBF] !w-[180px] gap-5">
-						<FiltersIcon />
-						<span className="md:text-[1.7rem] font-medium text-[#666666]">
-							Filter by region
-						</span>
-					</AppButton>
+					<Dropdown
+						renderButton={({ setOpen, open }) => (
+							<AppButton
+								onClick={() => setOpen(!open)}
+								fullyRounded
+								className="!bg-white border border-[#BFBFBF] !w-[180px] gap-5">
+								<FiltersIcon />
+								<span className="md:text-[1.7rem] font-medium text-[#666666]">
+									Filter by region
+								</span>
+							</AppButton>
+						)}
+						items={regions}
+						renderItem={({ item }) => (
+							<div key={item.id} className="py-[7px]">
+								<AppCheckbox
+									defaultValue={statesToShowByRegion.includes(item.id)}
+									onChange={(val) => filterByRegionHandler(val, item)}
+									name={item.name}>
+									<span className="text-2xl font-medium">{item.name}</span>
+								</AppCheckbox>
+							</div>
+						)}
+					/>
 					<Link href={"/campaigns/create"}>
 						<AppButton className="!w-[150px]" fullyRounded>
 							<div className="flex items-center gap-x-2 md:gap-x-5">
@@ -85,14 +127,34 @@ export default function RegionsDynamicHeader() {
 
 			{isCities && (
 				<div className="flex items-center gap-8">
-					<AppButton
-						fullyRounded
-						className="!bg-white border border-[#BFBFBF] !w-[180px] gap-5">
-						<FiltersIcon />
-						<span className="md:text-[1.7rem] font-medium text-[#666666]">
-							Filter by state
-						</span>
-					</AppButton>
+					<Dropdown
+						dropdownWidth="300px"
+						renderButton={({ setOpen, open }) => (
+							<AppButton
+								onClick={() => setOpen(!open)}
+								fullyRounded
+								className="!bg-white border border-[#BFBFBF] !w-[180px] gap-5">
+								<FiltersIcon />
+								<span className="md:text-[1.7rem] font-medium text-[#666666]">
+									Filter by state
+								</span>
+							</AppButton>
+						)}
+						items={states}
+						renderItem={({ item }) => (
+							<div
+								key={item.id}
+								className="py-[10px] border-b border-b-gray-100">
+								<AppCheckbox
+									defaultValue={true}
+									onChange={(val) => {}}
+									name={item.name}>
+									<span className="text-2xl font-medium">{item.name}</span>
+								</AppCheckbox>
+							</div>
+						)}
+					/>
+
 					<Link href={"/campaigns/create"}>
 						<AppButton className="!w-[150px]" fullyRounded>
 							<div className="flex items-center gap-x-2 md:gap-x-5">

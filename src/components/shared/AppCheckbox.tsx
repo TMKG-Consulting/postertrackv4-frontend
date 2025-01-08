@@ -5,14 +5,16 @@ import CheckedIcon from "./icons/CheckedIcon";
 type AppCheckboxProps = {
 	onChange?: (val: boolean) => void;
 	name: string;
+	defaultValue?: boolean;
 } & PropsWithChildren;
 
 export default function AppCheckbox({
 	children,
 	name,
 	onChange,
+	defaultValue = false,
 }: AppCheckboxProps) {
-	const [checked, setChecked] = useState(false);
+	const [checked, setChecked] = useState(defaultValue);
 
 	return (
 		<label htmlFor={name} className="flex items-center gap-2 cursor-pointer">
@@ -33,6 +35,7 @@ export default function AppCheckbox({
 					id={name}
 					type="checkbox"
 					className="hidden"
+					checked={checked}
 				/>
 				<CheckedIcon />
 			</div>

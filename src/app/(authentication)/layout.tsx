@@ -23,7 +23,7 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body className={` ${catamaran.variable} font-catamaran antialiased`}>
-				<RootProvider >
+				<RootProvider>
 					<Alert />
 					{children}
 				</RootProvider>
