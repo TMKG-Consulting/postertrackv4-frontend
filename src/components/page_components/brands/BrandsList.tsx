@@ -1,6 +1,6 @@
 "use client";
-import React from "react";
-import { useQuery } from "@tanstack/react-query";
+import React, { useState } from "react";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
 import useCredentials from "@/hooks/useCredentials";
@@ -10,40 +10,34 @@ import { Advertiser, Brand } from "@/types";
 
 export default function BrandsList() {
 	const { accessToken } = useCredentials();
+	const [currentPage, setCurrentPage] = useState(1);
 
-	const { data, isLoading, error } = useQuery({
-		queryKey: ["brandsAndAdvertisers"],
+	const { data, isLoading, error, isFetching } = useQuery({
+		queryKey: ["brandsAndAdvertisers", currentPage],
 		queryFn: async () => {
-			const res = await ApiInstance.get("/api/brands", {
+			const res = await ApiInstance.get(`/api/brands?page=${currentPage}`, {
 				headers: {
 					"auth-token": accessToken,
 				},
 			});
 
-			const res2 = await ApiInstance.get("/api/advertisers", {
-				headers: {
-					"auth-token": accessToken,
-				},
-			});
-
-			return { brands: res.data, advertisers: res2.data };
+			return res.data;
 		},
+		placeholderData: keepPreviousData,
+		retry: false,
 	});
 
 	return (
 		<>
 			<section className="grid md:grid-cols-3 gap-7 my-10">
-				{isLoading
+				{isLoading || isFetching
 					? [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((d, i) => (
 							<div
 								key={i}
 								className="w-full h-[100px] bg-[#e5e5e5] animate-pulse rounded-2xl"></div>
 					  ))
 					: //@ts-ignore
-					  data?.brands?.map((item: Brand, index) => {
-							const advertiser = data.advertisers.find(
-								(a: Advertiser) => a.id === item.advertiserId
-							);
+					  data.data?.map((item: Brand, index) => {
 							return (
 								<div
 									key={index}
@@ -59,7 +53,7 @@ export default function BrandsList() {
 										<span className="text-[17px] font-semibold">
 											{item.name}
 										</span>
-										<span className="text-[15px]">{advertiser.name}</span>
+										<span className="text-[15px]">{}</span>
 									</div>
 								</div>
 							);
@@ -67,7 +61,11 @@ export default function BrandsList() {
 			</section>
 			<section>
 				<div className="my-12 flex items-center justify-center md:justify-end px-5 md:px-10">
-					<Pagination />
+					<Pagination
+						currentPage={currentPage}
+						totalPages={data?.totalPages}
+						setCurrentPage={setCurrentPage}
+					/>
 				</div>
 			</section>
 		</>

@@ -45,15 +45,16 @@ export default function StatesCovered({
 									type="button"></button>
 							))
 					: data.map((d: State, index: number) => {
+							// @ts-ignore
 							const isSelected = selectedStates.includes(d.id);
 							return (
 								<button
 									key={index}
 									onClick={() => {
 										if (isSelected) {
-											removeState(d.id);
+											removeState(d.id!);
 										} else {
-											addState(d.id);
+											addState(d.id!);
 										}
 									}}
 									className={`p-3 min-w-[90px] w-max h-[34px] rounded-xl flex items-center justify-center gap-3 ${

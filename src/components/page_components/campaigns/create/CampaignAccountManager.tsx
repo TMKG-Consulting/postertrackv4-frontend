@@ -2,30 +2,28 @@
 import React, { useState } from "react";
 import Dropdown from "@/components/shared/Dropdown";
 import ChevronIcon from "@/components/shared/icons/ChevronIcon";
-import { useQuery } from "@tanstack/react-query";
-import useCredentials from "@/hooks/useCredentials";
-import { ApiInstance } from "@/utils";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { ErrorMessage, useFormikContext } from "formik";
 import AppLoader from "@/components/shared/AppLoader";
-import { Brand, Client } from "@/types";
+import { CampaignCreateData, Client } from "@/types";
 import SearchInput from "@/components/shared/SearchInput";
+import useUserManagement from "@/hooks/useUserManagement";
 
-export default function BrandAdvertiser() {
-	const { accessToken } = useCredentials();
+export default function CampaignAccountManager() {
+	const { values, setFieldValue } = useFormikContext<CampaignCreateData>();
 
-	const { values, setFieldValue } = useFormikContext<Brand>();
+	const { getAccountManagers } = useUserManagement();
+	const [currentPage, setCurrentPage] = useState(1);
 
 	const { data, isLoading, error, isFetching } = useQuery({
-		queryKey: ["advertisers"],
+		queryKey: ["accountManagers", currentPage],
 		queryFn: async () => {
-			const response = await ApiInstance.get("/api/advertisers", {
-				headers: {
-					"auth-token": accessToken,
-				},
-			});
+			const response = await getAccountManagers(currentPage);
 
-			return response.data;
+			return response;
 		},
+		placeholderData: keepPreviousData,
+		retry: false,
 	});
 
 	return (
@@ -35,22 +33,29 @@ export default function BrandAdvertiser() {
 				items={isLoading ? [1] : data.data}
 				renderButton={({ setOpen, open }) => (
 					<div className="w-full flex flex-col gap-y-5">
-						<span className="text-2xl font-semibold">Advertiser</span>
+						<span className="text-2xl font-semibold">Account Manager</span>
 						<button
 							type="button"
 							onClick={() => setOpen(!open)}
 							className="w-full h-[50px] rounded-xl bg-[#F5F5F5] px-8 flex items-center justify-between">
-							{values.advertiserId === "" && (
+							{values.accountManagerId === "" && (
 								<span className="text-2xl text-[#8D8D8D]">
-									Select Advertiser
+									Select Account Manager
 								</span>
 							)}
-							{values.advertiserId !== "" && (
+							{values.accountManagerId !== "" && (
 								<span className="text-2xl text-appBlack">
 									{
-										/* @ts-ignore */
-										data.data.find((d) => d.id === Number(values.advertiserId))
-											?.name
+										data?.data.find(
+											/* @ts-ignore */
+											(d) => d.id === Number(values.accountManagerId)
+										)?.firstname
+									}{" "}
+									{
+										data?.data.find(
+											/* @ts-ignore */
+											(d) => d.id === Number(values.accountManagerId)
+										)?.lastname
 									}
 								</span>
 							)}
@@ -70,13 +75,13 @@ export default function BrandAdvertiser() {
 							key={index}
 							onClick={() => {
 								//@ts-ignore
-								setFieldValue("advertiserId", item.id);
+								setFieldValue("accountManagerId", item.id);
 								setOpen(false);
 							}}
 							className="text-left py-5 text-2xl px-8 border-b border-b-[#cacaca] font-medium last:border-b-0 hover:bg-[#f5f5f5]"
 							type="button">
 							{/* @ts-ignore */}
-							{item.name}
+							{item.firstname} {item.lastname}
 						</button>
 					)
 				}
@@ -87,7 +92,7 @@ export default function BrandAdvertiser() {
 				)}
 			/>
 			<ErrorMessage
-				name="name"
+				name="accountManagerId"
 				component={"p"}
 				className="text-2xl font-medium text-red-400"
 			/>

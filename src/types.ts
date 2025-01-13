@@ -25,7 +25,8 @@ export interface FieldAuditor extends User {
 
 export interface Client extends User {
 	role: "CLIENT_AGENCY_USER";
-	industry: string | Industry;
+	industryId?: string | Industry;
+	industry?: Industry;
 	additionalEmail: string[];
 }
 
@@ -66,4 +67,26 @@ export interface Brand {
 	name: string;
 	advertiserId: number | string;
 	categoryId: number | string;
+}
+
+export interface CampaignCreateData {
+	clientId: string;
+	accountManagerId: string;
+}
+
+export interface Campaign {
+	id: number;
+	clientId: number;
+	accountManagerId: number;
+	siteList: Site[];
+}
+
+export interface Site {
+	city: string;
+	code: string;
+	brand: string;
+	state: string;
+	format: string;
+	location: string;
+	mediaOwner: string;
 }

@@ -24,7 +24,7 @@ const schema = Yup.object().shape({
 	phone: Yup.string().required().label("Phone Number"),
 	address: Yup.string().required().label("Address"),
 	role: Yup.string().required().label("Role"),
-	industry: Yup.string().required().label("Industry"),
+	industryId: Yup.string().required().label("Industry"),
 	additionalEmail: Yup.array(Yup.string()).optional().label("Additional Email"),
 });
 
@@ -42,7 +42,7 @@ export default function CreateClientForm({
 		address: "",
 		role: "CLIENT_AGENCY_USER",
 		additionalEmail: [],
-		industry: "",
+		industryId: "",
 	},
 }: ClientFormProps) {
 	const { createUser } = useUserManagement();
@@ -55,8 +55,7 @@ export default function CreateClientForm({
 		{ setSubmitting }: FormikHelpers<Client>
 	) => {
 		try {
-			const response = await createUser(values);
-			console.log(response);
+			await createUser(values);
 
 			showAndHideAlert({
 				message: "User created successfully.",
@@ -72,7 +71,7 @@ export default function CreateClientForm({
 
 			showAndHideAlert({
 				//@ts-ignore
-				message: err?.response?.data?.error,
+				message: err?.response?.data?.error ?? "An error occurred",
 				type: "error",
 			});
 			setSubmitting(false);
@@ -147,16 +146,16 @@ export default function CreateClientForm({
 											type="button"
 											onClick={() => setOpen(!open)}
 											className="w-full h-[50px] rounded-xl bg-[#F5F5F5] px-8 flex items-center justify-between">
-											{values.industry === "" && (
+											{values.industryId === "" && (
 												<span className="text-2xl text-[#8D8D8D]">
 													Select Industry
 												</span>
 											)}
-											{values.industry !== "" && (
+											{values.industryId !== "" && (
 												<span className="text-2xl text-appBlack">
 													{
 														industries.find(
-															(d) => d.id === Number(values.industry)
+															(d) => d.id === Number(values.industryId)
 														)?.name
 													}
 												</span>
@@ -169,7 +168,7 @@ export default function CreateClientForm({
 									<button
 										key={index}
 										onClick={() => {
-											setFieldValue("industry", item.id);
+											setFieldValue("industryId", item.id);
 											setOpen(false);
 										}}
 										className="text-left py-5 text-2xl px-8 border-b border-b-[#cacaca] font-medium last:border-b-0 hover:bg-[#f5f5f5]"
@@ -179,7 +178,7 @@ export default function CreateClientForm({
 								)}
 							/>
 							<ErrorMessage
-								name="industry"
+								name="industryId"
 								component={"p"}
 								className="text-2xl font-medium text-red-400"
 							/>

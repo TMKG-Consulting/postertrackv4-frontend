@@ -32,7 +32,7 @@ export default function BrandCategory() {
 		<div className="w-full">
 			<Dropdown
 				top={-100}
-				items={isLoading ? [1] : data}
+				items={isLoading ? [1] : data.data}
 				renderButton={({ setOpen, open }) => (
 					<div className="w-full flex flex-col gap-y-5">
 						<span className="text-2xl font-semibold">Category</span>
@@ -45,8 +45,11 @@ export default function BrandCategory() {
 							)}
 							{values.categoryId !== "" && (
 								<span className="text-2xl text-appBlack">
-									{/* @ts-ignore */}
-									{data.find((d) => d.id === Number(values.categoryId))?.name}
+									{
+										// @ts-ignore
+										data?.data?.find((d) => d.id === Number(values.categoryId))
+											?.name
+									}
 								</span>
 							)}
 							<ChevronIcon fill={"#8D8D8D"} />

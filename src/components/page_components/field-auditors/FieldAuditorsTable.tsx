@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Pagination from "@/components/shared/Pagination";
 import Dropdown from "@/components/shared/Dropdown";
 import Kebab from "@/components/shared/icons/Kebab";
@@ -10,24 +10,24 @@ import FieldAuditorsTableActions from "./FieldAuditorsTableActions";
 import EditFieldAuditor from "./EditFieldAuditor";
 import DeactivateFieldAuditor from "./DeactivatefieldAuditor";
 import ResetFieldAuditorPassword from "./ResetFieldAuditorPassword";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import useUserManagement from "@/hooks/useUserManagement";
-import AccountManagerPlaceholder from "@/app/AccountManagerPlaceholder";
+import AccountManagerPlaceholder from "@/components/shared/AccountManagerPlaceholder";
 
 export default function FieldAuditorsTable() {
-	const { getUsers } = useUserManagement();
+	const { getUsers, getFieldAuditors } = useUserManagement();
+	const [currentPage, setCurrentPage] = useState(1);
 
 	const { data, isLoading, error, isFetching } = useQuery({
-		queryKey: ["accountManagers"],
+		queryKey: ["accountManagers", currentPage],
 		queryFn: async () => {
-			const response = await getUsers();
+			const response = await getFieldAuditors(currentPage);
 
-			return response.filter(
-				//@ts-ignore
-				(u) => u.role === "FIELD_AUDITOR"
-			);
+			return response;
 		},
 		gcTime: 0,
+		placeholderData: keepPreviousData,
+		retry: false,
 	});
 
 	return (
@@ -66,7 +66,7 @@ export default function FieldAuditorsTable() {
 									.fill("")
 									.map((d, ind) => <AccountManagerPlaceholder key={ind} />)
 							: //@ts-ignore
-							  data.map((d, ind) => (
+							  data?.data?.map((d, ind) => (
 									<tr
 										key={ind}
 										className="border-b-[#E6E6E6] border-b 
@@ -134,9 +134,9 @@ export default function FieldAuditorsTable() {
 					</tbody>
 				</table>
 			</div>
-			<div className="my-12 flex items-center justify-center md:justify-end px-5 md:px-10">
+			{/* <div className="my-12 flex items-center justify-center md:justify-end px-5 md:px-10">
 				{!isLoading && <Pagination />}
-			</div>
+			</div> */}
 		</div>
 	);
 }

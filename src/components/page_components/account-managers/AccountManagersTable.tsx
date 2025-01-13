@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Pagination from "@/components/shared/Pagination";
 import Dropdown from "@/components/shared/Dropdown";
 import Kebab from "@/components/shared/icons/Kebab";
@@ -11,23 +11,21 @@ import EditAccountManager from "./EditAccountManager";
 import DeactivateAccountManager from "./DeactivateAccountManager";
 import ResetAccountManagerPassword from "./ResetAccountManagerPassword";
 import useUserManagement from "@/hooks/useUserManagement";
-import { useQuery } from "@tanstack/react-query";
-import AccountManagerPlaceholder from "@/app/AccountManagerPlaceholder";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
+import AccountManagerPlaceholder from "@/components/shared/AccountManagerPlaceholder";
 
 export default function AccountManagersTable() {
-	const { getUsers } = useUserManagement();
+	const { getUsers, getAccountManagers } = useUserManagement();
+	const [currentPage, setCurrentPage] = useState(1);
 
 	const { data, isLoading, error, isFetching } = useQuery({
-		queryKey: ["accountManagers"],
+		queryKey: ["accountManagers", currentPage],
 		queryFn: async () => {
-			const response = await getUsers();
-
-			return response.filter(
-				//@ts-ignore
-				(u) =>
-					u.role === "ACCOUNT_MANAGER" || u.role === "CHIEF_ACCOUNT_MANAGER"
-			);
+			const response = await getAccountManagers(currentPage);
+			return response;
 		},
+		placeholderData: keepPreviousData,
+		retry: false,
 	});
 
 	return (
@@ -66,7 +64,7 @@ export default function AccountManagersTable() {
 									.fill("")
 									.map((d, index) => <AccountManagerPlaceholder key={index} />)
 							: //@ts-ignore
-							  data.map((d, index) => (
+							  data.data.map((d, index) => (
 									<tr
 										key={index}
 										className="border-b-[#E6E6E6] border-b 
@@ -135,7 +133,13 @@ export default function AccountManagersTable() {
 				</table>
 			</div>
 			<div className="my-12 flex items-center justify-center md:justify-end px-5 md:px-10">
-				{!isLoading && <Pagination />}
+				{!isLoading && (
+					<Pagination
+						currentPage={currentPage}
+						totalPages={data?.totalPages}
+						setCurrentPage={setCurrentPage}
+					/>
+				)}
 			</div>
 		</div>
 	);

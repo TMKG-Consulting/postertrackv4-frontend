@@ -177,9 +177,9 @@ export default function CompetitiveReportTable() {
 					</tbody>
 				</table>
 			</div>
-			<div className="my-12 flex items-center justify-center md:justify-end px-5 md:px-10">
+			{/* <div className="my-12 flex items-center justify-center md:justify-end px-5 md:px-10">
 				<Pagination />
-			</div>
+			</div> */}
 		</div>
 	);
 }

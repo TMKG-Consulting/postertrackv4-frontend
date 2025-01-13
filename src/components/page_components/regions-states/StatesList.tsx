@@ -16,7 +16,7 @@ export default function StatesList() {
 			{states.map((state) => {
 				const numCities = cities.filter((c) => c.stateId === state.id);
 				const region = regions.find((r) => r.id === state.regionId);
-				if (!statesToShowByRegion.includes(state.regionId)) {
+				if (!statesToShowByRegion.includes(Number(state.regionId))) {
 					return;
 				}
 

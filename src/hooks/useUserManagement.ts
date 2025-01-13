@@ -18,13 +18,58 @@ export default function useUserManagement() {
 		}
 	};
 
-	const getUsers = async () => {
+	const getUsers = async (page: number) => {
 		try {
-			const response = await ApiInstance.get("/users", {
+			const response = await ApiInstance.get(`/users?page=${page}`, {
 				headers: {
 					"auth-token": accessToken,
 				},
 			});
+			return response.data;
+		} catch (error) {
+			throw error;
+		}
+	};
+
+	const getClients = async (page: number) => {
+		try {
+			const response = await ApiInstance.get(`/users/clients?page=${page}`, {
+				headers: {
+					"auth-token": accessToken,
+				},
+			});
+			return response.data;
+		} catch (error) {
+			throw error;
+		}
+	};
+
+	const getAccountManagers = async (page: number) => {
+		try {
+			const response = await ApiInstance.get(
+				`/users/account-managers?page=${page}`,
+				{
+					headers: {
+						"auth-token": accessToken,
+					},
+				}
+			);
+			return response.data;
+		} catch (error) {
+			throw error;
+		}
+	};
+
+	const getFieldAuditors = async (page: number) => {
+		try {
+			const response = await ApiInstance.get(
+				`/users/field-auditors?page=${page}`,
+				{
+					headers: {
+						"auth-token": accessToken,
+					},
+				}
+			);
 			return response.data;
 		} catch (error) {
 			throw error;
@@ -47,5 +92,12 @@ export default function useUserManagement() {
 		}
 	};
 
-	return { createUser, getUsers, updateUser };
+	return {
+		createUser,
+		getUsers,
+		updateUser,
+		getClients,
+		getAccountManagers,
+		getFieldAuditors,
+	};
 }
