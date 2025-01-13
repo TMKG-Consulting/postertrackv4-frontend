@@ -12,16 +12,20 @@ export default function page() {
 		<>
 			<DashboardHeader />
 			<section className="grid md:grid-cols-3 gap-10 mt-10">
-				<div className="w-full h-[128px] rounded-2xl bg-white p-8">
+				<Link
+					href={"/clients"}
+					className="w-full h-[128px] rounded-2xl bg-white p-8">
 					<div className="flex items-center justify-between">
 						<span className="text-[1.8rem] font-semibold text-appBlack">
-							Advertisers
+							Clients
 						</span>
 						<ClientsIcon />
 					</div>
 					<span className="text-[4rem] font-extrabold text-appBlack">500</span>
-				</div>
-				<div className="w-full h-[128px] rounded-2xl bg-white p-8">
+				</Link>
+				<Link
+					href={"/brands"}
+					className="w-full h-[128px] rounded-2xl bg-white p-8">
 					<div className="flex items-center justify-between">
 						<span className="text-[1.8rem] font-semibold text-appBlack">
 							Brands
@@ -29,17 +33,21 @@ export default function page() {
 						<ClientsIcon fill="#3632ED" />
 					</div>
 					<span className="text-[4rem] font-extrabold text-appBlack">500</span>
-				</div>
-				<div className="w-full h-[128px] rounded-2xl bg-white p-8">
+				</Link>
+				<Link
+					href={"/advertisers"}
+					className="w-full h-[128px] rounded-2xl bg-white p-8">
 					<div className="flex items-center justify-between">
 						<span className="text-[1.8rem] font-semibold text-appBlack">
-							Media Owners
+							Advertisers
 						</span>
 						<ClientsIcon fill="#139B9B" />
 					</div>
 					<span className="text-[4rem] font-extrabold text-appBlack">500</span>
-				</div>
-				<div className="w-full h-[128px] rounded-2xl bg-white p-8">
+				</Link>
+				<Link
+					href={"/field-auditors"}
+					className="w-full h-[128px] rounded-2xl bg-white p-8">
 					<div className="flex items-center justify-between">
 						<span className="text-[1.8rem] font-semibold text-appBlack">
 							Field Auditors
@@ -47,8 +55,8 @@ export default function page() {
 						<ClientsIcon fill="#ED3D05" />
 					</div>
 					<span className="text-[4rem] font-extrabold text-appBlack">500</span>
-				</div>
-				<div className="w-full h-[128px] rounded-2xl bg-white p-8">
+				</Link>
+				<Link href={""} className="w-full h-[128px] rounded-2xl bg-white p-8">
 					<div className="flex items-center justify-between">
 						<span className="text-[1.8rem] font-semibold text-appBlack">
 							Total Sites
@@ -56,8 +64,10 @@ export default function page() {
 						<TotalSitesIcon />
 					</div>
 					<span className="text-[4rem] font-extrabold text-appBlack">500</span>
-				</div>
-				<div className="w-full h-[128px] rounded-2xl bg-white p-8">
+				</Link>
+				<Link
+					href={"/campaigns"}
+					className="w-full h-[128px] rounded-2xl bg-white p-8">
 					<div className="flex items-center justify-between">
 						<span className="text-[1.8rem] font-semibold text-appBlack">
 							Campaigns
@@ -65,7 +75,7 @@ export default function page() {
 						<TotalCampaignsIcon />
 					</div>
 					<span className="text-[4rem] font-extrabold text-appBlack">500</span>
-				</div>
+				</Link>
 			</section>
 			<section className="rounded-2xl bg-white my-12">
 				<div className="w-full p-10 flex items-center justify-between">

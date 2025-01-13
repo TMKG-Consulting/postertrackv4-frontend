@@ -19,7 +19,7 @@ export default function FieldAuditorsTable() {
 	const [currentPage, setCurrentPage] = useState(1);
 
 	const { data, isLoading, error, isFetching } = useQuery({
-		queryKey: ["accountManagers", currentPage],
+		queryKey: ["fieldAuditors", currentPage],
 		queryFn: async () => {
 			const response = await getFieldAuditors(currentPage);
 
@@ -134,9 +134,15 @@ export default function FieldAuditorsTable() {
 					</tbody>
 				</table>
 			</div>
-			{/* <div className="my-12 flex items-center justify-center md:justify-end px-5 md:px-10">
-				{!isLoading && <Pagination />}
-			</div> */}
+			<div className="my-12 flex items-center justify-center md:justify-end px-5 md:px-10">
+				{!isLoading && (
+					<Pagination
+						currentPage={currentPage}
+						totalPages={data?.totalPages}
+						setCurrentPage={setCurrentPage}
+					/>
+				)}
+			</div>
 		</div>
 	);
 }

@@ -10,7 +10,7 @@ import DeactivateClient from "./DeactivateClient";
 import ResetClientPassword from "./ResetClientPassword";
 import useUserManagement from "@/hooks/useUserManagement";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
-import AccountManagerPlaceholder from "@/components/shared/AccountManagerPlaceholder";
+import ClientPlaceholder from "@/components/shared/ClientPlaceholder";
 
 export default function ClientsTable() {
 	const { getClients } = useUserManagement();
@@ -61,7 +61,7 @@ export default function ClientsTable() {
 						{isLoading || isFetching
 							? Array(5)
 									.fill("")
-									.map((d, index) => <AccountManagerPlaceholder key={index} />)
+									.map((d, index) => <ClientPlaceholder key={index} />)
 							: //@ts-ignore
 							  data.data.map((d, index) => (
 									<tr
@@ -74,13 +74,17 @@ export default function ClientsTable() {
 											</div>
 										</td>
 										<td className="text-center">
-											<span className="text-2xl font-medium">{d.name}</span>
+											<span className="text-2xl font-medium">
+												{d.advertiser.name}
+											</span>
 										</td>
 										<td className="">
 											<span className="text-2xl font-medium">{d.address}</span>
 										</td>
 										<td className="text-center">
-											<span className="text-2xl font-medium">John Doe</span>
+											<span className="text-2xl font-medium">
+												{d.industry.name}
+											</span>
 										</td>
 										<td className="text-center">
 											<span className="text-2xl font-medium">{d.phone}</span>

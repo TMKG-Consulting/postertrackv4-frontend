@@ -76,7 +76,7 @@ export default function CampaignsTable() {
 											<span className="text-2xl font-medium">{d.id}</span>
 										</td>
 										<td className="text-center">
-											<span className="text-2xl font-medium">ABC Limited</span>
+											<span className="text-2xl font-medium">{d.clientId}</span>
 										</td>
 										<td className="text-center hidden xl:table-cell">
 											<span className="text-2xl font-medium text-center">
@@ -84,7 +84,9 @@ export default function CampaignsTable() {
 											</span>
 										</td>
 										<td className="text-center hidden xl:table-cell">
-											<span className="text-2xl font-medium">200</span>
+											<span className="text-2xl font-medium">
+												{d.siteList.length}
+											</span>
 										</td>
 										<td className="text-center">
 											<Dropdown
@@ -100,7 +102,7 @@ export default function CampaignsTable() {
 													</button>
 												)}
 												items={[
-													<ViewCampaign />,
+													<ViewCampaign campaignId={d.id} />,
 													<AddMoreSites />,
 													<DeleteCampaign />,
 												]}

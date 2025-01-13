@@ -12,6 +12,8 @@ export interface User {
 	password?: string;
 	name?: string | number;
 	id?: number;
+	profilePicture?: string;
+	status?: boolean;
 }
 
 export interface AccountManager extends User {

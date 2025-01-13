@@ -2,7 +2,7 @@ import CampaignDetailsHeader from "@/components/page_components/campaigns/detail
 import React from "react";
 import CampaignSiteListTable from "@/components/page_components/campaigns/details/CampaignSiteListTable";
 
-export default function page() {
+export default async function page() {
 	return (
 		<>
 			<CampaignDetailsHeader />

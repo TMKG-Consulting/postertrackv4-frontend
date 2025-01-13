@@ -17,6 +17,9 @@ type DropdownProps<T> = {
 	renderItem: (val: RenderItemParams<T>) => React.JSX.Element;
 	renderButton: (val: RenderButtonParams) => React.JSX.Element;
 	renderHeader?: (val: RenderButtonParams) => React.JSX.Element;
+	renderFooter?: (val: RenderButtonParams) => React.JSX.Element;
+	dropdownContentRef?: React.MutableRefObject<null>;
+	handleContentScroll?: () => void;
 	dropdownWidth?: string;
 	bordered?: boolean;
 	top?: number;
@@ -36,6 +39,9 @@ export default function Dropdown<T>({
 	right,
 	bottom,
 	renderHeader,
+	renderFooter,
+	dropdownContentRef,
+	handleContentScroll,
 }: DropdownProps<T>) {
 	const [open, setOpen] = useState(false);
 	const containerRef = useRef(null);
@@ -64,11 +70,15 @@ export default function Dropdown<T>({
 						? "scale-100 opacity-100 pointer-events-auto"
 						: "scale-75 opacity-0 pointer-events-none"
 				}`}>
-				<div className="w-full  max-h-[250px] flex flex-col overflow-auto px-3 relative">
+				<div
+					ref={dropdownContentRef}
+					onScroll={handleContentScroll}
+					className="w-full  max-h-[250px] flex flex-col overflow-auto px-3 relative">
 					{renderHeader && renderHeader({ open, setOpen })}
 					{items.map((item, index) =>
 						renderItem({ item, index, setOpen, open })
 					)}
+					{renderFooter && renderFooter({ open, setOpen })}
 				</div>
 			</div>
 		</div>

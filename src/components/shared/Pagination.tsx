@@ -37,9 +37,9 @@ export default function Pagination({
 	return (
 		<div className="w-max flex items-center gap-x-3 md:gap-x-5">
 			<button
-				onClick={() => setCurrentPage(currentPage + 1)}
+				onClick={() => setCurrentPage(currentPage - 1)}
 				disabled={currentPage === 1}
-				className="bg-[#F2F2F2] w-[35px] h-[35px] rounded-lg flex items-center justify-center rotate-[90deg]">
+				className="bg-[#F2F2F2] w-[35px] h-[35px] rounded-lg flex items-center justify-center rotate-[90deg] disabled:cursor-not-allowed">
 				<ChevronIcon fill="#140100" />
 			</button>
 
@@ -58,8 +58,8 @@ export default function Pagination({
 			))}
 
 			<button
-				onClick={() => setCurrentPage(currentPage - 1)}
-				className="bg-[#F2F2F2] w-[35px] h-[35px] rounded-lg flex items-center justify-center rotate-[-90deg]"
+				onClick={() => setCurrentPage(currentPage + 1)}
+				className="bg-[#F2F2F2] w-[35px] h-[35px] rounded-lg flex items-center justify-center rotate-[-90deg] disabled:cursor-not-allowed"
 				disabled={currentPage === totalPages}>
 				<ChevronIcon fill="#140100" />
 			</button>
