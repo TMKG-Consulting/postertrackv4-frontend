@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Pagination from "@/components/shared/Pagination";
 import Dropdown from "@/components/shared/Dropdown";
 import Kebab from "@/components/shared/icons/Kebab";
@@ -8,8 +8,43 @@ import SiteListTableActions from "./SiteListTableActions";
 import ViewSiteReport from "./ViewSiteReport";
 import EditSite from "./EditSite";
 import DeleteSite from "./DeleteSite";
+import { Campaign, Site } from "@/types";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
+import useCredentials from "@/hooks/useCredentials";
+import { useParams } from "next/navigation";
+import { ApiInstance } from "@/utils";
+import SitePlaceholder from "@/components/shared/SitePlaceholder";
 
-export default function CampaignSiteListTable() {
+export default function CampaignSiteListTable({
+	campaign,
+}: {
+	campaign: Campaign;
+}) {
+	const { accessToken } = useCredentials();
+	const params = useParams();
+	const { data, isLoading, isFetching } = useQuery({
+		queryKey: ["campaignDetails", params.campaignId],
+		queryFn: async () => {
+			const response = await ApiInstance.get(
+				`/campaigns/${params.campaignId}`,
+				{
+					headers: {
+						"auth-token": accessToken,
+					},
+				}
+			);
+
+			return response.data.campaign;
+		},
+		initialData: campaign,
+	});
+
+	const [currentPage, setCurrentPage] = useState(1);
+	const itemsPerPage = 10;
+	const totalPages = Math.ceil(data?.siteList.length / itemsPerPage);
+	const startIndex = (currentPage - 1) * itemsPerPage;
+	const endIndex = startIndex + itemsPerPage;
+
 	return (
 		<div className="h-full flex flex-col">
 			<SiteListTableActions />
@@ -52,602 +87,89 @@ export default function CampaignSiteListTable() {
 						</tr>
 					</thead>
 					<tbody>
-						<tr
-							className="border-b-[#E6E6E6] border-b 
+						{isLoading || isFetching
+							? [1, 2, 3, 4, 5, 6].map((d, i) => <SitePlaceholder key={i} />)
+							: data?.siteList
+									.slice(startIndex, endIndex)
+									.map((d: Site, i: number) => (
+										<tr
+											key={i}
+											className="border-b-[#E6E6E6] border-b 
                         ">
-							<td className="text-center">
-								<div>
-									<AppCheckbox name="check-all" />
-								</div>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">4019</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">Airtel</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium text-center">Ikeja</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">Lagos</span>
-							</td>
-							<td className="">
-								<span className="text-2xl font-medium">
-									Along adeniran ogunsanya street surulere ftt bode thomas and
-									shoprite
-								</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">Prime Media</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">Led</span>
-							</td>
-							<td className="text-center">
-								<span className="flex p-[5px] border-[1.5px] border-[#FF8617] bg-[#FFE3CA] rounded-full text-[#FF8617] text-2xl items-center justify-center font-medium">
-									Pending
-								</span>
-							</td>
-							<td className="text-center">
-								<Dropdown
-									bordered
-									dropdownWidth="180px"
-									right={0}
-									top={100}
-									renderButton={({ setOpen, open }) => (
-										<button
-											onClick={() => setOpen(!open)}
-											className="w-[35px] h-[35px] rounded-full flex items-center justify-center">
-											<Kebab />
-										</button>
-									)}
-									items={[<ViewSiteReport />, <EditSite />, <DeleteSite />]}
-									renderItem={({ item, index }) => (
-										<div className="w-full" key={index}>
-											{item}
-										</div>
-									)}
-								/>
-							</td>
-						</tr>
-						<tr
-							className="border-b-[#E6E6E6] border-b 
-                        ">
-							<td className="text-center">
-								<div>
-									<AppCheckbox name="check-all" />
-								</div>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">4019</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">Airtel</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium text-center">Ikeja</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">Lagos</span>
-							</td>
-							<td className="">
-								<span className="text-2xl font-medium">
-									Along adeniran ogunsanya street surulere ftt bode thomas and
-									shoprite
-								</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">Prime Media</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">Led</span>
-							</td>
-							<td className="text-center">
-								<span className="flex p-[5px] border-[1.5px] border-[#FF8617] bg-[#FFE3CA] rounded-full text-[#FF8617] text-2xl items-center justify-center font-medium">
-									Pending
-								</span>
-							</td>
-							<td className="text-center">
-								<Dropdown
-									bordered
-									dropdownWidth="180px"
-									right={0}
-									top={100}
-									renderButton={({ setOpen, open }) => (
-										<button
-											onClick={() => setOpen(!open)}
-											className="w-[35px] h-[35px] rounded-full flex items-center justify-center">
-											<Kebab />
-										</button>
-									)}
-									items={[<ViewSiteReport />, <EditSite />, <DeleteSite />]}
-									renderItem={({ item, index }) => (
-										<div className="w-full" key={index}>
-											{item}
-										</div>
-									)}
-								/>
-							</td>
-						</tr>
-						<tr
-							className="border-b-[#E6E6E6] border-b 
-                        ">
-							<td className="text-center">
-								<div>
-									<AppCheckbox name="check-all" />
-								</div>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">4019</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">Airtel</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium text-center">Ikeja</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">Lagos</span>
-							</td>
-							<td className="">
-								<span className="text-2xl font-medium">
-									Along adeniran ogunsanya street surulere ftt bode thomas and
-									shoprite
-								</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">Prime Media</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">Led</span>
-							</td>
-							<td className="text-center">
-								<span className="flex p-[5px] border-[1.5px] border-[#FF8617] bg-[#FFE3CA] rounded-full text-[#FF8617] text-2xl items-center justify-center font-medium">
-									Pending
-								</span>
-							</td>
-							<td className="text-center">
-								<Dropdown
-									bordered
-									dropdownWidth="180px"
-									right={0}
-									top={100}
-									renderButton={({ setOpen, open }) => (
-										<button
-											onClick={() => setOpen(!open)}
-											className="w-[35px] h-[35px] rounded-full flex items-center justify-center">
-											<Kebab />
-										</button>
-									)}
-									items={[<ViewSiteReport />, <EditSite />, <DeleteSite />]}
-									renderItem={({ item, index }) => (
-										<div className="w-full" key={index}>
-											{item}
-										</div>
-									)}
-								/>
-							</td>
-						</tr>
-						<tr
-							className="border-b-[#E6E6E6] border-b 
-                        ">
-							<td className="text-center">
-								<div>
-									<AppCheckbox name="check-all" />
-								</div>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">4019</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">Airtel</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium text-center">Ikeja</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">Lagos</span>
-							</td>
-							<td className="">
-								<span className="text-2xl font-medium">
-									Along adeniran ogunsanya street surulere ftt bode thomas and
-									shoprite
-								</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">Prime Media</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">Led</span>
-							</td>
-							<td className="text-center">
-								<span className="flex p-[5px] border-[1.5px] border-[#FF8617] bg-[#FFE3CA] rounded-full text-[#FF8617] text-2xl items-center justify-center font-medium">
-									Pending
-								</span>
-							</td>
-							<td className="text-center">
-								<Dropdown
-									bordered
-									dropdownWidth="180px"
-									right={0}
-									top={100}
-									renderButton={({ setOpen, open }) => (
-										<button
-											onClick={() => setOpen(!open)}
-											className="w-[35px] h-[35px] rounded-full flex items-center justify-center">
-											<Kebab />
-										</button>
-									)}
-									items={[<ViewSiteReport />, <EditSite />, <DeleteSite />]}
-									renderItem={({ item, index }) => (
-										<div className="w-full" key={index}>
-											{item}
-										</div>
-									)}
-								/>
-							</td>
-						</tr>
-						<tr
-							className="border-b-[#E6E6E6] border-b 
-                        ">
-							<td className="text-center">
-								<div>
-									<AppCheckbox name="check-all" />
-								</div>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">4019</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">Airtel</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium text-center">Ikeja</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">Lagos</span>
-							</td>
-							<td className="">
-								<span className="text-2xl font-medium">
-									Along adeniran ogunsanya street surulere ftt bode thomas and
-									shoprite
-								</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">Prime Media</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">Led</span>
-							</td>
-							<td className="text-center">
-								<span className="flex p-[5px] border-[1.5px] border-[#FF8617] bg-[#FFE3CA] rounded-full text-[#FF8617] text-2xl items-center justify-center font-medium">
-									Pending
-								</span>
-							</td>
-							<td className="text-center">
-								<Dropdown
-									bordered
-									dropdownWidth="180px"
-									right={0}
-									top={100}
-									renderButton={({ setOpen, open }) => (
-										<button
-											onClick={() => setOpen(!open)}
-											className="w-[35px] h-[35px] rounded-full flex items-center justify-center">
-											<Kebab />
-										</button>
-									)}
-									items={[<ViewSiteReport />, <EditSite />, <DeleteSite />]}
-									renderItem={({ item, index }) => (
-										<div className="w-full" key={index}>
-											{item}
-										</div>
-									)}
-								/>
-							</td>
-						</tr>
-						<tr
-							className="border-b-[#E6E6E6] border-b 
-                        ">
-							<td className="text-center">
-								<div>
-									<AppCheckbox name="check-all" />
-								</div>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">4019</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">Airtel</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium text-center">Ikeja</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">Lagos</span>
-							</td>
-							<td className="">
-								<span className="text-2xl font-medium">
-									Along adeniran ogunsanya street surulere ftt bode thomas and
-									shoprite
-								</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">Prime Media</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">Led</span>
-							</td>
-							<td className="text-center">
-								<span className="flex p-[5px] border-[1.5px] border-[#FF8617] bg-[#FFE3CA] rounded-full text-[#FF8617] text-2xl items-center justify-center font-medium">
-									Pending
-								</span>
-							</td>
-							<td className="text-center">
-								<Dropdown
-									bordered
-									dropdownWidth="180px"
-									right={0}
-									top={100}
-									renderButton={({ setOpen, open }) => (
-										<button
-											onClick={() => setOpen(!open)}
-											className="w-[35px] h-[35px] rounded-full flex items-center justify-center">
-											<Kebab />
-										</button>
-									)}
-									items={[<ViewSiteReport />, <EditSite />, <DeleteSite />]}
-									renderItem={({ item, index }) => (
-										<div className="w-full" key={index}>
-											{item}
-										</div>
-									)}
-								/>
-							</td>
-						</tr>
-						<tr
-							className="border-b-[#E6E6E6] border-b 
-                        ">
-							<td className="text-center">
-								<div>
-									<AppCheckbox name="check-all" />
-								</div>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">4019</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">Airtel</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium text-center">Ikeja</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">Lagos</span>
-							</td>
-							<td className="">
-								<span className="text-2xl font-medium">
-									Along adeniran ogunsanya street surulere ftt bode thomas and
-									shoprite
-								</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">Prime Media</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">Led</span>
-							</td>
-							<td className="text-center">
-								<span className="flex p-[5px] border-[1.5px] border-[#FF8617] bg-[#FFE3CA] rounded-full text-[#FF8617] text-2xl items-center justify-center font-medium">
-									Pending
-								</span>
-							</td>
-							<td className="text-center">
-								<Dropdown
-									bordered
-									dropdownWidth="180px"
-									right={0}
-									top={100}
-									renderButton={({ setOpen, open }) => (
-										<button
-											onClick={() => setOpen(!open)}
-											className="w-[35px] h-[35px] rounded-full flex items-center justify-center">
-											<Kebab />
-										</button>
-									)}
-									items={[<ViewSiteReport />, <EditSite />, <DeleteSite />]}
-									renderItem={({ item, index }) => (
-										<div className="w-full" key={index}>
-											{item}
-										</div>
-									)}
-								/>
-							</td>
-						</tr>
-						<tr
-							className="border-b-[#E6E6E6] border-b 
-                        ">
-							<td className="text-center">
-								<div>
-									<AppCheckbox name="check-all" />
-								</div>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">4019</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">Airtel</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium text-center">Ikeja</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">Lagos</span>
-							</td>
-							<td className="">
-								<span className="text-2xl font-medium">
-									Along adeniran ogunsanya street surulere ftt bode thomas and
-									shoprite
-								</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">Prime Media</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">Led</span>
-							</td>
-							<td className="text-center">
-								<span className="flex p-[5px] border-[1.5px] border-[#FF8617] bg-[#FFE3CA] rounded-full text-[#FF8617] text-2xl items-center justify-center font-medium">
-									Pending
-								</span>
-							</td>
-							<td className="text-center">
-								<Dropdown
-									bordered
-									dropdownWidth="180px"
-									right={0}
-									top={100}
-									renderButton={({ setOpen, open }) => (
-										<button
-											onClick={() => setOpen(!open)}
-											className="w-[35px] h-[35px] rounded-full flex items-center justify-center">
-											<Kebab />
-										</button>
-									)}
-									items={[<ViewSiteReport />, <EditSite />, <DeleteSite />]}
-									renderItem={({ item, index }) => (
-										<div className="w-full" key={index}>
-											{item}
-										</div>
-									)}
-								/>
-							</td>
-						</tr>
-						<tr
-							className="border-b-[#E6E6E6] border-b 
-                        ">
-							<td className="text-center">
-								<div>
-									<AppCheckbox name="check-all" />
-								</div>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">4019</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">Airtel</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium text-center">Ikeja</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">Lagos</span>
-							</td>
-							<td className="">
-								<span className="text-2xl font-medium">
-									Along adeniran ogunsanya street surulere ftt bode thomas and
-									shoprite
-								</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">Prime Media</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">Led</span>
-							</td>
-							<td className="text-center">
-								<span className="flex p-[5px] border-[1.5px] border-[#FF8617] bg-[#FFE3CA] rounded-full text-[#FF8617] text-2xl items-center justify-center font-medium">
-									Pending
-								</span>
-							</td>
-							<td className="text-center">
-								<Dropdown
-									bordered
-									dropdownWidth="180px"
-									right={0}
-									top={100}
-									renderButton={({ setOpen, open }) => (
-										<button
-											onClick={() => setOpen(!open)}
-											className="w-[35px] h-[35px] rounded-full flex items-center justify-center">
-											<Kebab />
-										</button>
-									)}
-									items={[<ViewSiteReport />, <EditSite />, <DeleteSite />]}
-									renderItem={({ item, index }) => (
-										<div className="w-full" key={index}>
-											{item}
-										</div>
-									)}
-								/>
-							</td>
-						</tr>
-						<tr
-							className="border-b-[#E6E6E6] border-b 
-                        ">
-							<td className="text-center">
-								<div>
-									<AppCheckbox name="check-all" />
-								</div>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">4019</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">Airtel</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium text-center">Ikeja</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">Lagos</span>
-							</td>
-							<td className="">
-								<span className="text-2xl font-medium">
-									Along adeniran ogunsanya street surulere ftt bode thomas and
-									shoprite
-								</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">Prime Media</span>
-							</td>
-							<td className="text-center">
-								<span className="text-2xl font-medium">Led</span>
-							</td>
-							<td className="text-center">
-								<span className="flex p-[5px] border-[1.5px] border-[#FF8617] bg-[#FFE3CA] rounded-full text-[#FF8617] text-2xl items-center justify-center font-medium">
-									Pending
-								</span>
-							</td>
-							<td className="text-center">
-								<Dropdown
-									bordered
-									dropdownWidth="180px"
-									right={0}
-									top={100}
-									renderButton={({ setOpen, open }) => (
-										<button
-											onClick={() => setOpen(!open)}
-											className="w-[35px] h-[35px] rounded-full flex items-center justify-center">
-											<Kebab />
-										</button>
-									)}
-									items={[<ViewSiteReport />, <EditSite />, <DeleteSite />]}
-									renderItem={({ item, index }) => (
-										<div className="w-full" key={index}>
-											{item}
-										</div>
-									)}
-								/>
-							</td>
-						</tr>
+											<td className="text-center">
+												<div>
+													<AppCheckbox name="check-all" />
+												</div>
+											</td>
+											<td className="text-center">
+												<span className="text-xl font-medium">{d.code}</span>
+											</td>
+											<td className="text-center">
+												<span className="text-xl font-medium">{d.brand}</span>
+											</td>
+											<td className="text-center">
+												<span className="text-xl font-medium text-center">
+													{d.state}
+												</span>
+											</td>
+											<td className="text-center">
+												<span className="text-xl font-medium">{d.city}</span>
+											</td>
+											<td className="">
+												<span className="text-xl font-medium">
+													{d.location}
+												</span>
+											</td>
+											<td className="text-center">
+												<span className="text-xl font-medium">
+													{d.mediaOwner}
+												</span>
+											</td>
+											<td className="text-center">
+												<span className="text-xl font-medium">Led</span>
+											</td>
+											<td className="text-center">
+												<span className="flex p-[5px] border-[1.5px] border-[#FF8617] bg-[#FFE3CA] rounded-full text-[#FF8617] text-2xl items-center justify-center font-medium">
+													Pending
+												</span>
+											</td>
+											<td className="text-center">
+												<Dropdown
+													bordered
+													dropdownWidth="180px"
+													right={0}
+													top={100}
+													renderButton={({ setOpen, open }) => (
+														<button
+															onClick={() => setOpen(!open)}
+															className="w-[35px] h-[35px] rounded-full flex items-center justify-center">
+															<Kebab />
+														</button>
+													)}
+													items={[
+														<ViewSiteReport />,
+														<EditSite />,
+														<DeleteSite />,
+													]}
+													renderItem={({ item, index }) => (
+														<div className="w-full" key={index}>
+															{item}
+														</div>
+													)}
+												/>
+											</td>
+										</tr>
+									))}
 					</tbody>
 				</table>
 			</div>
-			{/* <div className="my-12 flex items-center justify-center md:justify-end px-5 md:px-10">
-				<Pagination />
-			</div> */}
+			<div className="my-12 flex items-center justify-center md:justify-end px-5 md:px-10">
+				<Pagination
+					currentPage={currentPage}
+					setCurrentPage={setCurrentPage}
+					totalPages={totalPages}
+				/>
+			</div>
 		</div>
 	);
 }

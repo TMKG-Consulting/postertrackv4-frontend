@@ -7,6 +7,9 @@ import { useQuery } from "@tanstack/react-query";
 import { ApiInstance } from "@/utils";
 import useCredentials from "@/hooks/useCredentials";
 import CategoriesTableActions from "./CategoriesTableAction";
+import DeleteIcon from "@/components/shared/icons/DeleteIcon";
+import Portal from "@/components/shared/Portal";
+import AppButton from "@/components/shared/AppButton";
 
 export default function CategoriesTable() {
 	const { accessToken } = useCredentials();
@@ -39,9 +42,13 @@ export default function CategoriesTable() {
 					: //@ts-ignore
 					  data.data.map((d, i) => (
 							<div
-								className="text-[1.7rem] py-[10px] border-b border-b-gray-100 font-medium"
+								className="text-[1.7rem] py-[10px] border-b border-b-gray-100 font-medium flex items-center justify-between"
 								key={i}>
 								<span>{d.name}</span>
+								<AppButton className="!w-[100px] bg-[#ed323730] items-center gap-2">
+									<DeleteIcon />
+									<span className="text-primary">Delete</span>
+								</AppButton>
 							</div>
 					  ))}
 			</div>

@@ -81,6 +81,8 @@ export interface Campaign {
 	clientId: number;
 	accountManagerId: number;
 	siteList: Site[];
+	accountManager?: AccountManager;
+	client?: Client;
 }
 
 export interface Site {
