@@ -18,7 +18,13 @@ export default function Error({
 
 	return (
 		<div className="w-full h-full flex flex-col items-center justify-center bg-white">
-			<Image alt="postertrack" src={"/error.jpg"} width={500} height={500} />
+			<Image
+				alt="postertrack"
+				src={"/error.jpg"}
+				width={500}
+				height={500}
+				priority
+			/>
 			<h2 className="text-4xl font-bold">Oops! Something went wrong!</h2>
 			<p className="text-2xl text-[#666666]">
 				Our technical team is working on it.

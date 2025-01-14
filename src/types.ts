@@ -69,6 +69,8 @@ export interface Brand {
 	name: string;
 	advertiserId: number | string;
 	categoryId: number | string;
+	advertiser?: Advertiser;
+	logo?: string;
 }
 
 export interface CampaignCreateData {

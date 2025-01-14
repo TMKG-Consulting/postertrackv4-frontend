@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import CampaignTableActions from "./CampaignTableActions";
 import Kebab from "@/components/shared/icons/Kebab";
 import Pagination from "@/components/shared/Pagination";
@@ -15,9 +15,10 @@ import { Campaign } from "@/types";
 
 export default function CampaignsTable() {
 	const { accessToken } = useCredentials();
+	const [currentPage, setCurrentPage] = useState(1);
 
 	const { data, isLoading, isFetching } = useQuery({
-		queryKey: ["campaigns"],
+		queryKey: ["campaigns", currentPage],
 		queryFn: async () => {
 			const response = await ApiInstance.get("/campaigns", {
 				headers: {
@@ -64,7 +65,7 @@ export default function CampaignsTable() {
 							? Array(5)
 									.fill("")
 									.map((d, index) => <CampaignPlaceholder key={index} />)
-							: data.map((d: Campaign, i: number) => (
+							: data.data.map((d: Campaign, i: number) => (
 									<tr
 										key={i}
 										className="border-b-[#E6E6E6] border-b 
