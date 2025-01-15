@@ -18,6 +18,8 @@ const schema = Yup.object().shape({
 interface AdvertiserFormProps {
 	isEditing?: boolean;
 	initialValues?: Advertiser;
+	advertiserId?: string | number;
+	editCallback?: (data: any) => void;
 }
 
 export default function CreateAdvertiserForm({
@@ -25,6 +27,8 @@ export default function CreateAdvertiserForm({
 	initialValues = {
 		name: "",
 	},
+	advertiserId,
+	editCallback,
 }: AdvertiserFormProps) {
 	const { showAndHideAlert } = useAlert();
 	const router = useRouter();
@@ -35,20 +39,42 @@ export default function CreateAdvertiserForm({
 		{ setSubmitting }: FormikHelpers<Advertiser>
 	) => {
 		try {
-			await ApiInstance.post("/api/advertisers", values, {
-				headers: {
-					"auth-token": accessToken,
-				},
-			});
+			if (!isEditing) {
+				await ApiInstance.post("/api/advertisers", values, {
+					headers: {
+						"auth-token": accessToken,
+					},
+				});
 
-			showAndHideAlert({
-				message: "Advertiser created successfully.",
-				type: "success",
-			});
+				showAndHideAlert({
+					message: "Advertiser created successfully.",
+					type: "success",
+				});
 
-			setSubmitting(false);
+				setSubmitting(false);
 
-			router.push("/advertisers");
+				router.push("/advertisers");
+			} else {
+				const res = await ApiInstance.put(
+					"/api/advertiser/" + advertiserId,
+					values,
+					{
+						headers: {
+							"auth-token": accessToken,
+						},
+					}
+				);
+
+				showAndHideAlert({
+					message: "Advertiser updated successfully.",
+					type: "success",
+				});
+
+				setSubmitting(false);
+
+				// @ts-ignore
+				editCallback(res.data);
+			}
 		} catch (error) {
 			const err = error as AxiosError;
 			console.log(err);
@@ -68,7 +94,9 @@ export default function CreateAdvertiserForm({
 				!isEditing ? "md:w-[85%] xl:w-[60%]" : ""
 			} bg-white rounded-2xl border border-[#E2E2E2]`}>
 			<div className="p-5 md:p-12">
-				<h1 className="text-[2.8rem] font-extrabold">Add New Advertiser</h1>
+				<h1 className="text-[2.8rem] font-extrabold">
+					{!isEditing ? "Add New Advertiser" : "Edit Advertiser"}
+				</h1>
 			</div>
 
 			<Formik
@@ -85,7 +113,7 @@ export default function CreateAdvertiserForm({
 						<AppButton
 							className="font-semibold"
 							fullyRounded
-							label={"Create Advertiser"}
+							label={!isEditing ? "Create Advertiser" : "Edit Advertiser"}
 							showLoading={!isValidating && isSubmitting}
 						/>
 					</Form>

@@ -27,6 +27,7 @@ const schema = Yup.object().shape({
 interface AccountManagerFormProps {
 	isEditing?: boolean;
 	initialValues?: AccountManager;
+	editCallback?: (data: any) => void;
 }
 
 export default function CreateAccountManagerForm({
@@ -39,6 +40,7 @@ export default function CreateAccountManagerForm({
 		address: "",
 		role: "CHIEF_ACCOUNT_MANAGER",
 	},
+	editCallback,
 }: AccountManagerFormProps) {
 	const { createUser, updateUser } = useUserManagement();
 	const { showAndHideAlert } = useAlert();
@@ -71,6 +73,9 @@ export default function CreateAccountManagerForm({
 					message: "User updated successfully.",
 					type: "success",
 				});
+
+				// @ts-ignore
+				editCallback(response);
 			}
 
 			setSubmitting(false);

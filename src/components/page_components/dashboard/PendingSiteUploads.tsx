@@ -1,6 +1,26 @@
+"use client";
 import React from "react";
+import { useQuery } from "@tanstack/react-query";
+import useCredentials from "@/hooks/useCredentials";
+import { ApiInstance } from "@/utils";
 
 export default function PendingSiteUploads() {
+	const { accessToken } = useCredentials();
+
+	const { data, isLoading, error } = useQuery({
+		queryKey: [],
+		queryFn: async () => {
+			const res = await ApiInstance.get("/sites/pending-uploads", {
+				headers: {
+					"auth-token": accessToken,
+				},
+			});
+
+			return res.data;
+		},
+	});
+
+	console.log(data);
 	return (
 		<div className="w-full overflow-auto">
 			<table className="w-[300%] md:w-[125%] xl:w-full" cellPadding={10}>

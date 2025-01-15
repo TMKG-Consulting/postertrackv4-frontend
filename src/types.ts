@@ -30,6 +30,7 @@ export interface Client extends User {
 	industryId?: string | Industry;
 	industry?: Industry;
 	additionalEmail: string[];
+	advertiser?: Advertiser;
 }
 
 export interface Industry {
@@ -71,6 +72,7 @@ export interface Brand {
 	categoryId: number | string;
 	advertiser?: Advertiser;
 	logo?: string;
+	category?: Category;
 }
 
 export interface CampaignCreateData {
@@ -85,6 +87,8 @@ export interface Campaign {
 	siteList: Site[];
 	accountManager?: AccountManager;
 	client?: Client;
+	campaignID: string;
+	uploadedAt?: Date;
 }
 
 export interface Site {
@@ -95,4 +99,11 @@ export interface Site {
 	format: string;
 	location: string;
 	mediaOwner: string;
+}
+
+export interface SiteAssignment {
+	id: number;
+	siteCode: string;
+	fieldAuditorId: number;
+	status: "pending" | "approved" | "disapproved";
 }

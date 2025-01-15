@@ -1,24 +1,27 @@
 "use client";
 import React, { useState } from "react";
 import Pagination from "@/components/shared/Pagination";
-import Dropdown from "@/components/shared/Dropdown";
-import Kebab from "@/components/shared/icons/Kebab";
+
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ApiInstance } from "@/utils";
 import useCredentials from "@/hooks/useCredentials";
 import CategoriesTableActions from "./CategoriesTableAction";
 import DeleteIcon from "@/components/shared/icons/DeleteIcon";
-import Portal from "@/components/shared/Portal";
 import AppButton from "@/components/shared/AppButton";
 import Modal from "@/components/shared/Modal";
 import useAlert from "@/hooks/useAlert";
 import EditIcon from "@/components/shared/icons/EditIcon";
+import CreateACategoryForm from "./create/CreateCategoryForm";
+import { Category } from "@/types";
 
 export default function CategoriesTable() {
 	const { accessToken } = useCredentials();
 	const [currentPage, setCurrentPage] = useState(1);
+
 	const [categoryTodelete, setCategoryTodelete] = useState<number | null>(null);
+	const [categoryToEdit, setCategoryToEdit] = useState<Category | null>(null);
 	const [isDeleting, setIsDeleting] = useState(false);
+
 	const { showAndHideAlert } = useAlert();
 	const queryClient = useQueryClient();
 
@@ -89,6 +92,33 @@ export default function CategoriesTable() {
 					</div>
 				</div>
 			</Modal>
+			<Modal
+				hideModal={isDeleting ? undefined : () => setCategoryToEdit(null)}
+				showModal={categoryToEdit !== null}>
+				<div className="flex flex-col items-center justify-center p-[20px]">
+					<CreateACategoryForm
+						isEditing
+						initialValues={categoryToEdit ?? undefined}
+						categoryId={categoryToEdit?.id}
+						editCallback={(res) => {
+							queryClient.setQueryData(["categories", currentPage], (prev) => {
+								// @ts-ignore
+								const data = { ...prev };
+								const index = data.data.findIndex(
+									// @ts-ignore
+									(d) => d.id === res.updatedCategory.id
+								);
+
+								data.data[index] = res.updatedCategory;
+
+								return data;
+							});
+
+							setCategoryToEdit(null);
+						}}
+					/>
+				</div>
+			</Modal>
 			<CategoriesTableActions />
 			<div className="grow w-full flex flex-col px-8">
 				{isLoading || isFetching
@@ -112,7 +142,7 @@ export default function CategoriesTable() {
 										<span className="text-primary">Delete</span>
 									</AppButton>
 									<AppButton
-										onClick={() => setCategoryTodelete(d.id)}
+										onClick={() => setCategoryToEdit(d)}
 										className="!w-[100px] items-center gap-2">
 										<EditIcon fill="white" />
 										<span className="">Edit</span>

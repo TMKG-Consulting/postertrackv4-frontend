@@ -24,7 +24,10 @@ export default function EditClientInfo({ client }: { client: Client }) {
 				Edit Client Info
 			</button>
 			<Modal showModal={showEdit} hideModal={() => setShowEdit(false)}>
-				<CreateClientForm initialValues={client} isEditing />
+				<CreateClientForm
+					initialValues={{ ...client, name: client.advertiser?.id }}
+					isEditing
+				/>
 			</Modal>
 		</>
 	);

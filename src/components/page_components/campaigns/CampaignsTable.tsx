@@ -74,14 +74,18 @@ export default function CampaignsTable() {
 											<span className="text-2xl font-medium">{i + 1}</span>
 										</td>
 										<td className="text-center hidden xl:table-cell">
-											<span className="text-2xl font-medium">{d.id}</span>
+											<span className="text-2xl font-medium">
+												{d.campaignID}
+											</span>
 										</td>
 										<td className="text-center">
-											<span className="text-2xl font-medium">{d.clientId}</span>
+											<span className="text-2xl font-medium">
+												{d.client?.advertiser?.name}
+											</span>
 										</td>
 										<td className="text-center hidden xl:table-cell">
 											<span className="text-2xl font-medium text-center">
-												July 12, 2024
+												{new Date(d.uploadedAt!).toDateString()}
 											</span>
 										</td>
 										<td className="text-center hidden xl:table-cell">
@@ -118,9 +122,13 @@ export default function CampaignsTable() {
 							  ))}
 					</tbody>
 				</table>
-				{/* <div className="my-12 flex items-center justify-center md:justify-end px-5 md:px-10">
-					<Pagination />
-				</div> */}
+				<div className="my-12 flex items-center justify-center md:justify-end px-5 md:px-10">
+					<Pagination
+						currentPage={currentPage}
+						totalPages={data?.totalPages}
+						setCurrentPage={setCurrentPage}
+					/>
+				</div>
 			</div>
 		</div>
 	);

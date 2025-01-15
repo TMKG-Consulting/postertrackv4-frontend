@@ -11,12 +11,17 @@ import StatesCovered from "./create/StatesCovered";
 import { FieldAuditor } from "@/types";
 import { useRootStore } from "@/components/shared/providers/RootProvider";
 import CreateFieldAuditorForm from "./create/CreateFieldAuditorForm";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+
 export default function EditFieldAuditor({
 	fieldAuditor,
+	currentPage,
 }: {
 	fieldAuditor: FieldAuditor;
+	currentPage: number;
 }) {
 	const { userDetails } = useRootStore();
+	const queryClient = useQueryClient();
 
 	const [showEdit, setShowEdit] = useState(false);
 
@@ -42,6 +47,34 @@ export default function EditFieldAuditor({
 						phone: fieldAuditor.phone ?? "",
 					}}
 					isEditing
+					editCallback={async (user) => {
+						await queryClient.setQueryData(
+							["fieldAuditors", currentPage],
+							(prev) => {
+								// @ts-ignore
+								const data = { ...prev };
+								const index = data.data.findIndex(
+									// @ts-ignore
+									(d) => d.id === user.id
+								);
+
+								console.log(index, user);
+
+								data.data[index] = { ...data.data[index], ...user };
+								console.log(data);
+
+								return data;
+							}
+						);
+
+						setShowEdit(false);
+
+						await queryClient.refetchQueries({
+							queryKey: ["fieldAuditors", currentPage],
+							exact: true,
+							refetchType: "none",
+						});
+					}}
 				/>
 			</Modal>
 		</>

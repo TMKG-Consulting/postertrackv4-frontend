@@ -18,6 +18,8 @@ const schema = Yup.object().shape({
 interface CategoryFormProps {
 	isEditing?: boolean;
 	initialValues?: Category;
+	categoryId?: string | number;
+	editCallback?: (data: any) => void;
 }
 
 export default function CreateACategoryForm({
@@ -25,6 +27,8 @@ export default function CreateACategoryForm({
 	initialValues = {
 		name: "",
 	},
+	categoryId,
+	editCallback,
 }: CategoryFormProps) {
 	const { showAndHideAlert } = useAlert();
 	const router = useRouter();
@@ -35,20 +39,42 @@ export default function CreateACategoryForm({
 		{ setSubmitting }: FormikHelpers<Category>
 	) => {
 		try {
-			await ApiInstance.post("/api/categories", values, {
-				headers: {
-					"auth-token": accessToken,
-				},
-			});
+			if (!isEditing) {
+				await ApiInstance.post("/api/categories", values, {
+					headers: {
+						"auth-token": accessToken,
+					},
+				});
 
-			showAndHideAlert({
-				message: "Category created successfully.",
-				type: "success",
-			});
+				showAndHideAlert({
+					message: "Category created successfully.",
+					type: "success",
+				});
 
-			setSubmitting(false);
+				setSubmitting(false);
 
-			router.push("/categories");
+				router.push("/categories");
+			} else {
+				const res = await ApiInstance.put(
+					"/api/category/" + categoryId,
+					values,
+					{
+						headers: {
+							"auth-token": accessToken,
+						},
+					}
+				);
+
+				showAndHideAlert({
+					message: "Category updated successfully.",
+					type: "success",
+				});
+
+				setSubmitting(false);
+
+				// @ts-ignore
+				editCallback(res.data);
+			}
 		} catch (error) {
 			const err = error as AxiosError;
 			console.log(err);
@@ -68,7 +94,9 @@ export default function CreateACategoryForm({
 				!isEditing ? "md:w-[85%] xl:w-[60%]" : ""
 			} bg-white rounded-2xl border border-[#E2E2E2]`}>
 			<div className="p-5 md:p-12">
-				<h1 className="text-[2.8rem] font-extrabold">Add New Category</h1>
+				<h1 className="text-[2.8rem] font-extrabold">
+					{!isEditing ? "Add New Category" : "Edit Category"}
+				</h1>
 			</div>
 
 			<Formik
@@ -85,7 +113,7 @@ export default function CreateACategoryForm({
 						<AppButton
 							className="font-semibold"
 							fullyRounded
-							label={"Create Category"}
+							label={!isEditing ? "Create Category" : "Edit Category"}
 							showLoading={!isValidating && isSubmitting}
 						/>
 					</Form>

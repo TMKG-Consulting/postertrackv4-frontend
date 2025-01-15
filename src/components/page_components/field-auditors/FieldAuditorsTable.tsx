@@ -26,7 +26,6 @@ export default function FieldAuditorsTable() {
 			return response;
 		},
 		gcTime: 0,
-		placeholderData: keepPreviousData,
 		retry: false,
 	});
 
@@ -83,7 +82,11 @@ export default function FieldAuditorsTable() {
 													width={30}
 													height={30}
 													alt="poster-track"
-													src="https://plus.unsplash.com/premium_photo-1671656349218-5218444643d8?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+													src={
+														d.profilePicture
+															? d.profilePicture
+															: "/no-avatar.svg"
+													}
 												/>
 												<span className="text-2xl font-medium w-max max-w-[130px] truncate">
 													{d.firstname} {d.lastname}
@@ -102,7 +105,7 @@ export default function FieldAuditorsTable() {
 											</span>
 										</td>
 										<td className="">
-											<Switch isOn={true} />
+											<DeactivateFieldAuditor user={d} userId={d.id} asSwitch />
 										</td>
 										<td className="text-center">
 											<Dropdown
@@ -118,8 +121,11 @@ export default function FieldAuditorsTable() {
 													</button>
 												)}
 												items={[
-													<EditFieldAuditor fieldAuditor={d} />,
-													<DeactivateFieldAuditor />,
+													<EditFieldAuditor
+														fieldAuditor={d}
+														currentPage={currentPage}
+													/>,
+													<DeactivateFieldAuditor user={d} userId={d.id} />,
 													<ResetFieldAuditorPassword />,
 												]}
 												renderItem={({ item, index }) => (

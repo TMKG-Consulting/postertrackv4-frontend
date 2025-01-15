@@ -31,6 +31,8 @@ const schema = Yup.object().shape({
 interface ClientFormProps {
 	isEditing?: boolean;
 	initialValues?: Client;
+	clientId?: string | number;
+	editCallback?: (data: any) => void;
 }
 
 export default function CreateClientForm({
@@ -45,7 +47,7 @@ export default function CreateClientForm({
 		industryId: "",
 	},
 }: ClientFormProps) {
-	const { createUser } = useUserManagement();
+	const { createUser, updateUser } = useUserManagement();
 	const { showAndHideAlert } = useAlert();
 	const router = useRouter();
 	const { industries } = useRootStore();
@@ -55,16 +57,33 @@ export default function CreateClientForm({
 		{ setSubmitting }: FormikHelpers<Client>
 	) => {
 		try {
-			await createUser(values);
+			if (!isEditing) {
+				await createUser(values);
 
-			showAndHideAlert({
-				message: "User created successfully.",
-				type: "success",
-			});
+				showAndHideAlert({
+					message: "User created successfully.",
+					type: "success",
+				});
 
-			setSubmitting(false);
+				setSubmitting(false);
 
-			router.push("/clients");
+				router.push("/clients");
+			} else {
+				//@ts-ignore
+				delete values.advertiser;
+				delete values.industry;
+				delete values.firstname;
+				delete values.lastname;
+				delete values.profilePicture;
+
+				const response = await updateUser(initialValues.id!, values);
+				console.log(response);
+
+				showAndHideAlert({
+					message: "User updated successfully.",
+					type: "success",
+				});
+			}
 		} catch (error) {
 			const err = error as AxiosError;
 			console.log(err);
@@ -84,7 +103,9 @@ export default function CreateClientForm({
 				!isEditing ? "md:w-[85%] xl:w-[60%]" : ""
 			} bg-white rounded-2xl border border-[#E2E2E2]`}>
 			<div className="p-5 md:p-12">
-				<h1 className="text-[2.8rem] font-extrabold">Add New Client</h1>
+				<h1 className="text-[2.8rem] font-extrabold">
+					{isEditing ? "Edit Client" : "Add New Client"}
+				</h1>
 			</div>
 
 			<Formik
@@ -186,7 +207,7 @@ export default function CreateClientForm({
 						<AppButton
 							className="font-semibold"
 							fullyRounded
-							label={"Create Advertiser"}
+							label={isEditing ? "Update Client" : "Create Client"}
 							showLoading={!isValidating && isSubmitting}
 						/>
 					</Form>

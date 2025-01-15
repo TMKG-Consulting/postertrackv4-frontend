@@ -81,7 +81,11 @@ export default function AccountManagersTable() {
 													width={30}
 													height={30}
 													alt="poster-track"
-													src="https://plus.unsplash.com/premium_photo-1671656349218-5218444643d8?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+													src={
+														d.profilePicture
+															? d.profilePicture
+															: "/no-avatar.svg"
+													}
 												/>
 												<span className="text-2xl font-medium w-max max-w-[130px] truncate">
 													{d.firstname} {d.lastname}
@@ -100,7 +104,11 @@ export default function AccountManagersTable() {
 											</span>
 										</td>
 										<td className="">
-											<Switch isOn={true} />
+											<DeactivateAccountManager
+												asSwitch
+												user={d}
+												userId={d.id}
+											/>
 										</td>
 										<td className="text-center">
 											<Dropdown
@@ -116,12 +124,18 @@ export default function AccountManagersTable() {
 													</button>
 												)}
 												items={[
-													<EditAccountManager accountManager={d} />,
-													<DeactivateAccountManager />,
+													<EditAccountManager
+														accountManager={d}
+														currentPage={currentPage}
+													/>,
+													<DeactivateAccountManager user={d} userId={d.id} />,
 													<ResetAccountManagerPassword />,
 												]}
-												renderItem={({ item, index }) => (
-													<div className="w-full" key={index}>
+												renderItem={({ item, index, setOpen, open }) => (
+													<div
+														onClick={() => setOpen(!open)}
+														className="w-full"
+														key={index}>
 														{item}
 													</div>
 												)}

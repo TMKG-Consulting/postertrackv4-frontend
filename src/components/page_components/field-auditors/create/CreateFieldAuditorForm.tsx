@@ -30,6 +30,7 @@ const schema = Yup.object().shape({
 interface FieldAuditorFormProps {
 	isEditing?: boolean;
 	initialValues?: FieldAuditor;
+	editCallback?: (data: any) => void;
 }
 
 export default function CreateFieldAuditorForm({
@@ -43,6 +44,7 @@ export default function CreateFieldAuditorForm({
 		role: "FIELD_AUDITOR",
 		statesCovered: [],
 	},
+	editCallback,
 }: FieldAuditorFormProps) {
 	const { createUser, updateUser } = useUserManagement();
 	const { showAndHideAlert } = useAlert();
@@ -57,25 +59,28 @@ export default function CreateFieldAuditorForm({
 				const response = await createUser(values);
 				console.log(response);
 
+				setSubmitting(false);
 				showAndHideAlert({
 					message: "User created successfully.",
 					type: "success",
 				});
+
+				router.push("/field-auditors");
 			}
 
 			if (isEditing) {
 				const response = await updateUser(initialValues.id!, values);
-				console.log(response);
+
+				setSubmitting(false);
 
 				showAndHideAlert({
 					message: "User updated successfully.",
 					type: "success",
 				});
+
+				// @ts-ignore
+				editCallback(response);
 			}
-
-			setSubmitting(false);
-
-			router.push("/field-auditors");
 		} catch (error) {
 			const err = error as AxiosError;
 			console.log(err);

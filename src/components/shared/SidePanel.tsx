@@ -27,7 +27,7 @@ export default function SidePanel() {
 	const isBrands = pathname.startsWith("/brands");
 
 	return (
-		<aside className="shrink-0 w-[300px] bg-appBlack h-screen sticky top-0 py-10 px-8 hidden lg:block">
+		<aside className="shrink-0 w-[300px] bg-appBlack h-screen sticky top-0 py-10 px-8 hidden lg:block overflow-auto">
 			<div className="flex items-center gap-x-5 mb-12">
 				<Image
 					src={"/poster-track-logo.png"}

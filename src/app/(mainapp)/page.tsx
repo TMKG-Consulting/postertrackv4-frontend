@@ -6,8 +6,31 @@ import Link from "next/link";
 import React from "react";
 import TotalSitesIcon from "@/components/shared/icons/TotalSitesIcon";
 import TotalCampaignsIcon from "@/components/shared/icons/TotalCampaignsIcon";
+import { ApiInstance } from "@/utils";
+import { cookies } from "next/headers";
+import { ACCESS_TOKEN_COOKIE_NAME } from "@/constants";
 
-export default function page() {
+export default async function page() {
+	const cookieStore = await cookies();
+	let analytics = {
+		totalClients: 0,
+		totalBrands: 0,
+		totalAdvertisers: 0,
+		totalFieldAuditors: 0,
+		totalSites: 0,
+		totalCampaigns: 0,
+	};
+	
+	if (cookieStore.has(ACCESS_TOKEN_COOKIE_NAME)) {
+		const res = await ApiInstance.get("/analytics/overview", {
+			headers: {
+				"auth-token": cookieStore.get(ACCESS_TOKEN_COOKIE_NAME)?.value,
+			},
+		});
+
+		analytics = res.data;
+	}
+
 	return (
 		<>
 			<DashboardHeader />
@@ -21,7 +44,9 @@ export default function page() {
 						</span>
 						<ClientsIcon />
 					</div>
-					<span className="text-[4rem] font-extrabold text-appBlack">500</span>
+					<span className="text-[4rem] font-extrabold text-appBlack">
+						{analytics.totalClients}
+					</span>
 				</Link>
 				<Link
 					href={"/brands"}
@@ -32,7 +57,9 @@ export default function page() {
 						</span>
 						<ClientsIcon fill="#3632ED" />
 					</div>
-					<span className="text-[4rem] font-extrabold text-appBlack">500</span>
+					<span className="text-[4rem] font-extrabold text-appBlack">
+						{analytics.totalBrands}
+					</span>
 				</Link>
 				<Link
 					href={"/advertisers"}
@@ -43,7 +70,9 @@ export default function page() {
 						</span>
 						<ClientsIcon fill="#139B9B" />
 					</div>
-					<span className="text-[4rem] font-extrabold text-appBlack">500</span>
+					<span className="text-[4rem] font-extrabold text-appBlack">
+						{analytics.totalAdvertisers}
+					</span>
 				</Link>
 				<Link
 					href={"/field-auditors"}
@@ -54,7 +83,9 @@ export default function page() {
 						</span>
 						<ClientsIcon fill="#ED3D05" />
 					</div>
-					<span className="text-[4rem] font-extrabold text-appBlack">500</span>
+					<span className="text-[4rem] font-extrabold text-appBlack">
+						{analytics.totalFieldAuditors}
+					</span>
 				</Link>
 				<Link href={""} className="w-full h-[128px] rounded-2xl bg-white p-8">
 					<div className="flex items-center justify-between">
@@ -63,7 +94,9 @@ export default function page() {
 						</span>
 						<TotalSitesIcon />
 					</div>
-					<span className="text-[4rem] font-extrabold text-appBlack">500</span>
+					<span className="text-[4rem] font-extrabold text-appBlack">
+						{analytics.totalSites}
+					</span>
 				</Link>
 				<Link
 					href={"/campaigns"}
@@ -74,7 +107,9 @@ export default function page() {
 						</span>
 						<TotalCampaignsIcon />
 					</div>
-					<span className="text-[4rem] font-extrabold text-appBlack">500</span>
+					<span className="text-[4rem] font-extrabold text-appBlack">
+						{analytics.totalCampaigns}
+					</span>
 				</Link>
 			</section>
 			<section className="rounded-2xl bg-white my-12">

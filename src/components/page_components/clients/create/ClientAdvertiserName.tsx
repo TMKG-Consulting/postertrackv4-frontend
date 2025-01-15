@@ -9,7 +9,6 @@ import { ErrorMessage, useFormikContext } from "formik";
 import AppLoader from "@/components/shared/AppLoader";
 import { Client } from "@/types";
 import SearchInput from "@/components/shared/SearchInput";
-import AppButton from "@/components/shared/AppButton";
 
 export default function ClientAdvertiserName() {
 	const { accessToken } = useCredentials();
@@ -43,7 +42,12 @@ export default function ClientAdvertiserName() {
 		}
 	}, [data]);
 
-	console.log(advertisers);
+	useEffect(() => {
+		if (values.advertiser) {
+			// @ts-ignore
+			setAdvertisers((prev) => [...prev, values.advertiser]);
+		}
+	}, []);
 
 	const handleScroll = () => {
 		const container = dropdownContentRef.current;
@@ -87,7 +91,7 @@ export default function ClientAdvertiserName() {
 							{values.name !== "" && (
 								<span className="text-2xl text-appBlack">
 									{/* @ts-ignore */}
-									{data.data.find((d) => d.id === Number(values.name))?.name}
+									{advertisers.find((d) => d.id === Number(values.name))?.name}
 								</span>
 							)}
 							<ChevronIcon fill={"#8D8D8D"} />

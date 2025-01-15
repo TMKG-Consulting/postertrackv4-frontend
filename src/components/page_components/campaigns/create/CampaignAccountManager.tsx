@@ -17,7 +17,7 @@ export default function CampaignAccountManager() {
 
 	const { getAccountManagers } = useUserManagement();
 	const [currentPage, setCurrentPage] = useState(1);
-	const [accountManagers, setAccountManagers] = useState([]);
+	const [accountManagers, setAccountManagers] = useState<any[]>([]);
 
 	const { data, isLoading, error, isFetching } = useQuery({
 		queryKey: ["accountManagers", currentPage],
@@ -78,13 +78,13 @@ export default function CampaignAccountManager() {
 							{values.accountManagerId !== "" && (
 								<span className="text-2xl text-appBlack">
 									{
-										data?.data.find(
+										accountManagers.find(
 											/* @ts-ignore */
 											(d) => d.id === Number(values.accountManagerId)
 										)?.firstname
 									}{" "}
 									{
-										data?.data.find(
+										accountManagers.find(
 											/* @ts-ignore */
 											(d) => d.id === Number(values.accountManagerId)
 										)?.lastname

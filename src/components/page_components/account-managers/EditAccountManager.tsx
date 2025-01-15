@@ -10,13 +10,17 @@ import AppButton from "@/components/shared/AppButton";
 import { useRootStore } from "@/components/shared/providers/RootProvider";
 import { AccountManager } from "@/types";
 import CreateAccountManagerForm from "./create/CreateAccountManagerForm";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function EditAccountManager({
 	accountManager,
+	currentPage,
 }: {
 	accountManager: AccountManager;
+	currentPage: number;
 }) {
 	const { userDetails } = useRootStore();
+	const queryClient = useQueryClient();
 
 	const [showEdit, setShowEdit] = useState(false);
 
@@ -34,7 +38,37 @@ export default function EditAccountManager({
 				Edit Account Info
 			</button>
 			<Modal showModal={showEdit} hideModal={() => setShowEdit(false)}>
-				<CreateAccountManagerForm initialValues={accountManager} isEditing />
+				<CreateAccountManagerForm
+					initialValues={accountManager}
+					isEditing
+					editCallback={async (user) => {
+						await queryClient.setQueryData(
+							["accountManagers", currentPage],
+							(prev) => {
+								// @ts-ignore
+								const data = { ...prev };
+								const index = data.data.findIndex(
+									// @ts-ignore
+									(d) => d.id === user.id
+								);
+
+								console.log(index, user);
+
+								data.data[index] = { ...data.data[index], ...user };
+
+								return data;
+							}
+						);
+
+						setShowEdit(false);
+
+						await queryClient.refetchQueries({
+							queryKey: ["accountManagers", currentPage],
+							exact: true,
+							refetchType: "none",
+						});
+					}}
+				/>
 			</Modal>
 		</>
 	);

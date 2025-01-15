@@ -130,7 +130,12 @@ export default function CampaignSiteListTable({
 											</td>
 											<td className="text-center">
 												<span className="flex p-[5px] border-[1.5px] border-[#FF8617] bg-[#FFE3CA] rounded-full text-[#FF8617] text-2xl items-center justify-center font-medium">
-													Pending
+													{
+														data?.siteAssignments.find(
+															// @ts-ignore
+															(a) => a.siteCode === d.code
+														)?.status
+													}
 												</span>
 											</td>
 											<td className="text-center">

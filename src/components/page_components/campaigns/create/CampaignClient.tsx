@@ -17,7 +17,7 @@ export default function CampaignClient() {
 
 	const { getClients } = useUserManagement();
 	const [currentPage, setCurrentPage] = useState(1);
-	const [clients, setClients] = useState([]);
+	const [clients, setClients] = useState<any>([]);
 
 	const { data, error, isFetching } = useQuery({
 		queryKey: ["clients", currentPage],
@@ -77,7 +77,7 @@ export default function CampaignClient() {
 								<span className="text-2xl text-appBlack">
 									{
 										/* @ts-ignore */
-										data?.data.find((d) => d.id === Number(values.clientId))
+										clients.find((d) => d.id === Number(values.clientId))
 											?.advertiser.name
 									}
 								</span>
