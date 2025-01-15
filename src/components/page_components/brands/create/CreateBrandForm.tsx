@@ -24,7 +24,7 @@ const schema = Yup.object().shape({
 interface BrandFormProps {
 	isEditing?: boolean;
 	initialValues?: Brand;
-	brandId: string | number;
+	brandId?: string | number;
 	editCallback?: (data: any) => void;
 }
 
