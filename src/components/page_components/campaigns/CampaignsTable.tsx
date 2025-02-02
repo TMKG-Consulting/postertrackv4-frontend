@@ -108,8 +108,8 @@ export default function CampaignsTable() {
 												)}
 												items={[
 													<ViewCampaign campaignId={d.id} />,
-													<AddMoreSites />,
-													<DeleteCampaign />,
+													<AddMoreSites campaignId={d.id} />,
+													<DeleteCampaign campaignId={d.id} />,
 												]}
 												renderItem={({ item, index }) => (
 													<div className="w-full" key={index}>

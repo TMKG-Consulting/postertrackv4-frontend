@@ -39,7 +39,7 @@ export default async function page({
 
 	return (
 		<>
-			<CampaignDetailsHeader />
+			<CampaignDetailsHeader campaign={campaignDetails} />
 			<section className="bg-white rounded-2xl border border-[#E2E2E2] min-h-[70vh] h-max">
 				<CampaignSiteListTable campaign={campaignDetails} />
 			</section>
