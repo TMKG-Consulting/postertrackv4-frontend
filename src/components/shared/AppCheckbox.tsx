@@ -1,5 +1,5 @@
 "use client";
-import React, { PropsWithChildren, useState } from "react";
+import React, { PropsWithChildren, useEffect, useState } from "react";
 import CheckedIcon from "./icons/CheckedIcon";
 
 type AppCheckboxProps = {
@@ -15,6 +15,10 @@ export default function AppCheckbox({
 	defaultValue = false,
 }: AppCheckboxProps) {
 	const [checked, setChecked] = useState(defaultValue);
+
+	useEffect(() => {
+		setChecked(defaultValue);
+	}, [defaultValue]);
 
 	return (
 		<label htmlFor={name} className="flex items-center gap-2 cursor-pointer">

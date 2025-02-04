@@ -32,11 +32,10 @@ export default function DeactivateAccountManager({
 			} else {
 				setCurrentStatus(true);
 			}
-			const response = await updateUser(userId, {
+			await updateUser(userId, {
 				...user,
 				status,
 			});
-			console.log(response);
 
 			showAndHideAlert({
 				message: "User updated successfully.",

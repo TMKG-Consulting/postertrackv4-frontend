@@ -15,8 +15,9 @@ import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import AccountManagerPlaceholder from "@/components/shared/AccountManagerPlaceholder";
 
 export default function AccountManagersTable() {
-	const { getUsers, getAccountManagers } = useUserManagement();
+	const { getAccountManagers } = useUserManagement();
 	const [currentPage, setCurrentPage] = useState(1);
+	const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
 
 	const { data, isLoading, error, isFetching } = useQuery({
 		queryKey: ["accountManagers", currentPage],
@@ -30,7 +31,7 @@ export default function AccountManagersTable() {
 
 	return (
 		<div className="h-full flex flex-col">
-			<AccountManagersTableActions />
+			<AccountManagersTableActions selectedUsers={selectedUsers} />
 			<div className="grow w-full overflow-auto xl:overflow-visible">
 				<table className="w-[250%] md:w-[150%] xl:w-full" cellPadding={15}>
 					<thead className="border-b border-t border-[#C7C7C7] border-t-[#C7C7C7] bg-[#f5f5f5]">
@@ -71,7 +72,19 @@ export default function AccountManagersTable() {
                         ">
 										<td className="text-center">
 											<div>
-												<AppCheckbox name="check-all" />
+												<AppCheckbox
+													onChange={(val) => {
+														if (val) {
+															setSelectedUsers([d.id, ...selectedUsers]);
+														} else {
+															setSelectedUsers((prev) =>
+																prev.filter((u) => u !== d.id)
+															);
+														}
+													}}
+													name={d.email}
+													defaultValue={selectedUsers.includes(d.id)}
+												/>
 											</div>
 										</td>
 										<td className="text-center">

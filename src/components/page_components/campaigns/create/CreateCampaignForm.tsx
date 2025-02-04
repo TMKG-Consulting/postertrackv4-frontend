@@ -14,6 +14,7 @@ import useCredentials from "@/hooks/useCredentials";
 import { useRouter, useParams } from "next/navigation";
 import FileIcon from "@/components/shared/icons/FileIcon";
 import CloseIcon from "@/components/shared/icons/CloseIcon";
+import * as XLSX from "xlsx";
 
 type CampaignFormProps = {
 	forAddMore?: boolean;
@@ -22,6 +23,16 @@ type CampaignFormProps = {
 interface CampaignCreationData {
 	clientId: string;
 	accountManagerId: string;
+}
+
+export interface SiteListData {
+	BRAND: string;
+	FORMAT: string;
+	LOCATION: string;
+	"MEDIA OWNER": string;
+	STATE: string;
+	TOWN: string;
+	index: number;
 }
 
 const schema = Yup.object().shape({
@@ -36,8 +47,16 @@ const addMoreSchema = Yup.object().shape({
 
 export default function CreateCampaignForm({ forAddMore }: CampaignFormProps) {
 	const [duplicatesFound, setDuplicatesFound] = useState(false);
+	const [duplicateEntries, setDuplicateEntries] = useState<SiteListData[]>([]);
 	const { showAndHideAlert } = useAlert();
+
 	const [siteList, setSiteList] = useState<File | null>(null);
+	const [jsonSiteList, setJsonSiteList] = useState<SiteListData[]>([]);
+	const [campaignData, setCampaignData] = useState<CampaignCreationData>({
+		clientId: "",
+		accountManagerId: "",
+	});
+
 	const { accessToken } = useCredentials();
 	const router = useRouter();
 	const params = useParams();
@@ -57,17 +76,9 @@ export default function CreateCampaignForm({ forAddMore }: CampaignFormProps) {
 				throw new AxiosError("Please upload campaign sitelist. ");
 			}
 
-			const formData = new FormData();
+			await checkDuplicates(siteList, values);
 
-			formData.append("clientId", values.clientId);
-			formData.append("accountManagerId", values.accountManagerId);
-			formData.append("siteList", siteList, siteList.name);
-
-			await ApiInstance.post("campaigns/create", formData, {
-				headers: {
-					"auth-token": accessToken,
-				},
-			});
+			await uploadCampaign(siteList, values);
 
 			showAndHideAlert({
 				message: "Campaign created successfully",
@@ -86,14 +97,6 @@ export default function CreateCampaignForm({ forAddMore }: CampaignFormProps) {
 				type: "error",
 			});
 			setSubmitting(false);
-
-			if (
-				err &&
-				// @ts-ignore
-				err.response?.data.error === "Duplicate board locations found."
-			) {
-				setDuplicatesFound(true);
-			}
 		}
 	};
 
@@ -110,16 +113,9 @@ export default function CreateCampaignForm({ forAddMore }: CampaignFormProps) {
 				throw new AxiosError("Please upload campaign sitelist. ");
 			}
 
-			const formData = new FormData();
+			await checkDuplicates(siteList, values);
 
-			formData.append("campaignId", campaignId as string);
-			formData.append("siteList", siteList, siteList.name);
-
-			await ApiInstance.post("sites/upload", formData, {
-				headers: {
-					"auth-token": accessToken,
-				},
-			});
+			await uploadCampaign(siteList, values);
 
 			showAndHideAlert({
 				message: "Site list added successfully",
@@ -138,14 +134,6 @@ export default function CreateCampaignForm({ forAddMore }: CampaignFormProps) {
 				type: "error",
 			});
 			setSubmitting(false);
-
-			if (
-				err &&
-				// @ts-ignore
-				err.response?.data.error === "Duplicate board locations found."
-			) {
-				setDuplicatesFound(true);
-			}
 		}
 	};
 
@@ -157,10 +145,138 @@ export default function CreateCampaignForm({ forAddMore }: CampaignFormProps) {
 		}
 	};
 
+	async function checkDuplicates(file: File, values: CampaignCreationData) {
+		return new Promise((resolve, reject) => {
+			const reader = new FileReader();
+			reader.onload = (e) => {
+				if (e.target?.result) {
+					const data = new Uint8Array(e.target.result as ArrayBuffer);
+					const workbook = XLSX.read(data, { type: "array" });
+					const sheetName = workbook.SheetNames[0];
+					const worksheet = workbook.Sheets[sheetName];
+					const jsonData: SiteListData[] = XLSX.utils.sheet_to_json(worksheet);
+
+					setJsonSiteList(jsonData.map((d, i) => ({ ...d, index: i })));
+
+					const seen = new Set();
+					const duplicateEntries: any = [];
+
+					jsonData.forEach((row, index: number) => {
+						// Convert row object to a unique string for comparison
+						const rowKey = `${row.STATE}-${row.TOWN}-${row.LOCATION}-${row["MEDIA OWNER"]}-${row.BRAND}-${row.FORMAT}`;
+						if (seen.has(rowKey)) {
+							duplicateEntries.push({ ...row, index });
+						} else {
+							seen.add(rowKey);
+						}
+					});
+
+					if (duplicateEntries.length > 0) {
+						setDuplicatesFound(true);
+						setDuplicateEntries(duplicateEntries);
+						setCampaignData(values);
+						reject(new Error("Duplicate entries"));
+					} else {
+						resolve("No duplicates found. File is good to go!");
+					}
+				}
+			};
+
+			reader.readAsArrayBuffer(file);
+		});
+	}
+
+	async function uploadCampaign(
+		file: File | Blob,
+		values: CampaignCreationData
+	) {
+		const formData = new FormData();
+
+		if (forAddMore) {
+			formData.append("campaignId", campaignId as string);
+		} else {
+			formData.append("clientId", values.clientId);
+			formData.append("accountManagerId", values.accountManagerId);
+		}
+
+		formData.append(
+			"siteList",
+			file,
+			file instanceof File ? file.name : siteList?.name
+		);
+
+		if (forAddMore) {
+			await ApiInstance.post("sites/upload", formData, {
+				headers: {
+					"auth-token": accessToken,
+				},
+			});
+		} else {
+			await ApiInstance.post("campaigns/create", formData, {
+				headers: {
+					"auth-token": accessToken,
+				},
+			});
+		}
+	}
+
+	function removeDuplicateRow(index: number) {
+		const updatedData = jsonSiteList.filter((d) => d.index !== index);
+		setJsonSiteList(updatedData);
+		setDuplicateEntries(duplicateEntries.filter((d) => d.index !== index));
+	}
+
+	function removeMultipleDuplicateRow(indexes: number[]) {
+		const updatedData = jsonSiteList.filter((d) => !indexes.includes(d.index));
+		setJsonSiteList(updatedData);
+		setDuplicateEntries(
+			duplicateEntries.filter((d) => !indexes.includes(d.index))
+		);
+	}
+
+	function convertToFile() {
+		// Convert updated data back to a file
+		const worksheet = XLSX.utils.json_to_sheet(jsonSiteList);
+		const workbook = XLSX.utils.book_new();
+		XLSX.utils.book_append_sheet(workbook, worksheet, "Cleaned Data");
+
+		const excelBuffer = XLSX.write(workbook, {
+			bookType: "xlsx",
+			type: "array",
+		});
+		const fileBlob = new Blob([excelBuffer], {
+			type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+		});
+
+		return fileBlob;
+	}
+
+	async function continueUpload() {
+		try {
+			const file = convertToFile();
+			await uploadCampaign(file, campaignData);
+			showAndHideAlert({
+				message: "Campaign created successfully",
+				type: "success",
+			});
+
+			router.replace("/campaigns");
+		} catch (error) {
+			const err = error as AxiosError;
+			console.log(err);
+
+			showAndHideAlert({
+				//@ts-ignore
+				message: err?.response?.data?.error ?? err.message,
+				type: "error",
+			});
+		}
+	}
+
 	return (
 		<div
 			className={`w-full md:w-[85%] ${
-				duplicatesFound ? "xl:w-[80%]" : "xl:w-[60%]"
+				duplicatesFound ? "xl:w-[100%]" : "xl:w-[60%]"
 			} bg-white rounded-2xl border border-[#E2E2E2]`}>
 			<div className="p-5 md:p-12">
 				<h1 className="text-[2.8rem] font-extrabold">
@@ -173,7 +289,20 @@ export default function CreateCampaignForm({ forAddMore }: CampaignFormProps) {
 				onSubmit={!forAddMore ? handleSubmit : handleAddMoreSubmit}>
 				{({ isSubmitting, isValidating }) => (
 					<>
-						{duplicatesFound && <DuplicatesFound />}
+						{duplicatesFound && (
+							<DuplicatesFound
+								removeDuplicate={removeDuplicateRow}
+								duplicates={duplicateEntries}
+								cancel={() => {
+									setDuplicateEntries([]);
+									setJsonSiteList([]);
+									setSiteList(null);
+									setDuplicatesFound(false);
+								}}
+								continueUpload={continueUpload}
+								removeMultipleDuplicate={removeMultipleDuplicateRow}
+							/>
+						)}
 						{!duplicatesFound && (
 							<Form className="w-full flex flex-col gap-y-10 mt-8 px-12 pb-12">
 								{!forAddMore && (
@@ -195,7 +324,7 @@ export default function CreateCampaignForm({ forAddMore }: CampaignFormProps) {
 											</span>
 										</div>
 										<input
-											accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+											accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv"
 											id="sitelist"
 											type="file"
 											className="hidden"
