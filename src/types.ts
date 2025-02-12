@@ -91,6 +91,16 @@ export interface Campaign {
 	uploadedAt?: Date;
 }
 
+export interface CampaignAllocation {
+	accountManager: string;
+	campaignId: string;
+	client: { id: number; name: string };
+	dateUploaded: string;
+	totalAuditors: number;
+	totalSites: number;
+	mainId: number;
+}
+
 export interface Site {
 	city: string;
 	code: string;

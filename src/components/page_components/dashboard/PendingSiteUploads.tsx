@@ -10,17 +10,18 @@ export default function PendingSiteUploads() {
 	const { data, isLoading, error } = useQuery({
 		queryKey: [],
 		queryFn: async () => {
-			const res = await ApiInstance.get("/sites/pending-uploads", {
+			const response = await ApiInstance.get("/compliance-report", {
 				headers: {
 					"auth-token": accessToken,
 				},
 			});
 
-			return res.data;
+			return response.data;
 		},
 	});
 
 	console.log(data);
+	
 	return (
 		<div className="w-full overflow-auto">
 			<table className="w-[300%] md:w-[125%] xl:w-full" cellPadding={10}>

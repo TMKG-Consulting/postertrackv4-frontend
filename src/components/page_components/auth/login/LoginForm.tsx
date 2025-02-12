@@ -90,13 +90,13 @@ export default function LoginForm() {
 								label="Password"
 								placeholder="Password"
 							/>
-							<div className="flex flex-row items-center justify-end">
+							{/* <div className="flex flex-row items-center justify-end">
 								<Link
 									href={"/auth/forgot-password"}
 									className="text-primary text-2xl">
 									Forgot Password ?
 								</Link>
-							</div>
+							</div> */}
 						</div>
 
 						<AppButton

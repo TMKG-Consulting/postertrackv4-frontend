@@ -154,7 +154,7 @@ export default function CreateCampaignForm({ forAddMore }: CampaignFormProps) {
 					const workbook = XLSX.read(data, { type: "array" });
 					const sheetName = workbook.SheetNames[0];
 					const worksheet = workbook.Sheets[sheetName];
-					const jsonData: SiteListData[] = XLSX.utils.sheet_to_json(worksheet);
+					const jsonData: any[] = XLSX.utils.sheet_to_json(worksheet);
 
 					setJsonSiteList(jsonData.map((d, i) => ({ ...d, index: i })));
 
@@ -162,12 +162,13 @@ export default function CreateCampaignForm({ forAddMore }: CampaignFormProps) {
 					const duplicateEntries: any = [];
 
 					jsonData.forEach((row, index: number) => {
-						// Convert row object to a unique string for comparison
-						const rowKey = `${row.STATE}-${row.TOWN}-${row.LOCATION}-${row["MEDIA OWNER"]}-${row.BRAND}-${row.FORMAT}`;
-						if (seen.has(rowKey)) {
+						const rowValues = Object.values(row).join("-");
+
+						// Check for duplicates
+						if (seen.has(rowValues)) {
 							duplicateEntries.push({ ...row, index });
 						} else {
-							seen.add(rowKey);
+							seen.add(rowValues);
 						}
 					});
 

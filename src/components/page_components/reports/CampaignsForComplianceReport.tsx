@@ -4,9 +4,33 @@ import Pagination from "@/components/shared/Pagination";
 import CampaignTableActions from "../campaigns/CampaignTableActions";
 import AppButton from "@/components/shared/AppButton";
 import { useRouter } from "next/navigation";
+import useCredentials from "@/hooks/useCredentials";
+import { useState } from "react";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
+import { ApiInstance } from "@/utils";
 
 export default function CampaignsForComplianceReport() {
 	const router = useRouter();
+	const { accessToken } = useCredentials();
+	const [currentPage, setCurrentPage] = useState(1);
+
+	const { data, isLoading, isFetching } = useQuery({
+		queryKey: ["campaigns", currentPage],
+		queryFn: async () => {
+			const response = await ApiInstance.get("/compliance-report", {
+				headers: {
+					"auth-token": accessToken,
+				},
+			});
+
+			return response.data;
+		},
+		gcTime: 0,
+		placeholderData: keepPreviousData,
+		retry: false,
+	});
+
+	console.log(data);
 
 	return (
 		<section className="bg-white rounded-2xl border border-[#E2E2E2] min-h-[70vh] mb-12">
