@@ -20,7 +20,7 @@ export default async function page() {
 		totalSites: 0,
 		totalCampaigns: 0,
 	};
-	
+
 	if (cookieStore.has(ACCESS_TOKEN_COOKIE_NAME)) {
 		const res = await ApiInstance.get("/analytics/overview", {
 			headers: {
@@ -117,11 +117,6 @@ export default async function page() {
 					<h5 className="text-[1.7rem] md:text-[2.5rem] font-extrabold text-appBlack">
 						Pending Site Uploads
 					</h5>
-					<Link
-						href={"/"}
-						className="text-2xl md:text-[1.7rem] text-primary underline font-bold">
-						View all sites
-					</Link>
 				</div>
 				<PendingSiteUploads />
 			</section>

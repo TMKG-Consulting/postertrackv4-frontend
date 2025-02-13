@@ -8,7 +8,7 @@ import SiteListTableActions from "./SiteListTableActions";
 import ViewSiteReport from "./ViewSiteReport";
 import EditSite from "./EditSite";
 import DeleteSite from "./DeleteSite";
-import { Campaign, Site } from "@/types";
+import { Campaign, Site, SiteAssignmentReport } from "@/types";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import useCredentials from "@/hooks/useCredentials";
 import { useParams } from "next/navigation";
@@ -91,80 +91,112 @@ export default function CampaignSiteListTable({
 							? [1, 2, 3, 4, 5, 6].map((d, i) => <SitePlaceholder key={i} />)
 							: data?.siteList
 									.slice(startIndex, endIndex)
-									.map((d: Site, i: number) => (
-										<tr
-											key={i}
-											className="border-b-[#E6E6E6] border-b 
+									.map((d: Site, i: number) => {
+										const siteAssignment = data?.siteAssignments.find(
+											(a: SiteAssignmentReport) => a.siteCode === d.code
+										);
+
+										const hasAssignment = siteAssignment !== undefined;
+
+										const isPending = siteAssignment?.status === "pending";
+										const isApproved = siteAssignment?.status === "approved";
+										const disapproved =
+											siteAssignment?.status === "disapproved";
+
+										return (
+											<tr
+												key={i}
+												className="border-b-[#E6E6E6] border-b 
                         ">
-											<td className="text-center">
-												<div>
-													<AppCheckbox name="check-all" />
-												</div>
-											</td>
-											<td className="text-center">
-												<span className="text-xl font-medium">{d.code}</span>
-											</td>
-											<td className="text-center">
-												<span className="text-xl font-medium">{d.brand}</span>
-											</td>
-											<td className="text-center">
-												<span className="text-xl font-medium text-center">
-													{d.state}
-												</span>
-											</td>
-											<td className="text-center">
-												<span className="text-xl font-medium">{d.city}</span>
-											</td>
-											<td className="">
-												<span className="text-xl font-medium">
-													{d.location}
-												</span>
-											</td>
-											<td className="text-center">
-												<span className="text-xl font-medium">
-													{d.mediaOwner}
-												</span>
-											</td>
-											<td className="text-center">
-												<span className="text-xl font-medium">Led</span>
-											</td>
-											<td className="text-center">
-												<span className="flex p-[5px] border-[1.5px] border-[#FF8617] bg-[#FFE3CA] rounded-full text-[#FF8617] text-2xl items-center justify-center font-medium">
-													{
-														data?.siteAssignments.find(
-															// @ts-ignore
-															(a) => a.siteCode === d.code
-														)?.status
-													}
-												</span>
-											</td>
-											<td className="text-center">
-												<Dropdown
-													bordered
-													dropdownWidth="180px"
-													right={0}
-													top={100}
-													renderButton={({ setOpen, open }) => (
-														<button
-															onClick={() => setOpen(!open)}
-															className="w-[35px] h-[35px] rounded-full flex items-center justify-center">
-															<Kebab />
-														</button>
+												<td className="text-center">
+													<div>
+														<AppCheckbox name="check-all" />
+													</div>
+												</td>
+												<td className="text-center">
+													<span className="text-xl font-medium">{d.code}</span>
+												</td>
+												<td className="text-center">
+													<span className="text-xl font-medium">{d.brand}</span>
+												</td>
+												<td className="text-center">
+													<span className="text-xl font-medium text-center">
+														{d.state}
+													</span>
+												</td>
+												<td className="text-center">
+													<span className="text-xl font-medium">{d.city}</span>
+												</td>
+												<td className="">
+													<span className="text-xl font-medium">
+														{d.location}
+													</span>
+												</td>
+												<td className="text-center">
+													<span className="text-xl font-medium">
+														{d.mediaOwner}
+													</span>
+												</td>
+												<td className="text-center">
+													<span className="text-xl font-medium">Led</span>
+												</td>
+												<td className="text-center">
+													{hasAssignment ? (
+														<span
+															className={`flex p-[5px] border-[1.5px] ${
+																isPending
+																	? "border-[#FF8617] text-[#FF8617]  bg-[#FFE3CA]"
+																	: ""
+															} ${
+																isApproved
+																	? "border-[#1b8e41] text-[#1b8e41]  bg-[#bbe7ca]"
+																	: ""
+															}  ${
+																disapproved
+																	? "border-[#e7352b] text-[#e7352b]  bg-[#e7c1bb]"
+																	: ""
+															} rounded-full text-2xl items-center justify-center font-medium`}>
+															{hasAssignment && siteAssignment.status}
+														</span>
+													) : (
+														<span
+															className={`flex p-[5px] border-[1.5px] rounded-full text-2xl items-center justify-center font-medium`}>
+															Unassigned
+														</span>
 													)}
-													items={[
-														<ViewSiteReport />,
-														<EditSite />,
-														<DeleteSite />,
-													]}
-													renderItem={({ item, index }) => (
-														<div className="w-full" key={index}>
-															{item}
-														</div>
-													)}
-												/>
-											</td>
-										</tr>
-									))}
+												</td>
+												<td className="text-center">
+													<Dropdown
+														bordered
+														dropdownWidth="180px"
+														right={0}
+														top={100}
+														renderButton={({ setOpen, open }) => (
+															<button
+																onClick={() => setOpen(!open)}
+																className="w-[35px] h-[35px] rounded-full flex items-center justify-center">
+																<Kebab />
+															</button>
+														)}
+														items={[
+															hasAssignment ? (
+																<ViewSiteReport
+																	siteAssignmentId={siteAssignment.id}
+																/>
+															) : null,
+															<EditSite />,
+															<DeleteSite />,
+														]}
+														renderItem={({ item, index }) => (
+															<div className="w-full" key={index}>
+																{item}
+															</div>
+														)}
+													/>
+												</td>
+											</tr>
+										);
+									})}
 					</tbody>
 				</table>
 			</div>

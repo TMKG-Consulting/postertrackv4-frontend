@@ -4,8 +4,11 @@ import SiteReportHeader from "@/components/page_components/campaigns/site-report
 import SiteReportImages from "@/components/page_components/campaigns/site-report/SiteReportImages";
 import SiteReportInfo from "@/components/page_components/campaigns/site-report/SiteReportInfo";
 import React from "react";
+import { cookies } from "next/headers";
+import { ApiInstance } from "@/utils";
+import { ACCESS_TOKEN_COOKIE_NAME } from "@/constants";
 
-export default function page() {
+export default async function page() {
 	return (
 		<>
 			<SiteReportHeader />

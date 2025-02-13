@@ -117,3 +117,35 @@ export interface SiteAssignment {
 	fieldAuditorId: number;
 	status: "pending" | "approved" | "disapproved";
 }
+
+export interface SiteAssignmentReport {
+	id: number;
+	siteCode: string;
+	campaignId: number;
+	advertiser: string;
+	brand: string;
+	address: string;
+	boardType: string;
+	mediaOwner: string;
+	message: string;
+	structureId: number;
+	posterId: number;
+	illuminationId: number;
+	routeId: number;
+	sideId: number;
+	comment: string;
+	imageUrls: string[];
+	geolocations: Array<{ latitude: number; longitude: number }>;
+	capturedTimestamps: Array<{ timestamp: string; filename: string }>;
+	uploadedBy: number;
+	uploadedAt: string;
+	status: string;
+	siteAssignmentId: number;
+	bsv: string;
+	city: string;
+	Structure: { id: number; name: string };
+	Poster: { id: number; name: string };
+	Illumination: { id: number; name: string };
+	Route: { id: number; name: string };
+	Side: { id: number; name: string };
+}

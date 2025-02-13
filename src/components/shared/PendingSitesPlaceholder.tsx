@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function CampaignPlaceholder() {
+export default function PendingSitesPlaceholder() {
 	return (
 		<tr
 			className="border-b-[#E6E6E6] border-b 
@@ -12,13 +12,14 @@ export default function CampaignPlaceholder() {
 			<td className="">
 				<span className="text-2xl font-medium rounded-full flex w-[80%] h-[5px] bg-[#e2e2e2] animate-pulse"></span>
 			</td>
-			<td className="text-left">
-				<span className="text-2xl font-medium flex w-full h-[5px] bg-[#e2e2e2] animate-pulse "></span>
-			</td>
+
 			<td>
 				<span className="block text-2xl font-medium  truncate w-full h-[5px] bg-[#e2e2e2] animate-pulse"></span>
 			</td>
 			<td className="">
+				<span className="text-2xl font-medium rounded-full flex w-full h-[5px] bg-[#e2e2e2] animate-pulse"></span>
+			</td>
+			<td className="text-center">
 				<span className="text-2xl font-medium rounded-full flex w-full h-[5px] bg-[#e2e2e2] animate-pulse"></span>
 			</td>
 			<td className="text-center">
