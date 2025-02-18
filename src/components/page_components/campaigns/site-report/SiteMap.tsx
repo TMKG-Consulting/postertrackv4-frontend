@@ -16,9 +16,9 @@ export default function SiteMap({ height = "280px" }: { height?: string }) {
 					defaultZoom={15}
 					gestureHandling={"greedy"}
 					disableDefaultUI={false}>
-					<Marker
-						position={{ lat: LatLng[0].latitude, lng: LatLng[0].longitude }}
-					/>
+					{LatLng.map((d: any, i: number) => (
+						<Marker key={i} position={{ lat: d.latitude, lng: d.longitude }} />
+					))}
 				</Map>
 			</APIProvider>
 		</section>
