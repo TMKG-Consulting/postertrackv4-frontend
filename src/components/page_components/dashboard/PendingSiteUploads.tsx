@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import useCredentials from "@/hooks/useCredentials";
 import { ApiInstance } from "@/utils";
 import Link from "next/link";
@@ -18,7 +18,7 @@ export default function PendingSiteUploads() {
 		queryKey: ["pending-uploads", currentPage],
 		queryFn: async () => {
 			const response = await ApiInstance.get(
-				"/compliance-report?page=" + currentPage,
+				"/compliance/pending-approval?page=" + currentPage,
 				{
 					headers: {
 						"auth-token": accessToken,
@@ -29,8 +29,6 @@ export default function PendingSiteUploads() {
 			return response.data;
 		},
 	});
-
-	console.log(data);
 
 	return (
 		<div className="h-full flex flex-col">
@@ -71,7 +69,7 @@ export default function PendingSiteUploads() {
 							? [1, 2, 3, 4, 5].map((d, i) => (
 									<PendingSitesPlaceholder key={i} />
 							  ))
-							: data?.data.map((d: SiteAssignmentReport, i: number) => {
+							: data?.pendingSites.map((d: SiteAssignmentReport, i: number) => {
 									const isPending = d.status === "pending";
 									const isApproved = d.status === "approved";
 									const disapproved = d.status === "disapproved";
@@ -102,8 +100,7 @@ export default function PendingSiteUploads() {
 
 											<td className="text-left">
 												<span className="text-2xl font-medium">
-													Along adeniran ogunsanya street surulere ftt bode
-													thomas and shoprite
+													{d.address}
 												</span>
 											</td>
 											<td className="text-center">
@@ -159,7 +156,7 @@ export default function PendingSiteUploads() {
 				{!isLoading && (
 					<Pagination
 						currentPage={currentPage}
-						totalPages={data?.pagination.totalPages}
+						totalPages={data?.totalPages}
 						setCurrentPage={setCurrentPage}
 					/>
 				)}

@@ -12,10 +12,18 @@ import useCredentials from "@/hooks/useCredentials";
 import { ApiInstance } from "@/utils";
 import CampaignPlaceholder from "@/components/shared/CampaignPlaceholder";
 import { Campaign } from "@/types";
+import { useRouter } from "next/navigation";
+import AppButton from "@/components/shared/AppButton";
+import Link from "next/link";
 
-export default function CampaignsTable() {
+export default function CampaignsTable({
+	forCompliance = false,
+}: {
+	forCompliance?: boolean;
+}) {
 	const { accessToken } = useCredentials();
 	const [currentPage, setCurrentPage] = useState(1);
+	const router = useRouter();
 
 	const { data, isLoading, isFetching } = useQuery({
 		queryKey: ["campaigns", currentPage],
@@ -94,29 +102,42 @@ export default function CampaignsTable() {
 											</span>
 										</td>
 										<td className="text-center">
-											<Dropdown
-												bordered
-												dropdownWidth="180px"
-												right={0}
-												top={100}
-												renderButton={({ setOpen, open }) => (
-													<button
-														onClick={() => setOpen(!open)}
-														className="w-[35px] h-[35px] rounded-full flex items-center justify-center">
-														<Kebab />
-													</button>
-												)}
-												items={[
-													<ViewCampaign campaignId={d.id} />,
-													<AddMoreSites campaignId={d.id} />,
-													<DeleteCampaign campaignId={d.id} />,
-												]}
-												renderItem={({ item, index }) => (
-													<div className="w-full" key={index}>
-														{item}
-													</div>
-												)}
-											/>
+											{!forCompliance && (
+												<Dropdown
+													bordered
+													dropdownWidth="180px"
+													right={0}
+													top={100}
+													renderButton={({ setOpen, open }) => (
+														<button
+															onClick={() => setOpen(!open)}
+															className="w-[35px] h-[35px] rounded-full flex items-center justify-center">
+															<Kebab />
+														</button>
+													)}
+													items={[
+														<ViewCampaign campaignId={d.id} />,
+														<AddMoreSites campaignId={d.id} />,
+														<DeleteCampaign campaignId={d.id} />,
+													]}
+													renderItem={({ item, index }) => (
+														<div className="w-full" key={index}>
+															{item}
+														</div>
+													)}
+												/>
+											)}
+											{forCompliance && (
+												<div className="flex items-center justify-center">
+													<Link href={"/reports/compliance/" + d.id}>
+														<AppButton
+															className="!w-[118px]"
+															fullyRounded
+															label="View Report"
+														/>
+													</Link>
+												</div>
+											)}
 										</td>
 									</tr>
 							  ))}

@@ -135,7 +135,7 @@ export interface SiteAssignmentReport {
 	sideId: number;
 	comment: string;
 	imageUrls: string[];
-	geolocations: Array<{ latitude: number; longitude: number }>;
+	geolocations: string;
 	capturedTimestamps: Array<{ timestamp: string; filename: string }>;
 	uploadedBy: number;
 	uploadedAt: string;

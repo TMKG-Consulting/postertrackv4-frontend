@@ -41,13 +41,13 @@ export default async function layout({
 
 	if (!hasReport) {
 		return (
-			<section>
-				<span>No Report Available</span>
+			<section className="h-screen flex items-center justify-center flex-col">
+				<span className="text-[2rem] font-semibold">No Report Available</span>
 			</section>
 		);
 	}
 
-	console.log(siteReport);
+	// console.log(siteReport);
 
 	return <SiteProvider reportBeingViewed={siteReport}>{children}</SiteProvider>;
 }

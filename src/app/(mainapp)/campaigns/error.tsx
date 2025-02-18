@@ -25,7 +25,7 @@ export default function Error({
 				width={500}
 				height={500}
 				priority={true}
-				loading="lazy"
+				
 				className="w-[500px] h-[500px]"
 			/>
 			<h2 className="text-4xl font-bold">

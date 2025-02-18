@@ -14,11 +14,11 @@ export default async function page() {
 			<SiteReportHeader />
 			<SiteMap />
 			<SiteDetailsTab />
-			<section className="w-full flex flex-col lg:flex-row gap-8 pb-12">
-				<div className="shrink-0 lg:w-[40%] xl:w-[35%] p-5 xl:p-10 bg-white rounded-2xl border border-[#E7E7E7]">
+			<section className="w-full flex flex-col lg:flex-row pb-12 justify-between">
+				<div className="shrink-0 lg:w-[39%] xl:w-[34%] p-5 xl:p-10 bg-white rounded-2xl border border-[#E7E7E7]">
 					<SiteReportInfo />
 				</div>
-				<div className="shrink-0 lg:w-[60%] xl:w-[65%]">
+				<div className="shrink-0 lg:w-[59%] xl:w-[64%] ">
 					<SiteReportImages />
 				</div>
 			</section>

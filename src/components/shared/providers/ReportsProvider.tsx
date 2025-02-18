@@ -8,6 +8,7 @@ type ReportsTab = "competitive" | "compliance";
 interface ReportStore {
 	currentTab: ReportsTab;
 	setCurrentTab(tab: ReportsTab): void;
+	
 }
 
 const ReportContext = createContext<StoreApi<ReportStore> | null>(null);

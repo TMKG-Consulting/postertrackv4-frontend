@@ -3,6 +3,7 @@ import CheckedIcon from "@/components/shared/icons/CheckedIcon";
 import React from "react";
 import { useSiteStore } from "@/components/shared/providers/SiteProvider";
 import AppButton from "@/components/shared/AppButton";
+import UpdateBSV from "./UpdateBSV";
 
 export default function SiteReportInfo() {
 	const { currentTab, reportBeingViewed } = useSiteStore();
@@ -121,9 +122,7 @@ export default function SiteReportInfo() {
 							{reportBeingViewed?.comment}
 						</span>
 					</div>
-					<div className="w-full flex items-center justify-center py-6 border-b border-b-[#dfdfdf]">
-						<AppButton label="Edit" />
-					</div>
+					<UpdateBSV />
 				</>
 			)}
 

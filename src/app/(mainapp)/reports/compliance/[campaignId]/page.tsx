@@ -2,7 +2,7 @@ import ComplianceReportHeader from "@/components/page_components/reports/complia
 import ComplianceReportTable from "@/components/page_components/reports/compliance/ComplianceReportTable";
 import React from "react";
 
-export default function page() {
+export default async function page() {
 	return (
 		<>
 			<ComplianceReportHeader />

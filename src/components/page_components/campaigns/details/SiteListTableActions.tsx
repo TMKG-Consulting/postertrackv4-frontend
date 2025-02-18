@@ -11,7 +11,7 @@ import Kebab from "@/components/shared/icons/Kebab";
 export default function SiteListTableActions() {
 	return (
 		<div className="p-8 flex items-center justify-between">
-			<div className="flex items-center gap-x-8">
+			{/* <div className="flex items-center gap-x-8">
 				<div className="w-[40px] xl:w-[100px]">
 					<AppButton
 						className="!bg-transparent border-primary border-[1.5px] !h-[40px]"
@@ -35,7 +35,7 @@ export default function SiteListTableActions() {
 						</div>
 					</AppButton>
 				</div>
-			</div>
+			</div> */}
 			<div className="flex items-center gap-x-7">
 				<div className="w-[40px] md:w-[100px]">
 					<AppButton
