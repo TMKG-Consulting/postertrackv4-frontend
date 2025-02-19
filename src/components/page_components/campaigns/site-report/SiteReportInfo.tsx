@@ -28,7 +28,9 @@ export default function SiteReportInfo() {
 						<span className=" font-medium text-2xl w-max flex text-[#797979]">
 							State
 						</span>
-						<span className="text-appBlack text-2xl font-medium">{}</span>
+						<span className="text-appBlack text-2xl font-medium">
+							{reportBeingViewed?.state}
+						</span>
 					</div>
 					<div className="w-full flex items-center justify-between py-6 border-b border-b-[#dfdfdf]">
 						<span className=" font-medium text-2xl w-max flex text-[#797979]">

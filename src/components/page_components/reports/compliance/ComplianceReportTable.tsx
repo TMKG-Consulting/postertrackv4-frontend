@@ -38,43 +38,43 @@ export default function ComplianceReportTable() {
 		throw new Error(error.response.data.message);
 	}
 
-	console.log(data);
-
 	return (
 		<div className="w-full h-full flex flex-col">
-			<ComplianceReportTableActions
-				reports={data?.data.map((d: any, i: number) => ({
-					SN: i + 1,
-					Code: d.siteCode,
-					State: "Abia",
-					City: d.city,
-					Address: d.address,
-					Brand: d.brand,
-					"Board Type": d.boardType,
-					"Media Owner": d.mediaOwner,
-					message: d.message,
-					Poster: d.Poster.name,
-					Structure: d.Structure.name,
-					Route: d.Route.name,
-					Illumination: d.Illumination.name,
-					Side: d.Side.name,
-					BSV: d.bsv,
-					Remark: d.comment,
-					"Date Captured": `${new Date(d.uploadedAt).toLocaleDateString(
-						"en-US",
-						{
-							dateStyle: "medium",
-						}
-					)} at ${new Date(d.uploadedAt)
-						.toLocaleTimeString("en-US", {
-							hour: "2-digit",
-							minute: "2-digit",
-							hour12: true,
-						})
-						.replace(" AM", ":am")
-						.replace(" PM", ":pm")}`,
-				}))}
-			/>
+			{data?.data && (
+				<ComplianceReportTableActions
+					reports={data?.data?.map((d: any, i: number) => ({
+						SN: i + 1,
+						Code: d.siteCode,
+						State: "Abia",
+						City: d.city,
+						Address: d.address,
+						Brand: d.brand,
+						"Board Type": d.boardType,
+						"Media Owner": d.mediaOwner,
+						message: d.message,
+						Poster: d.Poster.name,
+						Structure: d.Structure.name,
+						Route: d.Route.name,
+						Illumination: d.Illumination.name,
+						Side: d.Side.name,
+						BSV: d.bsv,
+						Remark: d.comment,
+						"Date Captured": `${new Date(d.uploadedAt).toLocaleDateString(
+							"en-US",
+							{
+								dateStyle: "medium",
+							}
+						)} at ${new Date(d.uploadedAt)
+							.toLocaleTimeString("en-US", {
+								hour: "2-digit",
+								minute: "2-digit",
+								hour12: true,
+							})
+							.replace(" AM", ":am")
+							.replace(" PM", ":pm")}`,
+					}))}
+				/>
+			)}
 			<div className="grow w-full overflow-auto">
 				<table className="w-[250%] md:w-[180%]" cellPadding={15}>
 					<thead className="border-b border-t border-[#C7C7C7] border-t-[#C7C7C7] bg-[#f5f5f5]">
@@ -133,106 +133,107 @@ export default function ComplianceReportTable() {
 						</tr>
 					</thead>
 					<tbody>
-						{isLoading || isFetching
-							? [...Array(5)].map((d, i) => (
-									<ComplianceReportPlaceholder key={i} />
-							  ))
-							: data.data.map((d: any, i: number) => (
-									<tr
-										key={i}
-										className="border-b-[#E6E6E6] border-b 
+						{(isLoading || isFetching) &&
+							[...Array(5)].map((d, i) => (
+								<ComplianceReportPlaceholder key={i} />
+							))}
+
+						{!isLoading &&
+							!isFetching &&
+							data?.data?.length > 0 &&
+							data?.data?.map((d: any, i: number) => (
+								<tr
+									key={i}
+									className="border-b-[#E6E6E6] border-b 
                         ">
-										<td className="text-center">
-											<span className="text-2xl font-medium">{i + 1}</span>
-										</td>
-										<td className="text-center">
-											<span className="text-2xl font-medium">{d.siteCode}</span>
-										</td>
-										<td className="text-center">
-											<span className="text-2xl font-medium">Abia</span>
-										</td>
-										<td className="text-center">
-											<span className="text-2xl font-medium">{d.city}</span>
-										</td>
-										<td className="">
-											<span className="text-2xl font-medium">{d.address}</span>
-										</td>
-										<td className="text-center">
-											<span className="text-2xl font-medium text-center">
-												{d.brand}
-											</span>
-										</td>
-										<td className="text-center">
-											<span className="text-2xl font-medium">
-												{d.boardType}
-											</span>
-										</td>
+									<td className="text-center">
+										<span className="text-2xl font-medium">{i + 1}</span>
+									</td>
+									<td className="text-center">
+										<span className="text-2xl font-medium">{d.siteCode}</span>
+									</td>
+									<td className="text-center">
+										<span className="text-2xl font-medium">{d.state}</span>
+									</td>
+									<td className="text-center">
+										<span className="text-2xl font-medium">{d.city}</span>
+									</td>
+									<td className="">
+										<span className="text-2xl font-medium">{d.address}</span>
+									</td>
+									<td className="text-center">
+										<span className="text-2xl font-medium text-center">
+											{d.brand}
+										</span>
+									</td>
+									<td className="text-center">
+										<span className="text-2xl font-medium">{d.boardType}</span>
+									</td>
 
-										<td className="text-center">
-											<span className="text-2xl font-medium">
-												{d.mediaOwner}
-											</span>
-										</td>
+									<td className="text-center">
+										<span className="text-2xl font-medium">{d.mediaOwner}</span>
+									</td>
 
-										<td className="text-center">
-											<span className="text-2xl font-medium">{d.message}</span>
-										</td>
-										<td className="text-center">
-											<span className="text-2xl font-medium">
-												{d.Poster.name}
-											</span>
-										</td>
-										<td className="text-center">
-											<span className="text-2xl font-medium">
-												{d.Structure.name}
-											</span>
-										</td>
-										<td className="text-center">
-											<span className="text-2xl font-medium">
-												{d.Route.name}
-											</span>
-										</td>
-										<td className="text-center">
-											<span className="text-2xl font-medium">
-												{d.Illumination.name}
-											</span>
-										</td>
-										<td className="text-center">
-											<span className="text-2xl font-medium">
-												{d.Side.name}
-											</span>
-										</td>
-										<td className="text-center">
-											<span className="text-2xl font-medium">{d.bsv}</span>
-										</td>
-										<td className="text-center">
-											<span className="text-2xl font-medium">{d.comment}</span>
-										</td>
-										<td className="text-center">
-											<span className="text-2xl font-medium">
-												{new Date(d.uploadedAt).toLocaleDateString("en-US", {
-													dateStyle: "medium",
-												})}
-											</span>{" "}
-											<br />
-											<span className="text-2xl font-medium">
-												{new Date(d.uploadedAt)
-													.toLocaleTimeString("en-US", {
-														hour: "2-digit",
-														minute: "2-digit",
-														hour12: true,
-													})
-													.replace(" AM", ":am")
-													.replace(" PM", ":pm")}
-											</span>
-										</td>
-									</tr>
-							  ))}
+									<td className="text-center">
+										<span className="text-2xl font-medium">{d.message}</span>
+									</td>
+									<td className="text-center">
+										<span className="text-2xl font-medium">
+											{d.Poster.name}
+										</span>
+									</td>
+									<td className="text-center">
+										<span className="text-2xl font-medium">
+											{d.Structure.name}
+										</span>
+									</td>
+									<td className="text-center">
+										<span className="text-2xl font-medium">{d.Route.name}</span>
+									</td>
+									<td className="text-center">
+										<span className="text-2xl font-medium">
+											{d.Illumination.name}
+										</span>
+									</td>
+									<td className="text-center">
+										<span className="text-2xl font-medium">{d.Side.name}</span>
+									</td>
+									<td className="text-center">
+										<span className="text-2xl font-medium">{d.bsv}</span>
+									</td>
+									<td className="text-center">
+										<span className="text-2xl font-medium">{d.comment}</span>
+									</td>
+									<td className="text-center">
+										<span className="text-2xl font-medium">
+											{new Date(d.uploadedAt).toLocaleDateString("en-US", {
+												dateStyle: "medium",
+											})}
+										</span>{" "}
+										<br />
+										<span className="text-2xl font-medium">
+											{new Date(d.uploadedAt)
+												.toLocaleTimeString("en-US", {
+													hour: "2-digit",
+													minute: "2-digit",
+													hour12: true,
+												})
+												.replace(" AM", ":am")
+												.replace(" PM", ":pm")}
+										</span>
+									</td>
+								</tr>
+							))}
 					</tbody>
 				</table>
+				{!isLoading && !isFetching && data.Reports?.length === 0 && (
+					<p className="text-4xl font-bold text-center my-10">
+						Reports Not Available
+					</p>
+				)}
 			</div>
 			<div className="my-12 flex items-center justify-center md:justify-end px-5 md:px-10">
-				{!isLoading && (
+				{!isLoading && data && data.pagination && (
 					<Pagination
 						currentPage={currentPage}
 						totalPages={Math.ceil(

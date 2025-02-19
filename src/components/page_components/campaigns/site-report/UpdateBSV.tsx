@@ -106,8 +106,15 @@ export default function UpdateBSV() {
 						onSubmit={submitHandler}
 						initialValues={initialValues}
 						validationSchema={schema}>
-						{({ isValidating, isSubmitting }) => (
+						{({ isValidating, isSubmitting, values }) => (
 							<Form className="flex flex-col w-full gap-[15px]">
+								<h2 className="text-3xl font-bold pb-8 border-b border-b-gray-300">
+									BSV:
+									{Object.values(values).reduce((acc: number, value) => {
+										return (acc += Number(value));
+									}, 0)}
+									%
+								</h2>
 								<div className="grid grid-cols-2 gap-5">
 									<div className="w-full flex flex-col gap-y-5">
 										<label

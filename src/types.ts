@@ -148,4 +148,5 @@ export interface SiteAssignmentReport {
 	Illumination: { id: number; name: string };
 	Route: { id: number; name: string };
 	Side: { id: number; name: string };
+	state: string;
 }

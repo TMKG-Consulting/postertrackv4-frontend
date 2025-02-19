@@ -15,11 +15,11 @@ export default function ComplianceReportHeader() {
 	const { accessToken } = useCredentials();
 	const [currentPage, setCurrentPage] = useState(1);
 
-	const { data, isLoading, error } = useQuery({
-		queryKey: ["compliance-reports", params.campaignId],
+	const { data, isLoading, isFetching, error } = useQuery({
+		queryKey: ["campaignDetails", params.campaignId],
 		queryFn: async () => {
-			const res = await ApiInstance.get(
-				`/view-campaign-compliance/${params.campaignId}`,
+			const response = await ApiInstance.get(
+				`/campaigns/${params.campaignId}`,
 				{
 					headers: {
 						"auth-token": accessToken,
@@ -27,7 +27,7 @@ export default function ComplianceReportHeader() {
 				}
 			);
 
-			return res.data;
+			return response.data.campaign;
 		},
 	});
 
@@ -57,26 +57,24 @@ export default function ComplianceReportHeader() {
 			<section className="flex items-center py-8 gap-8 lg::mb-10">
 				<span className="text-[1.7rem] font-medium">
 					Total Sites:{" "}
-					<span className="font-bold">
-						{data?.data[0]?.campaign.siteList.length}
-					</span>
+					<span className="font-bold">{data?.siteList.length}</span>
 				</span>
 				<span className="flex h-[24px] w-[1px] bg-appBlack"></span>
 				<span className="text-[1.7rem] font-medium">
 					Date Uploaded:{" "}
 					<span className="font-bold">
 						{" "}
-						{new Date(
-							data?.data[0].campaign.uploadedAt ?? Date.now()
-						).toLocaleDateString("en-US", {
-							dateStyle: "medium",
-						})}
+						{new Date(data?.uploadedAt ?? Date.now()).toLocaleDateString(
+							"en-US",
+							{
+								dateStyle: "medium",
+							}
+						)}
 					</span>
 				</span>
 				<span className="flex h-[24px] w-[1px] bg-appBlack"></span>
 				<span className="text-[1.7rem] font-medium">
-					Campaign ID:{" "}
-					<span className="font-bold">{data?.data[0].campaign.campaignID}</span>
+					Campaign ID: <span className="font-bold">{data?.campaignID}</span>
 				</span>
 			</section>
 		</>
