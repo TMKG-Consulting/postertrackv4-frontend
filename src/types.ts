@@ -16,6 +16,13 @@ export interface User {
 	status?: boolean;
 }
 
+export type Role =
+	| "CHIEF_ACCOUNT_MANAGER"
+	| "ACCOUNT_MANAGER"
+	| "SUPER_ADMIN"
+	| "CLIENT_AGENCY_USER"
+	| "FIELD_AUDITOR";
+
 export interface AccountManager extends User {
 	role: "CHIEF_ACCOUNT_MANAGER" | "ACCOUNT_MANAGER" | "SUPER_ADMIN";
 }

@@ -10,19 +10,26 @@ import useAlert from "@/hooks/useAlert";
 import { AxiosError } from "axios";
 import MarkIcon from "@/components/shared/icons/MarkIcon";
 import CautionIcon from "@/components/shared/icons/CautionIcon";
+import Modal from "@/components/shared/Modal";
+import { Form, Formik } from "formik";
+import AppInput from "@/components/shared/AppInput";
 
 export default function SiteReportHeader() {
 	const { reportBeingViewed, setReportBeingViewed } = useSiteStore();
 	const { accessToken } = useCredentials();
 	const { showAndHideAlert } = useAlert();
-	const [isFetching, setIsFetching] = useState(false);
+	const [isApproving, setIsApproving] = useState(false);
+	const [isDisapproving, setIsDisapproving] = useState(false);
 
 	const updateSiteStatus = async function (
 		status: "approved" | "disapproved",
 		disapprovalReason?: string
 	) {
 		try {
-			setIsFetching(true);
+			if (status === "approved") {
+				setIsApproving(true);
+			}
+
 			const response = await ApiInstance.put(
 				`compliance/${reportBeingViewed?.id}/status`,
 				{
@@ -36,7 +43,9 @@ export default function SiteReportHeader() {
 				}
 			);
 
-			setIsFetching(false);
+			if (status === "approved") {
+				setIsApproving(false);
+			}
 
 			if (reportBeingViewed) {
 				setReportBeingViewed({ ...reportBeingViewed, status });
@@ -53,7 +62,9 @@ export default function SiteReportHeader() {
 				type: "error",
 			});
 
-			setIsFetching(false);
+			if (status === "approved") {
+				setIsApproving(false);
+			}
 		}
 	};
 
@@ -82,14 +93,13 @@ export default function SiteReportHeader() {
 							className="!w-1/2 md:!w-[150px] font-medium !bg-[#048F2B24] border-[#048F2B] border-[1.5px] !text-[#048F2B]"
 							fullyRounded
 							label="Approve"
-							showLoading={isFetching}
+							showLoading={isApproving}
 						/>
 						<AppButton
-							onClick={() => updateSiteStatus("disapproved", "bad market")}
+							onClick={() => setIsDisapproving(true)}
 							className="!w-1/2 md:!w-[150px] !bg-[#EB410B24] !text-primary border-primary border-[1.5px] font-medium"
 							fullyRounded
 							label="Disapprove"
-							showLoading={isFetching}
 						/>
 					</>
 				)}
@@ -102,14 +112,41 @@ export default function SiteReportHeader() {
 				)}
 
 				{reportBeingViewed?.status === "disapproved" && (
-					<div className="cursor-none flex items-center gap-5 rounded-full p-5 bg-[#E7E7E740]">
-						<span className="text-2xl font-medium text-[#E7E7E7]">
+					<div className="cursor-none flex items-center gap-5 rounded-full p-5 bg-[#ED323740]">
+						<span className="text-2xl font-medium text-appBlack">
 							Disapproved
 						</span>{" "}
-						<CautionIcon />
+						<CautionIcon fill="#ED3237" />
 					</div>
 				)}
 			</div>
+			<Modal
+				showModal={isDisapproving}
+				hideModal={() => setIsDisapproving(false)}>
+				<Formik
+					initialValues={{ disapprovalReason: "" }}
+					onSubmit={(values, { setSubmitting }) => {
+						updateSiteStatus("disapproved", values.disapprovalReason);
+						setSubmitting(false);
+						setIsApproving(false);
+					}}>
+					{({ isSubmitting }) => (
+						<Form className="p-10">
+							<AppInput
+								name="disapprovalReason"
+								label="State your reason for disaproval"
+								placeholder="Disapproval Reason"
+							/>
+							<AppButton
+								type="submit"
+								label="Disapprove"
+								showLoading={isSubmitting}
+								className="mt-[20px]"
+							/>
+						</Form>
+					)}
+				</Formik>
+			</Modal>
 		</section>
 	);
 }

@@ -24,6 +24,7 @@ export default function SiteReportImages() {
 						height={470}
 						alt="poster-track"
 						className="w-full h-full "
+						priority={true}
 					/>
 				</div>
 			)}
@@ -42,6 +43,7 @@ export default function SiteReportImages() {
 							height={370}
 							alt="poster-track"
 							className="w-[90px] h-[60px] object-cover"
+							priority={true}
 						/>
 					</button>
 				))}

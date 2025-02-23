@@ -5,12 +5,14 @@ import Link from "next/link";
 import ChevronIcon from "@/components/shared/icons/ChevronIcon";
 import { Campaign } from "@/types";
 import DeleteCampaign from "../DeleteCampaign";
+import { useRouter } from "next/navigation";
 
 export default function CampaignDetailsHeader({
 	campaign,
 }: {
 	campaign: Campaign;
 }) {
+	const router = useRouter();
 	return (
 		<>
 			<section className="w-full h-[15rem] md:h-[10rem] flex flex-col md:flex-row md:items-center justify-center gap-y-10 md:justify-between border-b border-b-[#C7C7C7">
@@ -30,11 +32,13 @@ export default function CampaignDetailsHeader({
 					</h2>
 				</div>
 				<div className="w-full md:w-max flex items-center gap-3 md:gap-5">
-					<AppButton
-						className="!w-1/2 md:!w-[150px] font-medium"
-						fullyRounded
-						label="Compliance Report"
-					/>
+					<Link href={"/reports/compliance/" + campaign.id}>
+						<AppButton
+							className="!w-1/2 md:!w-[150px] font-medium"
+							fullyRounded
+							label="Compliance Report"
+						/>
+					</Link>
 					<DeleteCampaign campaignId={campaign.id} asBtn={true} />
 				</div>
 			</section>

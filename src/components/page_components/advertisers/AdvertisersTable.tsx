@@ -113,18 +113,21 @@ export default function AdvertisersTable() {
 						initialValues={advertiserToEdit ?? undefined}
 						advertiserId={advertiserToEdit?.id}
 						editCallback={(res) => {
-							queryClient.setQueryData(["advertisers", currentPage], (prev) => {
-								// @ts-ignore
-								const data = { ...prev };
-								const index = data.data.findIndex(
+							queryClient.setQueryData(
+								["advertisers", currentPage],
+								(prev: any) => {
 									// @ts-ignore
-									(d) => d.id === res.updatedAdvertiser.id
-								);
+									const data = { ...prev };
+									const index = data.data.findIndex(
+										// @ts-ignore
+										(d) => d.id === res.updatedAdvertiser.id
+									);
 
-								data.data[index] = res.updatedAdvertiser;
+									data.data[index] = res.updatedAdvertiser;
 
-								return data;
-							});
+									return data;
+								}
+							);
 
 							setAdvertiserToEdit(null);
 						}}
