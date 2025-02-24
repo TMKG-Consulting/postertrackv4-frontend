@@ -9,6 +9,8 @@ import { CampaignCreateData, Client } from "@/types";
 import SearchInput from "@/components/shared/SearchInput";
 import useUserManagement from "@/hooks/useUserManagement";
 import AppButton from "@/components/shared/AppButton";
+import SearchIcon from "@/components/shared/icons/SearchIcon";
+import { debounce } from "@/utils";
 
 export default function CampaignAccountManager() {
 	const { values, setFieldValue } = useFormikContext<CampaignCreateData>();
@@ -19,6 +21,7 @@ export default function CampaignAccountManager() {
 	const { getAccountManagers } = useUserManagement();
 	const [currentPage, setCurrentPage] = useState(1);
 	const [accountManagers, setAccountManagers] = useState<any[]>([]);
+	const [hasSearchResult, setHasSearchResult] = useState(false);
 
 	const { data, isLoading, error, isFetching } = useQuery({
 		queryKey: ["accountManagers", currentPage, search],
@@ -32,10 +35,21 @@ export default function CampaignAccountManager() {
 	});
 
 	useEffect(() => {
-		if (data) {
+		if (data && search === "") {
+			if (hasSearchResult) {
+				// @ts-ignore
+				setAccountManagers((prev) => [...data.data]);
+			} else {
+				// @ts-ignore
+				setAccountManagers((prev) => [...prev, ...data.data]);
+			}
+			setHasSearchResult(false);
+		} else if (data && search !== "") {
+			setHasSearchResult(true);
+			// @ts-ignore
 			setAccountManagers(data.data);
 		}
-	}, [data]);
+	}, [data, search, hasSearchResult]);
 
 	const handleScroll = () => {
 		const container = dropdownContentRef.current;
@@ -58,6 +72,11 @@ export default function CampaignAccountManager() {
 			setCurrentPage(currentPage + 1);
 		}
 	}, [isAtBottom, currentPage, data]);
+
+	const searchHandler = debounce(function (val) {
+		setCurrentPage(1);
+		setSearch(val);
+	}, 500);
 
 	return (
 		<div className="w-full">
@@ -112,7 +131,16 @@ export default function CampaignAccountManager() {
 				)}
 				renderHeader={({ setOpen, open }) => (
 					<div className="py-5 flex items-center justify-center sticky top-0 bg-white">
-						<SearchInput setSearch={setSearch} />
+						<div className="w-[255px] h-[45px] flex items-center px-5 bg-[#F5F5F5] rounded-xl transiton-all duration-200 focus-within:!border-primary border-transparent border-[1.5px] gap-x-3">
+							<SearchIcon />
+							<input
+								type="text"
+								placeholder="Search"
+								className="grow h-full outline-0 bg-transparent text-2xl"
+								name="search"
+								onChange={(e) => searchHandler(e.target.value)}
+							/>
+						</div>
 					</div>
 				)}
 				renderFooter={() => (

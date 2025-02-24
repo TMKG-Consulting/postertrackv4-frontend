@@ -9,6 +9,8 @@ import { CampaignCreateData, Client } from "@/types";
 import SearchInput from "@/components/shared/SearchInput";
 import useUserManagement from "@/hooks/useUserManagement";
 import AppButton from "@/components/shared/AppButton";
+import { debounce } from "@/utils";
+import SearchIcon from "@/components/shared/icons/SearchIcon";
 
 export default function CampaignClient() {
 	const { values, setFieldValue } = useFormikContext<CampaignCreateData>();
@@ -19,6 +21,7 @@ export default function CampaignClient() {
 	const { getClients } = useUserManagement();
 	const [currentPage, setCurrentPage] = useState(1);
 	const [clients, setClients] = useState<any>([]);
+	const [hasSearchResult, setHasSearchResult] = useState(false);
 
 	const { data, error, isFetching } = useQuery({
 		queryKey: ["clients", currentPage, search],
@@ -32,7 +35,18 @@ export default function CampaignClient() {
 	});
 
 	useEffect(() => {
-		if (data) {
+		if (data && search === "") {
+			if (hasSearchResult) {
+				// @ts-ignore
+				setClients((prev) => [...data.data]);
+			} else {
+				// @ts-ignore
+				setClients((prev) => [...prev, ...data.data]);
+			}
+			setHasSearchResult(false);
+		} else if (data && search !== "") {
+			setHasSearchResult(true);
+			// @ts-ignore
 			setClients(data.data);
 		}
 	}, [data]);
@@ -58,6 +72,11 @@ export default function CampaignClient() {
 			setCurrentPage(currentPage + 1);
 		}
 	}, [isAtBottom, currentPage, data]);
+
+	const searchHandler = debounce(function (val) {
+		setCurrentPage(1);
+		setSearch(val);
+	}, 500);
 
 	return (
 		<div className="w-full">
@@ -103,7 +122,16 @@ export default function CampaignClient() {
 				)}
 				renderHeader={({ setOpen, open }) => (
 					<div className="py-5 flex items-center justify-center sticky top-0 bg-white">
-						<SearchInput setSearch={setSearch} />
+						<div className="w-[255px] h-[45px] flex items-center px-5 bg-[#F5F5F5] rounded-xl transiton-all duration-200 focus-within:!border-primary border-transparent border-[1.5px] gap-x-3">
+							<SearchIcon />
+							<input
+								type="text"
+								placeholder="Search"
+								className="grow h-full outline-0 bg-transparent text-2xl"
+								name="search"
+								onChange={(e) => searchHandler(e.target.value)}
+							/>
+						</div>
 					</div>
 				)}
 				renderFooter={() => (

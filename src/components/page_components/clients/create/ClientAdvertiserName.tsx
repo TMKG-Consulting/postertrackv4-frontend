@@ -4,11 +4,12 @@ import Dropdown from "@/components/shared/Dropdown";
 import ChevronIcon from "@/components/shared/icons/ChevronIcon";
 import { useQuery } from "@tanstack/react-query";
 import useCredentials from "@/hooks/useCredentials";
-import { ApiInstance } from "@/utils";
+import { ApiInstance, debounce } from "@/utils";
 import { ErrorMessage, useFormikContext } from "formik";
 import AppLoader from "@/components/shared/AppLoader";
 import { Client } from "@/types";
 import SearchInput from "@/components/shared/SearchInput";
+import SearchIcon from "@/components/shared/icons/SearchIcon";
 
 export default function ClientAdvertiserName() {
 	const { accessToken } = useCredentials();
@@ -19,6 +20,7 @@ export default function ClientAdvertiserName() {
 	const [currentPage, setCurrentPage] = useState(1);
 	const [advertisers, setAdvertisers] = useState<any>([]);
 	const [search, setSearch] = useState("");
+	const [hasSearchResult, setHasSearchResult] = useState(false);
 
 	const { data, error, isFetching } = useQuery({
 		queryKey: ["advertisers", currentPage, search],
@@ -37,11 +39,21 @@ export default function ClientAdvertiserName() {
 	});
 
 	useEffect(() => {
-		if (data) {
+		if (data && search === "") {
+			if (hasSearchResult) {
+				// @ts-ignore
+				setAdvertisers((prev) => [...data.data]);
+			} else {
+				// @ts-ignore
+				setAdvertisers((prev) => [...prev, ...data.data]);
+			}
+			setHasSearchResult(false);
+		} else if (data && search !== "") {
+			setHasSearchResult(true);
 			// @ts-ignore
-			setAdvertisers((prev) => [...prev, ...data.data]);
+			setAdvertisers(data.data);
 		}
-	}, [data]);
+	}, [data, search, hasSearchResult]);
 
 	useEffect(() => {
 		if (values.advertiser) {
@@ -71,6 +83,11 @@ export default function ClientAdvertiserName() {
 			setCurrentPage(currentPage + 1);
 		}
 	}, [isAtBottom, currentPage, data]);
+
+	const searchHandler = debounce(function (val) {
+		setCurrentPage(1);
+		setSearch(val);
+	}, 500);
 
 	return (
 		<div className="w-full">
@@ -115,7 +132,16 @@ export default function ClientAdvertiserName() {
 				)}
 				renderHeader={({ setOpen, open }) => (
 					<div className="py-5 flex items-center justify-center sticky top-0 bg-white">
-						<SearchInput setSearch={setSearch} />
+						<div className="w-[255px] h-[45px] flex items-center px-5 bg-[#F5F5F5] rounded-xl transiton-all duration-200 focus-within:!border-primary border-transparent border-[1.5px] gap-x-3">
+							<SearchIcon />
+							<input
+								type="text"
+								placeholder="Search"
+								className="grow h-full outline-0 bg-transparent text-2xl"
+								name="search"
+								onChange={(e) => searchHandler(e.target.value)}
+							/>
+						</div>
 					</div>
 				)}
 				renderFooter={() => (
