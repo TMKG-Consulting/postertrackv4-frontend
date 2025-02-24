@@ -12,7 +12,6 @@ export default function CampaignDetailsHeader({
 }: {
 	campaign: Campaign;
 }) {
-	const router = useRouter();
 	return (
 		<>
 			<section className="w-full h-[15rem] md:h-[10rem] flex flex-col md:flex-row md:items-center justify-center gap-y-10 md:justify-between border-b border-b-[#C7C7C7">

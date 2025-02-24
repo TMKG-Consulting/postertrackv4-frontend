@@ -9,6 +9,8 @@ import TotalCampaignsIcon from "@/components/shared/icons/TotalCampaignsIcon";
 import { ApiInstance } from "@/utils";
 import { cookies } from "next/headers";
 import { ACCESS_TOKEN_COOKIE_NAME } from "@/constants";
+import { redirect } from "next/navigation";
+import { AccountManager, User } from "@/types";
 
 export default async function page() {
 	const cookieStore = await cookies();
@@ -21,6 +23,8 @@ export default async function page() {
 		totalCampaigns: 0,
 	};
 
+	let userDetails: AccountManager | null = null;
+
 	if (cookieStore.has(ACCESS_TOKEN_COOKIE_NAME)) {
 		const res = await ApiInstance.get("/analytics/overview", {
 			headers: {
@@ -28,15 +32,32 @@ export default async function page() {
 			},
 		});
 
+		const userDetailsRes = await ApiInstance.get("/user/detail", {
+			headers: {
+				"auth-token": cookieStore.get(ACCESS_TOKEN_COOKIE_NAME)?.value,
+			},
+		});
+
+		userDetails = userDetailsRes.data;
+
 		analytics = res.data;
 	}
+
+	if (!userDetails) {
+		return redirect("/auth/login");
+	}
+
+	const role = userDetails.role;
+
+	const hasAccess = ["CHIEF_ACCOUNT_MANAGER", "SUPER_ADMIN"].includes(role);
 
 	return (
 		<>
 			<DashboardHeader />
 			<section className="grid md:grid-cols-3 gap-10 mt-10">
 				<Link
-					href={"/clients"}
+					href={hasAccess ? "/clients" : ""}
+					style={{ cursor: hasAccess ? "pointer" : "not-allowed" }}
 					className="w-full h-[128px] rounded-2xl bg-white p-8">
 					<div className="flex items-center justify-between">
 						<span className="text-[1.8rem] font-semibold text-appBlack">
@@ -49,7 +70,8 @@ export default async function page() {
 					</span>
 				</Link>
 				<Link
-					href={"/brands"}
+					href={hasAccess ? "/brands" : ""}
+					style={{ cursor: hasAccess ? "pointer" : "not-allowed" }}
 					className="w-full h-[128px] rounded-2xl bg-white p-8">
 					<div className="flex items-center justify-between">
 						<span className="text-[1.8rem] font-semibold text-appBlack">
@@ -62,7 +84,8 @@ export default async function page() {
 					</span>
 				</Link>
 				<Link
-					href={"/advertisers"}
+					href={hasAccess ? "/advertisers" : ""}
+					style={{ cursor: hasAccess ? "pointer" : "not-allowed" }}
 					className="w-full h-[128px] rounded-2xl bg-white p-8">
 					<div className="flex items-center justify-between">
 						<span className="text-[1.8rem] font-semibold text-appBlack">
@@ -75,7 +98,8 @@ export default async function page() {
 					</span>
 				</Link>
 				<Link
-					href={"/field-auditors"}
+					href={hasAccess ? "/field-auditors" : ""}
+					style={{ cursor: hasAccess ? "pointer" : "not-allowed" }}
 					className="w-full h-[128px] rounded-2xl bg-white p-8">
 					<div className="flex items-center justify-between">
 						<span className="text-[1.8rem] font-semibold text-appBlack">
