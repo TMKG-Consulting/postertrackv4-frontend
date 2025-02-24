@@ -14,15 +14,16 @@ export default function CampaignClient() {
 	const { values, setFieldValue } = useFormikContext<CampaignCreateData>();
 	const dropdownContentRef = useRef(null);
 	const [isAtBottom, setIsAtBottom] = useState(false);
+	const [search, setSearch] = useState("");
 
 	const { getClients } = useUserManagement();
 	const [currentPage, setCurrentPage] = useState(1);
 	const [clients, setClients] = useState<any>([]);
 
 	const { data, error, isFetching } = useQuery({
-		queryKey: ["clients", currentPage],
+		queryKey: ["clients", currentPage, search],
 		queryFn: async () => {
-			const response = await getClients(currentPage);
+			const response = await getClients(currentPage, search);
 
 			return response;
 		},
@@ -102,7 +103,7 @@ export default function CampaignClient() {
 				)}
 				renderHeader={({ setOpen, open }) => (
 					<div className="py-5 flex items-center justify-center sticky top-0 bg-white">
-						<SearchInput />
+						<SearchInput setSearch={setSearch} />
 					</div>
 				)}
 				renderFooter={() => (

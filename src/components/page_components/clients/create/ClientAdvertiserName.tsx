@@ -18,12 +18,13 @@ export default function ClientAdvertiserName() {
 	const { values, setFieldValue } = useFormikContext<Client>();
 	const [currentPage, setCurrentPage] = useState(1);
 	const [advertisers, setAdvertisers] = useState<any>([]);
+	const [search, setSearch] = useState("");
 
 	const { data, error, isFetching } = useQuery({
-		queryKey: ["advertisers", currentPage],
+		queryKey: ["advertisers", currentPage, search],
 		queryFn: async () => {
 			const response = await ApiInstance.get(
-				`/api/advertisers?page=${currentPage}`,
+				`/api/advertisers?page=${currentPage}&search=${search}`,
 				{
 					headers: {
 						"auth-token": accessToken,
@@ -114,7 +115,7 @@ export default function ClientAdvertiserName() {
 				)}
 				renderHeader={({ setOpen, open }) => (
 					<div className="py-5 flex items-center justify-center sticky top-0 bg-white">
-						<SearchInput />
+						<SearchInput setSearch={setSearch} />
 					</div>
 				)}
 				renderFooter={() => (

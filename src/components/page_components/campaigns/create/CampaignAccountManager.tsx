@@ -14,15 +14,16 @@ export default function CampaignAccountManager() {
 	const { values, setFieldValue } = useFormikContext<CampaignCreateData>();
 	const dropdownContentRef = useRef(null);
 	const [isAtBottom, setIsAtBottom] = useState(false);
+	const [search, setSearch] = useState("");
 
 	const { getAccountManagers } = useUserManagement();
 	const [currentPage, setCurrentPage] = useState(1);
 	const [accountManagers, setAccountManagers] = useState<any[]>([]);
 
 	const { data, isLoading, error, isFetching } = useQuery({
-		queryKey: ["accountManagers", currentPage],
+		queryKey: ["accountManagers", currentPage, search],
 		queryFn: async () => {
-			const response = await getAccountManagers(currentPage);
+			const response = await getAccountManagers(currentPage, search);
 
 			return response;
 		},
@@ -111,7 +112,7 @@ export default function CampaignAccountManager() {
 				)}
 				renderHeader={({ setOpen, open }) => (
 					<div className="py-5 flex items-center justify-center sticky top-0 bg-white">
-						<SearchInput />
+						<SearchInput setSearch={setSearch} />
 					</div>
 				)}
 				renderFooter={() => (
