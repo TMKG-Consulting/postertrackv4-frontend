@@ -110,66 +110,6 @@ export const SidePanelContent = function ({ cb }: { cb?: () => void }) {
 						<span className="text-white text-3xl font-medium">Campaigns</span>
 					</Link>
 				)}
-				{canSeeOthers && (
-					<>
-						<Link
-							onClick={() => {
-								if (cb) {
-									cb();
-								}
-							}}
-							href={"/clients"}
-							className={`flex items-center gap-5 h-[40px] rounded-lg px-5 ${
-								isClients ? "bg-[#2A2625D4]" : "bg-transparent"
-							}`}>
-							<AdvertisersIcon />
-							<span className="text-white text-3xl font-medium">Clients</span>
-						</Link>
-						<Link
-							onClick={() => {
-								if (cb) {
-									cb();
-								}
-							}}
-							href={"/brands"}
-							className={`flex items-center gap-5 h-[40px] rounded-lg px-5 ${
-								isBrands ? "bg-[#2A2625D4]" : "bg-transparent"
-							}`}>
-							<AdvertisersIcon />
-							<span className="text-white text-3xl font-medium">Brands</span>
-						</Link>
-						<Link
-							onClick={() => {
-								if (cb) {
-									cb();
-								}
-							}}
-							href={"/account-managers"}
-							className={`flex items-center gap-5 h-[40px] rounded-lg px-5 ${
-								isAccountManagers ? "bg-[#2A2625D4]" : "bg-transparent"
-							}`}>
-							<AccountManagerIcon />
-							<span className="text-white text-3xl font-medium">
-								Account Managers
-							</span>
-						</Link>
-						<Link
-							onClick={() => {
-								if (cb) {
-									cb();
-								}
-							}}
-							href={"/field-auditors"}
-							className={`flex items-center gap-5 h-[40px] rounded-lg px-5 ${
-								isFieldAuditors ? "bg-[#2A2625D4]" : "bg-transparent"
-							}`}>
-							<AccountManagerIcon />
-							<span className="text-white text-3xl font-medium">
-								Field Auditors
-							</span>
-						</Link>
-					</>
-				)}
 				{canSeeReports && (
 					<Link
 						onClick={() => {
@@ -193,6 +133,54 @@ export const SidePanelContent = function ({ cb }: { cb?: () => void }) {
 									cb();
 								}
 							}}
+							href={"/account-managers"}
+							className={`flex items-center gap-5 h-[40px] rounded-lg px-5 ${
+								isAccountManagers ? "bg-[#2A2625D4]" : "bg-transparent"
+							}`}>
+							<AccountManagerIcon />
+							<span className="text-white text-3xl font-medium">
+								Account Managers
+							</span>
+						</Link>
+						<Link
+							onClick={() => {
+								if (cb) {
+									cb();
+								}
+							}}
+							href={"/clients"}
+							className={`flex items-center gap-5 h-[40px] rounded-lg px-5 ${
+								isClients ? "bg-[#2A2625D4]" : "bg-transparent"
+							}`}>
+							<AdvertisersIcon />
+							<span className="text-white text-3xl font-medium">Clients</span>
+						</Link>
+						<Link
+							onClick={() => {
+								if (cb) {
+									cb();
+								}
+							}}
+							href={"/field-auditors"}
+							className={`flex items-center gap-5 h-[40px] rounded-lg px-5 ${
+								isFieldAuditors ? "bg-[#2A2625D4]" : "bg-transparent"
+							}`}>
+							<AccountManagerIcon />
+							<span className="text-white text-3xl font-medium">
+								Field Auditors
+							</span>
+						</Link>
+					</>
+				)}
+
+				{canSeeOthers && (
+					<>
+						<Link
+							onClick={() => {
+								if (cb) {
+									cb();
+								}
+							}}
 							href={"/advertisers"}
 							className={`flex items-center gap-5 h-[40px] rounded-lg px-5 ${
 								isAdvertisers ? "bg-[#2A2625D4]" : "bg-transparent"
@@ -208,14 +196,12 @@ export const SidePanelContent = function ({ cb }: { cb?: () => void }) {
 									cb();
 								}
 							}}
-							href={"/regions-states"}
+							href={"/brands"}
 							className={`flex items-center gap-5 h-[40px] rounded-lg px-5 ${
-								isRegions ? "bg-[#2A2625D4]" : "bg-transparent"
+								isBrands ? "bg-[#2A2625D4]" : "bg-transparent"
 							}`}>
-							<LocationIcon />
-							<span className="text-white text-3xl font-medium">
-								Regions & States
-							</span>
+							<AdvertisersIcon />
+							<span className="text-white text-3xl font-medium">Brands</span>
 						</Link>
 						<Link
 							onClick={() => {
@@ -230,6 +216,21 @@ export const SidePanelContent = function ({ cb }: { cb?: () => void }) {
 							<CategoryIcon />
 							<span className="text-white text-3xl font-medium">
 								Categories
+							</span>
+						</Link>
+						<Link
+							onClick={() => {
+								if (cb) {
+									cb();
+								}
+							}}
+							href={"/regions-states"}
+							className={`flex items-center gap-5 h-[40px] rounded-lg px-5 ${
+								isRegions ? "bg-[#2A2625D4]" : "bg-transparent"
+							}`}>
+							<LocationIcon />
+							<span className="text-white text-3xl font-medium">
+								Regions & States
 							</span>
 						</Link>
 					</>
