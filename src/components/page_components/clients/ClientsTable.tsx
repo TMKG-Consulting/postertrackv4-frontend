@@ -15,11 +15,12 @@ import ClientPlaceholder from "@/components/shared/ClientPlaceholder";
 export default function ClientsTable() {
 	const { getClients } = useUserManagement();
 	const [currentPage, setCurrentPage] = useState(1);
+	const [search, setSearch] = useState("");
 
 	const { data, isLoading, error, isFetching } = useQuery({
-		queryKey: ["clients", currentPage],
+		queryKey: ["clients", currentPage, search],
 		queryFn: async () => {
-			const response = await getClients(currentPage);
+			const response = await getClients(currentPage, search);
 
 			return response;
 		},
@@ -29,7 +30,7 @@ export default function ClientsTable() {
 
 	return (
 		<div className="h-full flex flex-col">
-			<ClientsTableActions />
+			<ClientsTableActions setSearch={setSearch} />
 			<div className="grow w-full overflow-auto xl:overflow-visible">
 				<table className="w-[250%] md:w-[150%] xl:w-full" cellPadding={15}>
 					<thead className="border-b border-t border-[#C7C7C7] border-t-[#C7C7C7] bg-[#f5f5f5]">

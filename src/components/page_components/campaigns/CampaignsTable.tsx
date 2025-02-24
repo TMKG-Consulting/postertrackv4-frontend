@@ -24,15 +24,19 @@ export default function CampaignsTable({
 	const { accessToken } = useCredentials();
 	const [currentPage, setCurrentPage] = useState(1);
 	const router = useRouter();
+	const [search, setSearch] = useState("");
 
 	const { data, isLoading, isFetching } = useQuery({
-		queryKey: ["campaigns", currentPage],
+		queryKey: ["campaigns", currentPage, search],
 		queryFn: async () => {
-			const response = await ApiInstance.get("/campaigns", {
-				headers: {
-					"auth-token": accessToken,
-				},
-			});
+			const response = await ApiInstance.get(
+				`/campaigns?page=${currentPage}&search=${search}`,
+				{
+					headers: {
+						"auth-token": accessToken,
+					},
+				}
+			);
 
 			return response.data;
 		},
@@ -43,7 +47,7 @@ export default function CampaignsTable({
 
 	return (
 		<div className="h-full flex flex-col">
-			<CampaignTableActions />
+			<CampaignTableActions setSearch={setSearch} />
 			<div className="grow w-full overflow-auto xl:overflow-visible">
 				<table className="w-[100%] md:w-[100%] xl:w-full" cellPadding={15}>
 					<thead className="border-b border-t border-[#C7C7C7] border-t-[#C7C7C7] bg-[#f5f5f5]">

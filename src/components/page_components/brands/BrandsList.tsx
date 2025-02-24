@@ -17,10 +17,12 @@ import DeleteIcon from "@/components/shared/icons/DeleteIcon";
 import Modal from "@/components/shared/Modal";
 import useAlert from "@/hooks/useAlert";
 import CreateBrandForm from "./create/CreateBrandForm";
+import SearchInput from "@/components/shared/SearchInput";
 
 export default function BrandsList() {
 	const { accessToken } = useCredentials();
 	const [currentPage, setCurrentPage] = useState(1);
+	const [search, setSearch] = useState("");
 
 	const [brandTodelete, setBrandTodelete] = useState<number | undefined>(
 		undefined
@@ -32,13 +34,16 @@ export default function BrandsList() {
 	const queryClient = useQueryClient();
 
 	const { data, isLoading, error, isFetching } = useQuery({
-		queryKey: ["brandsAndAdvertisers", currentPage],
+		queryKey: ["brandsAndAdvertisers", currentPage, search],
 		queryFn: async () => {
-			const res = await ApiInstance.get(`/api/brands?page=${currentPage}`, {
-				headers: {
-					"auth-token": accessToken,
-				},
-			});
+			const res = await ApiInstance.get(
+				`/api/brands?page=${currentPage}&search=${search}`,
+				{
+					headers: {
+						"auth-token": accessToken,
+					},
+				}
+			);
 
 			return res.data;
 		},
@@ -76,6 +81,36 @@ export default function BrandsList() {
 			showAndHideAlert({ message: error.message, type: "error" });
 			setIsDeleting(false);
 		}
+	}
+
+	function getRandomColor() {
+		// Generate a random color
+		const randomColor = Math.floor(Math.random() * 16777215)
+			.toString(16)
+			.padStart(6, "0");
+		const color = `#${randomColor}`;
+
+		// Convert hex color to RGB
+		const r = parseInt(color.slice(1, 3), 16);
+		const g = parseInt(color.slice(3, 5), 16);
+		const b = parseInt(color.slice(5, 7), 16);
+
+		// Calculate the brightness of the color
+		const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+
+		// If the color is too light, adjust it to be darker
+		if (brightness > 200) {
+			const darkerColor = `#${Math.floor(r / 2)
+				.toString(16)
+				.padStart(2, "0")}${Math.floor(g / 2)
+				.toString(16)
+				.padStart(2, "0")}${Math.floor(b / 2)
+				.toString(16)
+				.padStart(2, "0")}`;
+			return darkerColor;
+		}
+
+		return color;
 	}
 
 	return (
@@ -134,6 +169,13 @@ export default function BrandsList() {
 					/>
 				</div>
 			</Modal>
+			<section className="flex items-center justify-end">
+				<SearchInput
+					background="transparent"
+					borderColor="#B3B3B3"
+					setSearch={setSearch}
+				/>
+			</section>
 			<section className="grid md:grid-cols-3 gap-7 my-10">
 				{isLoading || isFetching
 					? [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((d, i) => (
@@ -141,47 +183,64 @@ export default function BrandsList() {
 								key={i}
 								className="w-full h-[100px] bg-[#e5e5e5] animate-pulse rounded-2xl"></div>
 					  ))
-					: //@ts-ignore
-					  data.data?.map((item: Brand, index) => {
-							return (
-								<div
-									key={index}
-									className="w-full rounded-2xl p-5 border-[1.5px] border-[#E2E2E2] bg-white">
-									<div className="flex items-center gap-5">
-										<Image
-											className="w-[50px] h-[50px] rounded-full object-cover"
-											width={50}
-											height={50}
-											alt="poster-track"
-											src={item.logo ? item.logo : "/no-avatar.svg"}
-										/>
-										<div className="flex flex-col gap-y-1">
-											<span className="text-[17px] font-semibold">
-												{item.name}
-											</span>
-											{/* @ts-ignore */}
-											<span className="text-[15px]">
-												{item.advertiser?.name}
-											</span>
+					: data.data
+							//@ts-ignore
+							?.sort((a: Brand, b: Brand) => {
+								return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+							})
+							//@ts-ignore
+							.map((item: Brand, index) => {
+								return (
+									<div
+										key={index}
+										className="w-full rounded-2xl p-5 border-[1.5px] border-[#E2E2E2] bg-white">
+										<div className="flex items-center gap-5">
+											{item.logo && item.logo !== "null" && (
+												<Image
+													className="w-[50px] h-[50px] rounded-full object-cover"
+													width={50}
+													height={50}
+													alt="poster-track"
+													src={item.logo}
+												/>
+											)}
+											{!item.logo ||
+												(item.logo === "null" && (
+													<div
+														style={{ backgroundColor: getRandomColor() }}
+														className="w-[50px] h-[50px] rounded-full flex items-center justify-center">
+														<span className="text-3xl font-bold text-white">
+															{item.name.split("")[0].toUpperCase()}
+														</span>
+													</div>
+												))}
+											<div className="flex flex-col gap-y-1">
+												<span className="text-[17px] font-semibold">
+													{item.name}
+												</span>
+												{/* @ts-ignore */}
+												<span className="text-[15px]">
+													{item.advertiser?.name}
+												</span>
+											</div>
+										</div>
+										<div className="flex items-center gap-5 mt-5">
+											<AppButton
+												onClick={() => setBrandTodelete(item.id)}
+												className="!w-[100px] !bg-[#ed323730] items-center gap-2">
+												<DeleteIcon />
+												<span className="text-primary">Delete</span>
+											</AppButton>
+											<AppButton
+												onClick={() => setBrandToEdit(item)}
+												className="!w-[100px] items-center gap-2">
+												<EditIcon fill="white" />
+												<span className="">Edit</span>
+											</AppButton>
 										</div>
 									</div>
-									<div className="flex items-center gap-5 mt-5">
-										<AppButton
-											onClick={() => setBrandTodelete(item.id)}
-											className="!w-[100px] !bg-[#ed323730] items-center gap-2">
-											<DeleteIcon />
-											<span className="text-primary">Delete</span>
-										</AppButton>
-										<AppButton
-											onClick={() => setBrandToEdit(item)}
-											className="!w-[100px] items-center gap-2">
-											<EditIcon fill="white" />
-											<span className="">Edit</span>
-										</AppButton>
-									</div>
-								</div>
-							);
-					  })}
+								);
+							})}
 			</section>
 			<section>
 				<div className="my-12 flex items-center justify-center md:justify-end px-5 md:px-10">

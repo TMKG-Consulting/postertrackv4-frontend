@@ -15,6 +15,14 @@ import { useRootStore } from "./providers/RootProvider";
 import { Role } from "@/types";
 
 export default function SidePanel() {
+	return (
+		<aside className="shrink-0 w-[300px] bg-appBlack h-screen sticky top-0 py-10 px-8 hidden lg:block overflow-auto">
+			<SidePanelContent />
+		</aside>
+	);
+}
+
+export const SidePanelContent = function ({ cb }: { cb?: () => void }) {
 	const pathname = usePathname();
 	const { userDetails } = useRootStore();
 
@@ -61,7 +69,7 @@ export default function SidePanel() {
 	].includes(role);
 
 	return (
-		<aside className="shrink-0 w-[300px] bg-appBlack h-screen sticky top-0 py-10 px-8 hidden lg:block overflow-auto">
+		<>
 			<div className="flex items-center gap-x-5 mb-12">
 				<Image
 					src={"/poster-track-logo.png"}
@@ -74,6 +82,11 @@ export default function SidePanel() {
 			<div className="flex flex-col mt-20 gap-y-8">
 				{canSeeDashboard && (
 					<Link
+						onClick={() => {
+							if (cb) {
+								cb();
+							}
+						}}
 						href={"/"}
 						className={`flex items-center gap-5 h-[40px] rounded-lg px-5 ${
 							isDashboard ? "bg-[#2A2625D4]" : "bg-transparent"
@@ -84,6 +97,11 @@ export default function SidePanel() {
 				)}
 				{canSeeCampaigns && (
 					<Link
+						onClick={() => {
+							if (cb) {
+								cb();
+							}
+						}}
 						href={"/campaigns"}
 						className={`flex items-center gap-5 h-[40px] rounded-lg px-5 ${
 							isCampaigns ? "bg-[#2A2625D4]" : "bg-transparent"
@@ -95,6 +113,11 @@ export default function SidePanel() {
 				{canSeeOthers && (
 					<>
 						<Link
+							onClick={() => {
+								if (cb) {
+									cb();
+								}
+							}}
 							href={"/clients"}
 							className={`flex items-center gap-5 h-[40px] rounded-lg px-5 ${
 								isClients ? "bg-[#2A2625D4]" : "bg-transparent"
@@ -103,6 +126,11 @@ export default function SidePanel() {
 							<span className="text-white text-3xl font-medium">Clients</span>
 						</Link>
 						<Link
+							onClick={() => {
+								if (cb) {
+									cb();
+								}
+							}}
 							href={"/brands"}
 							className={`flex items-center gap-5 h-[40px] rounded-lg px-5 ${
 								isBrands ? "bg-[#2A2625D4]" : "bg-transparent"
@@ -111,6 +139,11 @@ export default function SidePanel() {
 							<span className="text-white text-3xl font-medium">Brands</span>
 						</Link>
 						<Link
+							onClick={() => {
+								if (cb) {
+									cb();
+								}
+							}}
 							href={"/account-managers"}
 							className={`flex items-center gap-5 h-[40px] rounded-lg px-5 ${
 								isAccountManagers ? "bg-[#2A2625D4]" : "bg-transparent"
@@ -121,6 +154,11 @@ export default function SidePanel() {
 							</span>
 						</Link>
 						<Link
+							onClick={() => {
+								if (cb) {
+									cb();
+								}
+							}}
 							href={"/field-auditors"}
 							className={`flex items-center gap-5 h-[40px] rounded-lg px-5 ${
 								isFieldAuditors ? "bg-[#2A2625D4]" : "bg-transparent"
@@ -134,6 +172,11 @@ export default function SidePanel() {
 				)}
 				{canSeeReports && (
 					<Link
+						onClick={() => {
+							if (cb) {
+								cb();
+							}
+						}}
 						href={"/reports"}
 						className={`flex items-center gap-5 h-[40px] rounded-lg px-5 ${
 							isReports ? "bg-[#2A2625D4]" : "bg-transparent"
@@ -145,6 +188,11 @@ export default function SidePanel() {
 				{canSeeOthers && (
 					<>
 						<Link
+							onClick={() => {
+								if (cb) {
+									cb();
+								}
+							}}
 							href={"/advertisers"}
 							className={`flex items-center gap-5 h-[40px] rounded-lg px-5 ${
 								isAdvertisers ? "bg-[#2A2625D4]" : "bg-transparent"
@@ -155,6 +203,11 @@ export default function SidePanel() {
 							</span>
 						</Link>
 						<Link
+							onClick={() => {
+								if (cb) {
+									cb();
+								}
+							}}
 							href={"/regions-states"}
 							className={`flex items-center gap-5 h-[40px] rounded-lg px-5 ${
 								isRegions ? "bg-[#2A2625D4]" : "bg-transparent"
@@ -165,6 +218,11 @@ export default function SidePanel() {
 							</span>
 						</Link>
 						<Link
+							onClick={() => {
+								if (cb) {
+									cb();
+								}
+							}}
 							href={"/categories"}
 							className={`flex items-center gap-5 h-[40px] rounded-lg px-5 ${
 								isCategories ? "bg-[#2A2625D4]" : "bg-transparent"
@@ -177,6 +235,6 @@ export default function SidePanel() {
 					</>
 				)}
 			</div>
-		</aside>
+		</>
 	);
-}
+};

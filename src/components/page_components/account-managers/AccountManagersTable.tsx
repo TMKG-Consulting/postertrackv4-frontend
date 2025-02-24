@@ -18,11 +18,12 @@ export default function AccountManagersTable() {
 	const { getAccountManagers } = useUserManagement();
 	const [currentPage, setCurrentPage] = useState(1);
 	const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
+	const [search, setSearch] = useState("");
 
 	const { data, isLoading, error, isFetching } = useQuery({
-		queryKey: ["accountManagers", currentPage],
+		queryKey: ["accountManagers", currentPage, search],
 		queryFn: async () => {
-			const response = await getAccountManagers(currentPage);
+			const response = await getAccountManagers(currentPage, search);
 			return response;
 		},
 		placeholderData: keepPreviousData,
@@ -31,7 +32,10 @@ export default function AccountManagersTable() {
 
 	return (
 		<div className="h-full flex flex-col">
-			<AccountManagersTableActions selectedUsers={selectedUsers} />
+			<AccountManagersTableActions
+				setSearch={setSearch}
+				selectedUsers={selectedUsers}
+			/>
 			<div className="grow w-full overflow-auto xl:overflow-visible">
 				<table className="w-[250%] md:w-[150%] xl:w-full" cellPadding={15}>
 					<thead className="border-b border-t border-[#C7C7C7] border-t-[#C7C7C7] bg-[#f5f5f5]">

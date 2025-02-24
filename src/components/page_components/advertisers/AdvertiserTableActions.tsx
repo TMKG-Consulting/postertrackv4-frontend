@@ -8,13 +8,17 @@ import FiltersIcon from "@/components/shared/icons/FiltersIcon";
 import SearchInput from "@/components/shared/SearchInput";
 import Kebab from "@/components/shared/icons/Kebab";
 
-export default function AdvertiserTableActions() {
+export default function AdvertiserTableActions({
+	setSearch,
+}: {
+	setSearch: (val: string) => void;
+}) {
 	return (
 		<div className="p-8 flex flex-col gap-y-5 md:flex-row md:items-center justify-between">
 			<div className="flex items-center gap-x-7">
-				<SearchInput />
+				<SearchInput setSearch={setSearch} />
 				<div className="hidden md:block w-[40px] md:w-[100px]">
-					<AppButton
+					{/* <AppButton
 						className="!bg-transparent border-[#BFBFBF] border-[1.5px] !h-[40px]"
 						fullyRounded>
 						<div className="flex items-center gap-x-3">
@@ -23,16 +27,16 @@ export default function AdvertiserTableActions() {
 								Filters
 							</span>
 						</div>
-					</AppButton>
+					</AppButton> */}
 				</div>
 				<div className="md:hidden w-[40px] md:w-[100px]">
-					<AppButton
+					{/* <AppButton
 						className="!bg-transparent border-[#BFBFBF] border-[1.5px] !h-[40px]"
 						fullyRounded>
 						<div className="flex items-center gap-x-3">
 							<Kebab />
 						</div>
-					</AppButton>
+					</AppButton> */}
 				</div>
 			</div>
 		</div>

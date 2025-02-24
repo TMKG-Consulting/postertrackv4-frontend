@@ -23,6 +23,7 @@ export default function AdvertisersTable() {
 	const queryClient = useQueryClient();
 	const [isEditing, setIsEditing] = useState(false);
 	const { showAndHideAlert } = useAlert();
+	const [search, setSearch] = useState("");
 
 	const [advertiserToEdit, setAdvertiserToEdit] = useState<Advertiser | null>(
 		null
@@ -32,10 +33,10 @@ export default function AdvertisersTable() {
 	);
 
 	const { data, isLoading, error, isFetching } = useQuery({
-		queryKey: ["advertisers", currentPage],
+		queryKey: ["advertisers", currentPage, search],
 		queryFn: async () => {
 			const response = await ApiInstance.get(
-				`/api/advertisers?page=${currentPage}`,
+				`/api/advertisers?page=${currentPage}&search=${search}`,
 				{
 					headers: {
 						"auth-token": accessToken,
@@ -63,7 +64,7 @@ export default function AdvertisersTable() {
 				}
 			);
 
-			queryClient.setQueryData(["advertisers", currentPage], (prev) => {
+			queryClient.setQueryData(["advertisers", currentPage], (prev: any) => {
 				// @ts-ignore
 				const data = { ...prev };
 				// @ts-ignore
@@ -134,7 +135,7 @@ export default function AdvertisersTable() {
 					/>
 				</div>
 			</Modal>
-			<AdvertiserTableActions />
+			<AdvertiserTableActions setSearch={setSearch} />
 			<div className="grow w-full flex flex-col px-8">
 				{isLoading || isFetching
 					? [1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6].map((d, i) => (
@@ -144,27 +145,31 @@ export default function AdvertisersTable() {
 							</div>
 					  ))
 					: //@ts-ignore
-					  data.data.map((d, i) => (
-							<div
-								className="text-[1.7rem] py-[10px] border-b border-b-gray-100 font-medium flex flex-col md:flex-row items-center justify-between"
-								key={i}>
-								<span>{d.name}</span>
-								<div className="flex items-center gap-5">
-									<AppButton
-										onClick={() => setAdvertiserToEdit(d)}
-										className="!w-[100px] items-center gap-2">
-										<EditIcon fill="white" />
-										<span className="">Edit</span>
-									</AppButton>
-									<AppButton
-										onClick={() => setAdvertiserToDelete(d.id)}
-										className="!w-[100px] !bg-[#ed323730] items-center gap-2">
-										<DeleteIcon />
-										<span className="text-primary">Delete</span>
-									</AppButton>
+					  data.data
+							.sort((a: Advertiser, b: Advertiser) =>
+								a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+							)
+							.map((d: Advertiser, i: number) => (
+								<div
+									className="text-[1.7rem] py-[10px] border-b border-b-gray-100 font-medium flex flex-col md:flex-row items-center justify-between"
+									key={i}>
+									<span>{d.name}</span>
+									<div className="flex items-center gap-5">
+										<AppButton
+											onClick={() => setAdvertiserToEdit(d)}
+											className="!w-[100px] items-center gap-2">
+											<EditIcon fill="white" />
+											<span className="">Edit</span>
+										</AppButton>
+										<AppButton
+											onClick={() => setAdvertiserToDelete(d.id ? d.id : 0)}
+											className="!w-[100px] !bg-[#ed323730] items-center gap-2">
+											<DeleteIcon />
+											<span className="text-primary">Delete</span>
+										</AppButton>
+									</div>
 								</div>
-							</div>
-					  ))}
+							))}
 			</div>
 			<div className="my-12 flex items-center justify-center md:justify-end px-5 md:px-10">
 				<Pagination

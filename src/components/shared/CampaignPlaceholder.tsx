@@ -9,19 +9,19 @@ export default function CampaignPlaceholder() {
 				<div className="w-full h-[5px] rounded-lg bg-[#e2e2e2] animate-pulse"></div>
 			</td>
 
-			<td className="">
+			<td className="hidden xl:table-cell">
 				<span className="text-2xl font-medium rounded-full flex w-[80%] h-[5px] bg-[#e2e2e2] animate-pulse"></span>
 			</td>
 			<td className="text-left">
 				<span className="text-2xl font-medium flex w-full h-[5px] bg-[#e2e2e2] animate-pulse "></span>
 			</td>
-			<td>
-				<span className="block text-2xl font-medium  truncate w-full h-[5px] bg-[#e2e2e2] animate-pulse"></span>
+			<td className="hidden xl:table-cell">
+				<span className=" text-2xl font-medium  truncate w-full h-[5px] bg-[#e2e2e2] animate-pulse"></span>
 			</td>
 			<td className="">
 				<span className="text-2xl font-medium rounded-full flex w-full h-[5px] bg-[#e2e2e2] animate-pulse"></span>
 			</td>
-			<td className="text-center">
+			<td className="hidden xl:table-cell text-center">
 				<span className="text-2xl font-medium rounded-full flex w-full h-[5px] bg-[#e2e2e2] animate-pulse"></span>
 			</td>
 		</tr>

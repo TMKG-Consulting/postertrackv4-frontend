@@ -40,7 +40,7 @@ export default function ComplianceReportTableActions({
 
 	return (
 		<div className="p-8 flex flex-col gap-y-5 md:flex-row md:items-center justify-between">
-			<div className="hidden md:flex items-center gap-x-8">
+			<div className="flex items-center gap-x-8">
 				<div className="w-[40px] xl:w-[100px]">
 					<AppButton
 						className="!bg-transparent border-primary border-[1.5px] !h-[40px]"

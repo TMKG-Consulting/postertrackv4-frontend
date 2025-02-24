@@ -17,11 +17,12 @@ import AccountManagerPlaceholder from "@/components/shared/AccountManagerPlaceho
 export default function FieldAuditorsTable() {
 	const { getUsers, getFieldAuditors } = useUserManagement();
 	const [currentPage, setCurrentPage] = useState(1);
+	const [search, setSearch] = useState("");
 
 	const { data, isLoading, error, isFetching } = useQuery({
-		queryKey: ["fieldAuditors", currentPage],
+		queryKey: ["fieldAuditors", currentPage, search],
 		queryFn: async () => {
-			const response = await getFieldAuditors(currentPage);
+			const response = await getFieldAuditors(currentPage, search);
 
 			return response;
 		},
@@ -31,7 +32,7 @@ export default function FieldAuditorsTable() {
 
 	return (
 		<div className="h-full flex flex-col">
-			<FieldAuditorsTableActions />
+			<FieldAuditorsTableActions setSearch={setSearch} />
 			<div className="grow w-full overflow-auto xl:overflow-visible">
 				<table className="w-[250%] md:w-[150%] xl:w-full" cellPadding={15}>
 					<thead className="border-b border-t border-[#C7C7C7] border-t-[#C7C7C7] bg-[#f5f5f5]">

@@ -7,40 +7,36 @@ import Kebab from "@/components/shared/icons/Kebab";
 
 export default function AccountManagersTableActions({
 	selectedUsers,
+	setSearch,
 }: {
 	selectedUsers: number[];
+	setSearch: (val: string) => void;
 }) {
 	return (
 		<div className="p-8 flex flex-col gap-y-5 md:flex-row md:items-center justify-between">
 			<div className="flex items-center gap-x-7">
-				{selectedUsers.length > 0 ? (
-					<>
-						<SearchInput />
-						<div className="hidden md:block w-[40px] md:w-[100px]">
-							<AppButton
-								className="!bg-transparent border-[#BFBFBF] border-[1.5px] !h-[40px]"
-								fullyRounded>
-								<div className="flex items-center gap-x-3">
-									<FiltersIcon />
-									<span className="hidden md:flex text-2xl font-medium text-[#666666]">
-										Filters
-									</span>
-								</div>
-							</AppButton>
+				<SearchInput setSearch={setSearch} />
+				<div className="hidden md:block w-[40px] md:w-[100px]">
+					{/* <AppButton
+						className="!bg-transparent border-[#BFBFBF] border-[1.5px] !h-[40px]"
+						fullyRounded>
+						<div className="flex items-center gap-x-3">
+							<FiltersIcon />
+							<span className="hidden md:flex text-2xl font-medium text-[#666666]">
+								Filters
+							</span>
 						</div>
-						<div className="md:hidden w-[40px] md:w-[100px]">
-							<AppButton
-								className="!bg-transparent border-[#BFBFBF] border-[1.5px] !h-[40px]"
-								fullyRounded>
-								<div className="flex items-center gap-x-3">
-									<Kebab />
-								</div>
-							</AppButton>
+					</AppButton> */}
+				</div>
+				<div className="md:hidden w-[40px] md:w-[100px]">
+					{/* <AppButton
+						className="!bg-transparent border-[#BFBFBF] border-[1.5px] !h-[40px]"
+						fullyRounded>
+						<div className="flex items-center gap-x-3">
+							<Kebab />
 						</div>
-					</>
-				) : (
-					<div></div>
-				)}
+					</AppButton> */}
+				</div>
 			</div>
 		</div>
 	);

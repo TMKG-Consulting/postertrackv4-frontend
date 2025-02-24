@@ -182,404 +182,425 @@ export default function UpdateBSV() {
 							onSubmit={submitHandler}
 							initialValues={initialValues}
 							validationSchema={schema}>
-							{({ isValidating, isSubmitting, values }) => (
-								<Form className="flex flex-col w-full gap-[15px]">
-									<div className="py-5 bg-[#656565] text-white">
-										<h2 className="text-3xl font-bold text-center">
-											Edit Submitted Report
-										</h2>
-									</div>
-									<div className="grid grid-cols-2 gap-5">
+							{({ isValidating, isSubmitting, values }) => {
+								const {
+									visibilityDistance,
+									trafficDensity,
+									trafficSpeed,
+									angleOfVision,
+									clutterByBillboard,
+									clutterOtherFormat,
+									proximityOfCompetition,
+									pedestrianTrafficWeight,
+								} = values;
+								return (
+									<Form className="flex flex-col w-full gap-[15px]">
+										<div className="py-5 bg-[#656565] text-white">
+											<h2 className="text-3xl font-bold text-center">
+												Edit Submitted Report
+											</h2>
+										</div>
+										<div className="grid grid-cols-2 gap-5">
+											<div className="w-full flex flex-col gap-y-5">
+												<label
+													className="text-[1.7rem] text-appBlack font-semibold"
+													htmlFor={"structureId"}>
+													Structure
+												</label>
+												<Field
+													id={"structureId"}
+													name={"structureId"}
+													className="h-[50px] rounded-2xl bg-[#F5F5F5] text-2xl font-medium px-[10px] outline-none focus:border-primary border-transparent border-[1.5px] transition-all duration-200"
+													as="select">
+													{data.structures.map(
+														(d: { id: number; name: string }, i: number) => (
+															<option key={i} value={d.id}>
+																{d.name}
+															</option>
+														)
+													)}
+												</Field>
+												<ErrorMessage
+													name={"structureId"}
+													component={"p"}
+													className="text-2xl font-medium text-red-400"
+												/>
+											</div>
+											<div className="w-full flex flex-col gap-y-5">
+												<label
+													className="text-[1.7rem] text-appBlack font-semibold"
+													htmlFor={"posterId"}>
+													Poster
+												</label>
+												<Field
+													id={"posterId"}
+													name={"posterId"}
+													className="h-[50px] rounded-2xl bg-[#F5F5F5] text-2xl font-medium px-[10px] outline-none focus:border-primary border-transparent border-[1.5px] transition-all duration-200"
+													as="select">
+													{data.posters.map(
+														(d: { id: number; name: string }, i: number) => (
+															<option key={i} value={d.id}>
+																{d.name}
+															</option>
+														)
+													)}
+												</Field>
+												<ErrorMessage
+													name={"posterId"}
+													component={"p"}
+													className="text-2xl font-medium text-red-400"
+												/>
+											</div>
+										</div>
+										<div className="grid grid-cols-2 gap-5">
+											<div className="w-full flex flex-col gap-y-5">
+												<label
+													className="text-[1.7rem] text-appBlack font-semibold"
+													htmlFor={"illuminationId"}>
+													Illumination
+												</label>
+												<Field
+													id={"illuminationId"}
+													name={"illuminationId"}
+													className="h-[50px] rounded-2xl bg-[#F5F5F5] text-2xl font-medium px-[10px] outline-none focus:border-primary border-transparent border-[1.5px] transition-all duration-200"
+													as="select">
+													{data.illuminations.map(
+														(d: { id: number; name: string }, i: number) => (
+															<option key={i} value={d.id}>
+																{d.name}
+															</option>
+														)
+													)}
+												</Field>
+												<ErrorMessage
+													name={"illuminationId"}
+													component={"p"}
+													className="text-2xl font-medium text-red-400"
+												/>
+											</div>
+											<div className="w-full flex flex-col gap-y-5">
+												<label
+													className="text-[1.7rem] text-appBlack font-semibold"
+													htmlFor={"sideId"}>
+													Side
+												</label>
+												<Field
+													id={"sideId"}
+													name={"sideId"}
+													className="h-[50px] rounded-2xl bg-[#F5F5F5] text-2xl font-medium px-[10px] outline-none focus:border-primary border-transparent border-[1.5px] transition-all duration-200"
+													as="select">
+													{data.sides.map(
+														(d: { id: number; name: string }, i: number) => (
+															<option key={i} value={d.id}>
+																{d.name}
+															</option>
+														)
+													)}
+												</Field>
+												<ErrorMessage
+													name={"sideId"}
+													component={"p"}
+													className="text-2xl font-medium text-red-400"
+												/>
+											</div>
+										</div>
+										<div className="grid grid-cols-2 gap-5">
+											<div className="w-full flex flex-col gap-y-5">
+												<label
+													className="text-[1.7rem] text-appBlack font-semibold"
+													htmlFor={"routeId"}>
+													Route
+												</label>
+												<Field
+													id={"routeId"}
+													name={"routeId"}
+													className="h-[50px] rounded-2xl bg-[#F5F5F5] text-2xl font-medium px-[10px] outline-none focus:border-primary border-transparent border-[1.5px] transition-all duration-200"
+													as="select">
+													{data.routes.map(
+														(d: { id: number; name: string }, i: number) => (
+															<option key={i} value={d.id}>
+																{d.name}
+															</option>
+														)
+													)}
+												</Field>
+												<ErrorMessage
+													name={"routeId"}
+													component={"p"}
+													className="text-2xl font-medium text-red-400"
+												/>
+											</div>
+											<div className="w-full flex flex-col gap-y-5">
+												<label
+													className="text-[1.7rem] text-appBlack font-semibold"
+													htmlFor={"comment"}>
+													Comment
+												</label>
+												<Field
+													id={"comment"}
+													name={"comment"}
+													placeholder={"Comment"}
+													className="h-[50px] rounded-2xl bg-[#F5F5F5] text-2xl font-medium px-[10px] outline-none focus:border-primary border-transparent border-[1.5px] transition-all duration-200"
+												/>
+												<ErrorMessage
+													name={"comment"}
+													component={"p"}
+													className="text-2xl font-medium text-red-400"
+												/>
+											</div>
+										</div>
 										<div className="w-full flex flex-col gap-y-5">
 											<label
 												className="text-[1.7rem] text-appBlack font-semibold"
-												htmlFor={"structureId"}>
-												Structure
+												htmlFor={"message"}>
+												Message
 											</label>
 											<Field
-												id={"structureId"}
-												name={"structureId"}
+												id={"message"}
+												name={"message"}
+												placeholder={"message"}
 												className="h-[50px] rounded-2xl bg-[#F5F5F5] text-2xl font-medium px-[10px] outline-none focus:border-primary border-transparent border-[1.5px] transition-all duration-200"
-												as="select">
-												{data.structures.map(
-													(d: { id: number; name: string }, i: number) => (
-														<option key={i} value={d.id}>
-															{d.name}
+											/>
+											<ErrorMessage
+												name={"message"}
+												component={"p"}
+												className="text-2xl font-medium text-red-400"
+											/>
+										</div>
+										<div className="py-5 bg-[#656565] text-white">
+											<h2 className="text-3xl font-bold text-center">
+												BSV:
+												{Object.values({
+													visibilityDistance,
+													trafficDensity,
+													trafficSpeed,
+													angleOfVision,
+													clutterByBillboard,
+													clutterOtherFormat,
+													proximityOfCompetition,
+													pedestrianTrafficWeight,
+												}).reduce((acc: number, value) => {
+													return (acc += Number(value));
+												}, 0)}
+												%
+											</h2>
+										</div>
+										<div className="grid grid-cols-2 gap-5">
+											<div className="w-full flex flex-col gap-y-5">
+												<label
+													className="text-[1.7rem] text-appBlack font-semibold"
+													htmlFor={"visibilityDistance"}>
+													Visibility Distance
+												</label>
+												<Field
+													id={"visibilityDistance"}
+													name={"visibilityDistance"}
+													placeholder={"visibility Distance"}
+													className="h-[50px] rounded-2xl bg-[#F5F5F5] text-2xl font-medium px-[10px] outline-none focus:border-primary border-transparent border-[1.5px] transition-all duration-200"
+													as="select">
+													<option value={0}>0</option>
+													{[...Array(20).keys()].map((i) => (
+														<option key={i} value={i + 1}>
+															{i + 1}
 														</option>
-													)
-												)}
-											</Field>
-											<ErrorMessage
-												name={"structureId"}
-												component={"p"}
-												className="text-2xl font-medium text-red-400"
-											/>
-										</div>
-										<div className="w-full flex flex-col gap-y-5">
-											<label
-												className="text-[1.7rem] text-appBlack font-semibold"
-												htmlFor={"posterId"}>
-												Poster
-											</label>
-											<Field
-												id={"posterId"}
-												name={"posterId"}
-												className="h-[50px] rounded-2xl bg-[#F5F5F5] text-2xl font-medium px-[10px] outline-none focus:border-primary border-transparent border-[1.5px] transition-all duration-200"
-												as="select">
-												{data.posters.map(
-													(d: { id: number; name: string }, i: number) => (
-														<option key={i} value={d.id}>
-															{d.name}
+													))}
+												</Field>
+												<ErrorMessage
+													name={"visibilityDistance"}
+													component={"p"}
+													className="text-2xl font-medium text-red-400"
+												/>
+											</div>
+											<div className="w-full flex flex-col gap-y-5">
+												<label
+													className="text-[1.7rem] text-appBlack font-semibold"
+													htmlFor={"trafficDensity"}>
+													Traffic Density
+												</label>
+												<Field
+													id={"trafficDensity"}
+													name={"trafficDensity"}
+													placeholder={"Traffic Density"}
+													className="h-[50px] rounded-2xl bg-[#F5F5F5] text-2xl font-medium px-[10px] outline-none focus:border-primary border-transparent border-[1.5px] transition-all duration-200"
+													as="select">
+													<option value={0}>0</option>
+													{[...Array(15).keys()].map((i) => (
+														<option key={i} value={i + 1}>
+															{i + 1}
 														</option>
-													)
-												)}
-											</Field>
-											<ErrorMessage
-												name={"posterId"}
-												component={"p"}
-												className="text-2xl font-medium text-red-400"
-											/>
+													))}
+												</Field>
+												<ErrorMessage
+													name={"trafficDensity"}
+													component={"p"}
+													className="text-2xl font-medium text-red-400"
+												/>
+											</div>
 										</div>
-									</div>
-									<div className="grid grid-cols-2 gap-5">
-										<div className="w-full flex flex-col gap-y-5">
-											<label
-												className="text-[1.7rem] text-appBlack font-semibold"
-												htmlFor={"illuminationId"}>
-												Illumination
-											</label>
-											<Field
-												id={"illuminationId"}
-												name={"illuminationId"}
-												className="h-[50px] rounded-2xl bg-[#F5F5F5] text-2xl font-medium px-[10px] outline-none focus:border-primary border-transparent border-[1.5px] transition-all duration-200"
-												as="select">
-												{data.illuminations.map(
-													(d: { id: number; name: string }, i: number) => (
-														<option key={i} value={d.id}>
-															{d.name}
+										<div className="grid grid-cols-2 gap-5">
+											<div className="w-full flex flex-col gap-y-5">
+												<label
+													className="text-[1.7rem] text-appBlack font-semibold"
+													htmlFor={"trafficSpeed"}>
+													Traffic Speed
+												</label>
+												<Field
+													id={"trafficSpeed"}
+													name={"trafficSpeed"}
+													placeholder={"Traffic Speed"}
+													className="h-[50px] rounded-2xl bg-[#F5F5F5] text-2xl font-medium px-[10px] outline-none focus:border-primary border-transparent border-[1.5px] transition-all duration-200"
+													as="select">
+													<option value={0}>0</option>
+													{[...Array(10).keys()].map((i) => (
+														<option key={i} value={i + 1}>
+															{i + 1}
 														</option>
-													)
-												)}
-											</Field>
-											<ErrorMessage
-												name={"illuminationId"}
-												component={"p"}
-												className="text-2xl font-medium text-red-400"
-											/>
-										</div>
-										<div className="w-full flex flex-col gap-y-5">
-											<label
-												className="text-[1.7rem] text-appBlack font-semibold"
-												htmlFor={"sideId"}>
-												Side
-											</label>
-											<Field
-												id={"sideId"}
-												name={"sideId"}
-												className="h-[50px] rounded-2xl bg-[#F5F5F5] text-2xl font-medium px-[10px] outline-none focus:border-primary border-transparent border-[1.5px] transition-all duration-200"
-												as="select">
-												{data.sides.map(
-													(d: { id: number; name: string }, i: number) => (
-														<option key={i} value={d.id}>
-															{d.name}
+													))}
+												</Field>
+												<ErrorMessage
+													name={"trafficSpeed"}
+													component={"p"}
+													className="text-2xl font-medium text-red-400"
+												/>
+											</div>
+											<div className="w-full flex flex-col gap-y-5">
+												<label
+													className="text-[1.7rem] text-appBlack font-semibold"
+													htmlFor={"angleOfVision"}>
+													Angle of Vision
+												</label>
+												<Field
+													id={"angleOfVision"}
+													name={"angleOfVision"}
+													placeholder={"Angle of Vision"}
+													className="h-[50px] rounded-2xl bg-[#F5F5F5] text-2xl font-medium px-[10px] outline-none focus:border-primary border-transparent border-[1.5px] transition-all duration-200"
+													as="select">
+													<option value={0}>0</option>
+													{[...Array(15).keys()].map((i) => (
+														<option key={i} value={i + 1}>
+															{i + 1}
 														</option>
-													)
-												)}
-											</Field>
-											<ErrorMessage
-												name={"sideId"}
-												component={"p"}
-												className="text-2xl font-medium text-red-400"
-											/>
+													))}
+												</Field>
+												<ErrorMessage
+													name={"angleOfVision"}
+													component={"p"}
+													className="text-2xl font-medium text-red-400"
+												/>
+											</div>
 										</div>
-									</div>
-									<div className="grid grid-cols-2 gap-5">
-										<div className="w-full flex flex-col gap-y-5">
-											<label
-												className="text-[1.7rem] text-appBlack font-semibold"
-												htmlFor={"routeId"}>
-												Route
-											</label>
-											<Field
-												id={"routeId"}
-												name={"routeId"}
-												className="h-[50px] rounded-2xl bg-[#F5F5F5] text-2xl font-medium px-[10px] outline-none focus:border-primary border-transparent border-[1.5px] transition-all duration-200"
-												as="select">
-												{data.routes.map(
-													(d: { id: number; name: string }, i: number) => (
-														<option key={i} value={d.id}>
-															{d.name}
+										<div className="grid grid-cols-2 gap-5">
+											<div className="w-full flex flex-col gap-y-5">
+												<label
+													className="text-[1.7rem] text-appBlack font-semibold"
+													htmlFor={"clutterByBillboard"}>
+													Clutter by Billboard
+												</label>
+												<Field
+													id={"clutterByBillboard"}
+													name={"clutterByBillboard"}
+													placeholder={"Clutter by Billboard"}
+													className="h-[50px] rounded-2xl bg-[#F5F5F5] text-2xl font-medium px-[10px] outline-none focus:border-primary border-transparent border-[1.5px] transition-all duration-200"
+													as="select">
+													<option value={0}>0</option>
+													{[...Array(15).keys()].map((i) => (
+														<option key={i} value={i + 1}>
+															{i + 1}
 														</option>
-													)
-												)}
-											</Field>
-											<ErrorMessage
-												name={"routeId"}
-												component={"p"}
-												className="text-2xl font-medium text-red-400"
-											/>
+													))}
+												</Field>
+												<ErrorMessage
+													name={"clutterByBillboard"}
+													component={"p"}
+													className="text-2xl font-medium text-red-400"
+												/>
+											</div>
+											<div className="w-full flex flex-col gap-y-5">
+												<label
+													className="text-[1.7rem] text-appBlack font-semibold"
+													htmlFor={"clutterOtherFormat"}>
+													Clutter by Other format
+												</label>
+												<Field
+													id={"clutterOtherFormat"}
+													name={"clutterOtherFormat"}
+													placeholder={"Clutter by Other format"}
+													className="h-[50px] rounded-2xl bg-[#F5F5F5] text-2xl font-medium px-[10px] outline-none focus:border-primary border-transparent border-[1.5px] transition-all duration-200"
+													as="select">
+													<option value={0}>0</option>
+													{[...Array(5).keys()].map((i) => (
+														<option key={i} value={i + 1}>
+															{i + 1}
+														</option>
+													))}
+												</Field>
+												<ErrorMessage
+													name={"clutterOtherFormat"}
+													component={"p"}
+													className="text-2xl font-medium text-red-400"
+												/>
+											</div>
 										</div>
-										<div className="w-full flex flex-col gap-y-5">
-											<label
-												className="text-[1.7rem] text-appBlack font-semibold"
-												htmlFor={"comment"}>
-												Comment
-											</label>
-											<Field
-												id={"comment"}
-												name={"comment"}
-												placeholder={"Comment"}
-												className="h-[50px] rounded-2xl bg-[#F5F5F5] text-2xl font-medium px-[10px] outline-none focus:border-primary border-transparent border-[1.5px] transition-all duration-200"
-											/>
-											<ErrorMessage
-												name={"comment"}
-												component={"p"}
-												className="text-2xl font-medium text-red-400"
-											/>
+										<div className="grid grid-cols-2 gap-5">
+											<div className="w-full flex flex-col gap-y-5">
+												<label
+													className="text-[1.7rem] text-appBlack font-semibold"
+													htmlFor={"proximityOfCompetition"}>
+													Proximity of competition
+												</label>
+												<Field
+													id={"proximityOfCompetition"}
+													name={"proximityOfCompetition"}
+													placeholder={"Proximity of competition"}
+													className="h-[50px] rounded-2xl bg-[#F5F5F5] text-2xl font-medium px-[10px] outline-none focus:border-primary border-transparent border-[1.5px] transition-all duration-200"
+													as="select">
+													<option value={0}>0</option>
+													{[...Array(10).keys()].map((i) => (
+														<option key={i} value={i + 1}>
+															{i + 1}
+														</option>
+													))}
+												</Field>
+												<ErrorMessage
+													name={"proximityOfCompetition"}
+													component={"p"}
+													className="text-2xl font-medium text-red-400"
+												/>
+											</div>
+											<div className="w-full flex flex-col gap-y-5">
+												<label
+													className="text-[1.7rem] text-appBlack font-semibold"
+													htmlFor={"pedestrianTrafficWeight"}>
+													Pedestrian Traffic Weight
+												</label>
+												<Field
+													id={"pedestrianTrafficWeight"}
+													name={"pedestrianTrafficWeight"}
+													placeholder={"Pedestrian Traffic Weight"}
+													className="h-[50px] rounded-2xl bg-[#F5F5F5] text-2xl font-medium px-[10px] outline-none focus:border-primary border-transparent border-[1.5px] transition-all duration-200"
+													as="select">
+													<option value={0}>0</option>
+													{[...Array(10).keys()].map((i) => (
+														<option key={i} value={i + 1}>
+															{i + 1}
+														</option>
+													))}
+												</Field>
+												<ErrorMessage
+													name={"pedestrianTrafficWeight"}
+													component={"p"}
+													className="text-2xl font-medium text-red-400"
+												/>
+											</div>
 										</div>
-									</div>
-									<div className="w-full flex flex-col gap-y-5">
-										<label
-											className="text-[1.7rem] text-appBlack font-semibold"
-											htmlFor={"message"}>
-											Message
-										</label>
-										<Field
-											id={"message"}
-											name={"message"}
-											placeholder={"message"}
-											className="h-[50px] rounded-2xl bg-[#F5F5F5] text-2xl font-medium px-[10px] outline-none focus:border-primary border-transparent border-[1.5px] transition-all duration-200"
+										<AppButton
+											showLoading={isSubmitting && !isValidating}
+											type="submit"
+											label="Submit"
 										/>
-										<ErrorMessage
-											name={"message"}
-											component={"p"}
-											className="text-2xl font-medium text-red-400"
-										/>
-									</div>
-									<div className="py-5 bg-[#656565] text-white">
-										<h2 className="text-3xl font-bold text-center">
-											BSV:
-											{Object.values(values).reduce((acc: number, value) => {
-												return (acc += Number(value));
-											}, 0)}
-											%
-										</h2>
-									</div>
-									<div className="grid grid-cols-2 gap-5">
-										<div className="w-full flex flex-col gap-y-5">
-											<label
-												className="text-[1.7rem] text-appBlack font-semibold"
-												htmlFor={"visibilityDistance"}>
-												Visibility Distance
-											</label>
-											<Field
-												id={"visibilityDistance"}
-												name={"visibilityDistance"}
-												placeholder={"visibility Distance"}
-												className="h-[50px] rounded-2xl bg-[#F5F5F5] text-2xl font-medium px-[10px] outline-none focus:border-primary border-transparent border-[1.5px] transition-all duration-200"
-												as="select">
-												<option value={0}>0</option>
-												{[...Array(20).keys()].map((i) => (
-													<option key={i} value={i + 1}>
-														{i + 1}
-													</option>
-												))}
-											</Field>
-											<ErrorMessage
-												name={"visibilityDistance"}
-												component={"p"}
-												className="text-2xl font-medium text-red-400"
-											/>
-										</div>
-										<div className="w-full flex flex-col gap-y-5">
-											<label
-												className="text-[1.7rem] text-appBlack font-semibold"
-												htmlFor={"trafficDensity"}>
-												Traffic Density
-											</label>
-											<Field
-												id={"trafficDensity"}
-												name={"trafficDensity"}
-												placeholder={"Traffic Density"}
-												className="h-[50px] rounded-2xl bg-[#F5F5F5] text-2xl font-medium px-[10px] outline-none focus:border-primary border-transparent border-[1.5px] transition-all duration-200"
-												as="select">
-												<option value={0}>0</option>
-												{[...Array(15).keys()].map((i) => (
-													<option key={i} value={i + 1}>
-														{i + 1}
-													</option>
-												))}
-											</Field>
-											<ErrorMessage
-												name={"trafficDensity"}
-												component={"p"}
-												className="text-2xl font-medium text-red-400"
-											/>
-										</div>
-									</div>
-									<div className="grid grid-cols-2 gap-5">
-										<div className="w-full flex flex-col gap-y-5">
-											<label
-												className="text-[1.7rem] text-appBlack font-semibold"
-												htmlFor={"trafficSpeed"}>
-												Traffic Speed
-											</label>
-											<Field
-												id={"trafficSpeed"}
-												name={"trafficSpeed"}
-												placeholder={"Traffic Speed"}
-												className="h-[50px] rounded-2xl bg-[#F5F5F5] text-2xl font-medium px-[10px] outline-none focus:border-primary border-transparent border-[1.5px] transition-all duration-200"
-												as="select">
-												<option value={0}>0</option>
-												{[...Array(10).keys()].map((i) => (
-													<option key={i} value={i + 1}>
-														{i + 1}
-													</option>
-												))}
-											</Field>
-											<ErrorMessage
-												name={"trafficSpeed"}
-												component={"p"}
-												className="text-2xl font-medium text-red-400"
-											/>
-										</div>
-										<div className="w-full flex flex-col gap-y-5">
-											<label
-												className="text-[1.7rem] text-appBlack font-semibold"
-												htmlFor={"angleOfVision"}>
-												Angle of Vision
-											</label>
-											<Field
-												id={"angleOfVision"}
-												name={"angleOfVision"}
-												placeholder={"Angle of Vision"}
-												className="h-[50px] rounded-2xl bg-[#F5F5F5] text-2xl font-medium px-[10px] outline-none focus:border-primary border-transparent border-[1.5px] transition-all duration-200"
-												as="select">
-												<option value={0}>0</option>
-												{[...Array(15).keys()].map((i) => (
-													<option key={i} value={i + 1}>
-														{i + 1}
-													</option>
-												))}
-											</Field>
-											<ErrorMessage
-												name={"angleOfVision"}
-												component={"p"}
-												className="text-2xl font-medium text-red-400"
-											/>
-										</div>
-									</div>
-									<div className="grid grid-cols-2 gap-5">
-										<div className="w-full flex flex-col gap-y-5">
-											<label
-												className="text-[1.7rem] text-appBlack font-semibold"
-												htmlFor={"clutterByBillboard"}>
-												Clutter by Billboard
-											</label>
-											<Field
-												id={"clutterByBillboard"}
-												name={"clutterByBillboard"}
-												placeholder={"Clutter by Billboard"}
-												className="h-[50px] rounded-2xl bg-[#F5F5F5] text-2xl font-medium px-[10px] outline-none focus:border-primary border-transparent border-[1.5px] transition-all duration-200"
-												as="select">
-												<option value={0}>0</option>
-												{[...Array(15).keys()].map((i) => (
-													<option key={i} value={i + 1}>
-														{i + 1}
-													</option>
-												))}
-											</Field>
-											<ErrorMessage
-												name={"clutterByBillboard"}
-												component={"p"}
-												className="text-2xl font-medium text-red-400"
-											/>
-										</div>
-										<div className="w-full flex flex-col gap-y-5">
-											<label
-												className="text-[1.7rem] text-appBlack font-semibold"
-												htmlFor={"clutterOtherFormat"}>
-												Clutter by Other format
-											</label>
-											<Field
-												id={"clutterOtherFormat"}
-												name={"clutterOtherFormat"}
-												placeholder={"Clutter by Other format"}
-												className="h-[50px] rounded-2xl bg-[#F5F5F5] text-2xl font-medium px-[10px] outline-none focus:border-primary border-transparent border-[1.5px] transition-all duration-200"
-												as="select">
-												<option value={0}>0</option>
-												{[...Array(5).keys()].map((i) => (
-													<option key={i} value={i + 1}>
-														{i + 1}
-													</option>
-												))}
-											</Field>
-											<ErrorMessage
-												name={"clutterOtherFormat"}
-												component={"p"}
-												className="text-2xl font-medium text-red-400"
-											/>
-										</div>
-									</div>
-									<div className="grid grid-cols-2 gap-5">
-										<div className="w-full flex flex-col gap-y-5">
-											<label
-												className="text-[1.7rem] text-appBlack font-semibold"
-												htmlFor={"proximityOfCompetition"}>
-												Proximity of competition
-											</label>
-											<Field
-												id={"proximityOfCompetition"}
-												name={"proximityOfCompetition"}
-												placeholder={"Proximity of competition"}
-												className="h-[50px] rounded-2xl bg-[#F5F5F5] text-2xl font-medium px-[10px] outline-none focus:border-primary border-transparent border-[1.5px] transition-all duration-200"
-												as="select">
-												<option value={0}>0</option>
-												{[...Array(10).keys()].map((i) => (
-													<option key={i} value={i + 1}>
-														{i + 1}
-													</option>
-												))}
-											</Field>
-											<ErrorMessage
-												name={"proximityOfCompetition"}
-												component={"p"}
-												className="text-2xl font-medium text-red-400"
-											/>
-										</div>
-										<div className="w-full flex flex-col gap-y-5">
-											<label
-												className="text-[1.7rem] text-appBlack font-semibold"
-												htmlFor={"pedestrianTrafficWeight"}>
-												Pedestrian Traffic Weight
-											</label>
-											<Field
-												id={"pedestrianTrafficWeight"}
-												name={"pedestrianTrafficWeight"}
-												placeholder={"Pedestrian Traffic Weight"}
-												className="h-[50px] rounded-2xl bg-[#F5F5F5] text-2xl font-medium px-[10px] outline-none focus:border-primary border-transparent border-[1.5px] transition-all duration-200"
-												as="select">
-												<option value={0}>0</option>
-												{[...Array(10).keys()].map((i) => (
-													<option key={i} value={i + 1}>
-														{i + 1}
-													</option>
-												))}
-											</Field>
-											<ErrorMessage
-												name={"pedestrianTrafficWeight"}
-												component={"p"}
-												className="text-2xl font-medium text-red-400"
-											/>
-										</div>
-									</div>
-									<AppButton
-										showLoading={isSubmitting && !isValidating}
-										type="submit"
-										label="Submit"
-									/>
-								</Form>
-							)}
+									</Form>
+								);
+							}}
 						</Formik>
 					)}
 				</div>

@@ -7,9 +7,6 @@ export default function page() {
 	return (
 		<>
 			<BrandHeader />
-			<section className="flex items-center justify-end">
-				<SearchInput background="transparent" borderColor="#B3B3B3" />
-			</section>
 			<BrandsList />
 		</>
 	);
