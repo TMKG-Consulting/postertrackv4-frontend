@@ -79,7 +79,7 @@ export const SidePanelContent = function ({ cb }: { cb?: () => void }) {
 				/>
 				<LogoText />
 			</div>
-			<div className="flex flex-col mt-20 gap-y-8">
+			<div className="flex flex-col xl:mt-20 gap-y-2 xl:gap-y-8">
 				{canSeeDashboard && (
 					<Link
 						onClick={() => {
@@ -92,7 +92,9 @@ export const SidePanelContent = function ({ cb }: { cb?: () => void }) {
 							isDashboard ? "bg-[#2A2625D4]" : "bg-transparent"
 						}`}>
 						<DashboardIcon />
-						<span className="text-white text-3xl font-medium">Dashboard</span>
+						<span className="text-white text-2xl xl:text-3xl font-medium">
+							Dashboard
+						</span>
 					</Link>
 				)}
 				{canSeeCampaigns && (
@@ -107,7 +109,9 @@ export const SidePanelContent = function ({ cb }: { cb?: () => void }) {
 							isCampaigns ? "bg-[#2A2625D4]" : "bg-transparent"
 						}`}>
 						<CampaignIcon />
-						<span className="text-white text-3xl font-medium">Campaigns</span>
+						<span className="text-white text-2xl xl:text-3xl font-medium">
+							Campaigns
+						</span>
 					</Link>
 				)}
 				{canSeeReports && (
@@ -122,7 +126,9 @@ export const SidePanelContent = function ({ cb }: { cb?: () => void }) {
 							isReports ? "bg-[#2A2625D4]" : "bg-transparent"
 						}`}>
 						<ReportsIcon />
-						<span className="text-white text-3xl font-medium">Reports</span>
+						<span className="text-white text-2xl xl:text-3xl font-medium">
+							Reports
+						</span>
 					</Link>
 				)}
 				{canSeeOthers && (
@@ -138,7 +144,7 @@ export const SidePanelContent = function ({ cb }: { cb?: () => void }) {
 								isAccountManagers ? "bg-[#2A2625D4]" : "bg-transparent"
 							}`}>
 							<AccountManagerIcon />
-							<span className="text-white text-3xl font-medium">
+							<span className="text-white text-2xl xl:text-3xl font-medium">
 								Account Managers
 							</span>
 						</Link>
@@ -153,7 +159,9 @@ export const SidePanelContent = function ({ cb }: { cb?: () => void }) {
 								isClients ? "bg-[#2A2625D4]" : "bg-transparent"
 							}`}>
 							<AdvertisersIcon />
-							<span className="text-white text-3xl font-medium">Clients</span>
+							<span className="text-white text-2xl xl:text-3xl font-medium">
+								Clients
+							</span>
 						</Link>
 						<Link
 							onClick={() => {
@@ -166,7 +174,7 @@ export const SidePanelContent = function ({ cb }: { cb?: () => void }) {
 								isFieldAuditors ? "bg-[#2A2625D4]" : "bg-transparent"
 							}`}>
 							<AccountManagerIcon />
-							<span className="text-white text-3xl font-medium">
+							<span className="text-white text-2xl xl:text-3xl font-medium">
 								Field Auditors
 							</span>
 						</Link>
@@ -186,7 +194,7 @@ export const SidePanelContent = function ({ cb }: { cb?: () => void }) {
 								isAdvertisers ? "bg-[#2A2625D4]" : "bg-transparent"
 							}`}>
 							<AdvertisersIcon />
-							<span className="text-white text-3xl font-medium">
+							<span className="text-white text-2xl xl:text-3xl font-medium">
 								Advertisers
 							</span>
 						</Link>
@@ -201,7 +209,9 @@ export const SidePanelContent = function ({ cb }: { cb?: () => void }) {
 								isBrands ? "bg-[#2A2625D4]" : "bg-transparent"
 							}`}>
 							<AdvertisersIcon />
-							<span className="text-white text-3xl font-medium">Brands</span>
+							<span className="text-white text-2xl xl:text-3xl font-medium">
+								Brands
+							</span>
 						</Link>
 						<Link
 							onClick={() => {
@@ -214,7 +224,7 @@ export const SidePanelContent = function ({ cb }: { cb?: () => void }) {
 								isCategories ? "bg-[#2A2625D4]" : "bg-transparent"
 							}`}>
 							<CategoryIcon />
-							<span className="text-white text-3xl font-medium">
+							<span className="text-white text-2xl xl:text-3xl font-medium">
 								Categories
 							</span>
 						</Link>
@@ -229,7 +239,7 @@ export const SidePanelContent = function ({ cb }: { cb?: () => void }) {
 								isRegions ? "bg-[#2A2625D4]" : "bg-transparent"
 							}`}>
 							<LocationIcon />
-							<span className="text-white text-3xl font-medium">
+							<span className="text-white text-2xl xl:text-3xl font-medium">
 								Regions & States
 							</span>
 						</Link>
