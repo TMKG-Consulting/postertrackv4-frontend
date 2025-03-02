@@ -49,7 +49,6 @@ export default function PendingSiteUploads() {
 							<th>
 								<span className="text-2xl font-semibold">City</span>
 							</th>
-
 							<th className="w-[215px] text-left">
 								<span className="text-2xl font-semibold w-full">Address</span>
 							</th>

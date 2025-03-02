@@ -17,11 +17,11 @@ const schema = Yup.object().shape({
 	visibilityDistance: Yup.number().required(),
 	trafficDensity: Yup.number().required(),
 	trafficSpeed: Yup.number().required(),
-	angleOfVision: Yup.number().required(),
-	clutterByBillboard: Yup.number().required(),
-	clutterOtherFormat: Yup.number().required(),
-	proximityOfCompetition: Yup.number().required(),
-	pedestrianTrafficWeight: Yup.number().required(),
+	angleVision: Yup.number().required(),
+	clutterBillboard: Yup.number().required(),
+	clutterFormat: Yup.number().required(),
+	proximityCompetition: Yup.number().required(),
+	pedestrianTraffic: Yup.number().required(),
 	message: Yup.string().required().label("Message"),
 	comment: Yup.string().required().label("Comment"),
 	structureId: Yup.number().required().label("Structure"),
@@ -35,11 +35,11 @@ interface BSV {
 	visibilityDistance: number;
 	trafficDensity: number;
 	trafficSpeed: number;
-	angleOfVision: number;
-	clutterByBillboard: number;
-	clutterOtherFormat: number;
-	proximityOfCompetition: number;
-	pedestrianTrafficWeight: number;
+	angleVision: number;
+	clutterBillboard: number;
+	clutterFormat: number;
+	proximityCompetition: number;
+	pedestrianTraffic: number;
 	message: string;
 	comment: string;
 	structureId: number | string;
@@ -68,15 +68,17 @@ export default function UpdateBSV() {
 		gcTime: 0,
 	});
 
+	console.log(reportBeingViewed);
+
 	const initialValues: BSV = {
-		visibilityDistance: 0,
-		trafficDensity: 0,
-		trafficSpeed: 0,
-		angleOfVision: 0,
-		clutterByBillboard: 0,
-		clutterOtherFormat: 0,
-		proximityOfCompetition: 0,
-		pedestrianTrafficWeight: 0,
+		visibilityDistance: reportBeingViewed?.visibilityDistance ?? 0,
+		trafficDensity: reportBeingViewed?.trafficDensity ?? 0,
+		trafficSpeed: reportBeingViewed?.trafficSpeed ?? 0,
+		angleVision: reportBeingViewed?.angleVision ?? 0,
+		clutterBillboard: reportBeingViewed?.clutterBillboard ?? 0,
+		clutterFormat: reportBeingViewed?.clutterFormat ?? 0,
+		proximityCompetition: reportBeingViewed?.proximityCompetition ?? 0,
+		pedestrianTraffic: reportBeingViewed?.pedestrianTraffic ?? 0,
 		message: reportBeingViewed?.message ?? "",
 		comment: reportBeingViewed?.comment ?? "",
 		structureId: reportBeingViewed?.structureId ?? "",
@@ -95,11 +97,11 @@ export default function UpdateBSV() {
 				visibilityDistance,
 				trafficDensity,
 				trafficSpeed,
-				angleOfVision,
-				clutterByBillboard,
-				clutterOtherFormat,
-				proximityOfCompetition,
-				pedestrianTrafficWeight,
+				angleVision,
+				clutterBillboard,
+				clutterFormat,
+				proximityCompetition,
+				pedestrianTraffic,
 				message,
 				comment,
 				structureId,
@@ -113,11 +115,11 @@ export default function UpdateBSV() {
 				visibilityDistance,
 				trafficDensity,
 				trafficSpeed,
-				angleOfVision,
-				clutterByBillboard,
-				clutterOtherFormat,
-				proximityOfCompetition,
-				pedestrianTrafficWeight,
+				angleVision,
+				clutterBillboard,
+				clutterFormat,
+				proximityCompetition,
+				pedestrianTraffic,
 			}).reduce((acc: number, value) => {
 				return (acc += Number(value));
 			}, 0);
@@ -126,13 +128,21 @@ export default function UpdateBSV() {
 				"/compliance/" + reportBeingViewed?.id,
 				{
 					bsv: `${bsvScore}%`,
+					visibilityDistance: Number(visibilityDistance),
+					trafficDensity: Number(trafficDensity),
+					trafficSpeed: Number(trafficSpeed),
+					angleVision: Number(angleVision),
+					clutterBillboard: Number(clutterBillboard),
+					clutterFormat: Number(clutterFormat),
+					pedestrianTraffic: Number(pedestrianTraffic),
+					proximityCompetition: Number(proximityCompetition),
 					message,
 					comment,
-					structureId,
-					posterId,
-					illuminationId,
-					routeId,
-					sideId,
+					structureId: Number(structureId),
+					posterId: Number(posterId),
+					illuminationId: Number(illuminationId),
+					routeId: Number(routeId),
+					sideId: Number(sideId),
 				},
 				{
 					headers: {
@@ -148,8 +158,9 @@ export default function UpdateBSV() {
 					...response.data.updatedCompliance,
 				});
 			}
+
 			showAndHideAlert({
-				message: "BSV Updated",
+				message: "Report Updated",
 				type: "success",
 			});
 			setIsUpdating(false);
@@ -187,11 +198,11 @@ export default function UpdateBSV() {
 									visibilityDistance,
 									trafficDensity,
 									trafficSpeed,
-									angleOfVision,
-									clutterByBillboard,
-									clutterOtherFormat,
-									proximityOfCompetition,
-									pedestrianTrafficWeight,
+									angleVision,
+									clutterBillboard,
+									clutterFormat,
+									proximityCompetition,
+									pedestrianTraffic,
 								} = values;
 								return (
 									<Form className="flex flex-col w-full gap-[15px]">
@@ -374,11 +385,11 @@ export default function UpdateBSV() {
 													visibilityDistance,
 													trafficDensity,
 													trafficSpeed,
-													angleOfVision,
-													clutterByBillboard,
-													clutterOtherFormat,
-													proximityOfCompetition,
-													pedestrianTrafficWeight,
+													angleVision,
+													clutterBillboard,
+													clutterFormat,
+													proximityCompetition,
+													pedestrianTraffic,
 												}).reduce((acc: number, value) => {
 													return (acc += Number(value));
 												}, 0)}
@@ -466,12 +477,12 @@ export default function UpdateBSV() {
 											<div className="w-full flex flex-col gap-y-5">
 												<label
 													className="text-[1.7rem] text-appBlack font-semibold"
-													htmlFor={"angleOfVision"}>
+													htmlFor={"angleVision"}>
 													Angle of Vision
 												</label>
 												<Field
-													id={"angleOfVision"}
-													name={"angleOfVision"}
+													id={"angleVision"}
+													name={"angleVision"}
 													placeholder={"Angle of Vision"}
 													className="h-[50px] rounded-2xl bg-[#F5F5F5] text-2xl font-medium px-[10px] outline-none focus:border-primary border-transparent border-[1.5px] transition-all duration-200"
 													as="select">
@@ -483,7 +494,7 @@ export default function UpdateBSV() {
 													))}
 												</Field>
 												<ErrorMessage
-													name={"angleOfVision"}
+													name={"angleVision"}
 													component={"p"}
 													className="text-2xl font-medium text-red-400"
 												/>
@@ -493,12 +504,12 @@ export default function UpdateBSV() {
 											<div className="w-full flex flex-col gap-y-5">
 												<label
 													className="text-[1.7rem] text-appBlack font-semibold"
-													htmlFor={"clutterByBillboard"}>
+													htmlFor={"clutterBillboard"}>
 													Clutter by Billboard
 												</label>
 												<Field
-													id={"clutterByBillboard"}
-													name={"clutterByBillboard"}
+													id={"clutterBillboard"}
+													name={"clutterBillboard"}
 													placeholder={"Clutter by Billboard"}
 													className="h-[50px] rounded-2xl bg-[#F5F5F5] text-2xl font-medium px-[10px] outline-none focus:border-primary border-transparent border-[1.5px] transition-all duration-200"
 													as="select">
@@ -510,7 +521,7 @@ export default function UpdateBSV() {
 													))}
 												</Field>
 												<ErrorMessage
-													name={"clutterByBillboard"}
+													name={"clutterBillboard"}
 													component={"p"}
 													className="text-2xl font-medium text-red-400"
 												/>
@@ -518,12 +529,12 @@ export default function UpdateBSV() {
 											<div className="w-full flex flex-col gap-y-5">
 												<label
 													className="text-[1.7rem] text-appBlack font-semibold"
-													htmlFor={"clutterOtherFormat"}>
+													htmlFor={"clutterFormat"}>
 													Clutter by Other format
 												</label>
 												<Field
-													id={"clutterOtherFormat"}
-													name={"clutterOtherFormat"}
+													id={"clutterFormat"}
+													name={"clutterFormat"}
 													placeholder={"Clutter by Other format"}
 													className="h-[50px] rounded-2xl bg-[#F5F5F5] text-2xl font-medium px-[10px] outline-none focus:border-primary border-transparent border-[1.5px] transition-all duration-200"
 													as="select">
@@ -535,7 +546,7 @@ export default function UpdateBSV() {
 													))}
 												</Field>
 												<ErrorMessage
-													name={"clutterOtherFormat"}
+													name={"clutterFormat"}
 													component={"p"}
 													className="text-2xl font-medium text-red-400"
 												/>
@@ -545,12 +556,12 @@ export default function UpdateBSV() {
 											<div className="w-full flex flex-col gap-y-5">
 												<label
 													className="text-[1.7rem] text-appBlack font-semibold"
-													htmlFor={"proximityOfCompetition"}>
+													htmlFor={"proximityCompetition"}>
 													Proximity of competition
 												</label>
 												<Field
-													id={"proximityOfCompetition"}
-													name={"proximityOfCompetition"}
+													id={"proximityCompetition"}
+													name={"proximityCompetition"}
 													placeholder={"Proximity of competition"}
 													className="h-[50px] rounded-2xl bg-[#F5F5F5] text-2xl font-medium px-[10px] outline-none focus:border-primary border-transparent border-[1.5px] transition-all duration-200"
 													as="select">
@@ -562,7 +573,7 @@ export default function UpdateBSV() {
 													))}
 												</Field>
 												<ErrorMessage
-													name={"proximityOfCompetition"}
+													name={"proximityCompetition"}
 													component={"p"}
 													className="text-2xl font-medium text-red-400"
 												/>
@@ -570,12 +581,12 @@ export default function UpdateBSV() {
 											<div className="w-full flex flex-col gap-y-5">
 												<label
 													className="text-[1.7rem] text-appBlack font-semibold"
-													htmlFor={"pedestrianTrafficWeight"}>
+													htmlFor={"pedestrianTraffic"}>
 													Pedestrian Traffic Weight
 												</label>
 												<Field
-													id={"pedestrianTrafficWeight"}
-													name={"pedestrianTrafficWeight"}
+													id={"pedestrianTraffic"}
+													name={"pedestrianTraffic"}
 													placeholder={"Pedestrian Traffic Weight"}
 													className="h-[50px] rounded-2xl bg-[#F5F5F5] text-2xl font-medium px-[10px] outline-none focus:border-primary border-transparent border-[1.5px] transition-all duration-200"
 													as="select">
@@ -587,7 +598,7 @@ export default function UpdateBSV() {
 													))}
 												</Field>
 												<ErrorMessage
-													name={"pedestrianTrafficWeight"}
+													name={"pedestrianTraffic"}
 													component={"p"}
 													className="text-2xl font-medium text-red-400"
 												/>

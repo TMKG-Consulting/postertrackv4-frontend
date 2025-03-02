@@ -86,31 +86,32 @@ export default function SiteReportHeader() {
 				</h2>
 			</div>
 			<div className="w-full md:w-max flex items-center gap-3 md:gap-5">
-				{reportBeingViewed?.status === "pending" && (
-					<>
-						<AppButton
-							onClick={() => updateSiteStatus("approved")}
-							className="!w-1/2 md:!w-[150px] font-medium !bg-[#048F2B24] border-[#048F2B] border-[1.5px] !text-[#048F2B]"
-							fullyRounded
-							label="Approve"
-							showLoading={isApproving}
-						/>
-						<AppButton
-							onClick={() => setIsDisapproving(true)}
-							className="!w-1/2 md:!w-[150px] !bg-[#EB410B24] !text-primary border-primary border-[1.5px] font-medium"
-							fullyRounded
-							label="Disapprove"
-						/>
-					</>
-				)}
-
 				{reportBeingViewed?.status === "approved" && (
 					<div className="cursor-none flex items-center gap-5 rounded-full p-5 bg-[#048F2B]">
 						<span className="text-2xl font-medium text-white">Approved</span>{" "}
 						<MarkIcon fill="white" />
 					</div>
 				)}
+				{(reportBeingViewed?.status === "pending" ||
+					reportBeingViewed?.status === "disapproved") && (
+					<AppButton
+						onClick={() => updateSiteStatus("approved")}
+						className="!w-1/2 md:!w-[150px] font-medium !bg-[#048F2B24] border-[#048F2B] border-[1.5px] !text-[#048F2B]"
+						fullyRounded
+						label="Approve"
+						showLoading={isApproving}
+					/>
+				)}
 
+				{(reportBeingViewed?.status === "pending" ||
+					reportBeingViewed?.status === "approved") && (
+					<AppButton
+						onClick={() => setIsDisapproving(true)}
+						className="!w-1/2 md:!w-[150px] !bg-[#EB410B24] !text-primary border-primary border-[1.5px] font-medium"
+						fullyRounded
+						label="Disapprove"
+					/>
+				)}
 				{reportBeingViewed?.status === "disapproved" && (
 					<div className="cursor-none flex items-center gap-5 rounded-full p-5 bg-[#ED323740]">
 						<span className="text-2xl font-medium text-appBlack">
@@ -125,10 +126,10 @@ export default function SiteReportHeader() {
 				hideModal={() => setIsDisapproving(false)}>
 				<Formik
 					initialValues={{ disapprovalReason: "" }}
-					onSubmit={(values, { setSubmitting }) => {
-						updateSiteStatus("disapproved", values.disapprovalReason);
+					onSubmit={async (values, { setSubmitting }) => {
+						await updateSiteStatus("disapproved", values.disapprovalReason);
 						setSubmitting(false);
-						setIsApproving(false);
+						setIsDisapproving(false);
 					}}>
 					{({ isSubmitting }) => (
 						<Form className="p-10">

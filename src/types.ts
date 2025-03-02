@@ -156,4 +156,12 @@ export interface SiteAssignmentReport {
 	Route: { id: number; name: string };
 	Side: { id: number; name: string };
 	state: string;
+	visibilityDistance: number;
+	trafficDensity: number;
+	trafficSpeed: number;
+	angleVision: number;
+	clutterBillboard: number;
+	clutterFormat: number;
+	proximityCompetition: number;
+	pedestrianTraffic: number;
 }
