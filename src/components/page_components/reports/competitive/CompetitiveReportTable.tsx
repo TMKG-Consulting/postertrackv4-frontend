@@ -39,21 +39,26 @@ export default function CompetitiveReportTable() {
 	});
 
 	useEffect(() => {
-		console.log(data);
 		if (data) {
 			if (data.advertiserHasComplianceReport) {
-				setDataToDisplay(data.advertiserComplianceData);
-			} else {
-				setDataToDisplay(data.advertiserCompetitiveData);
-			}
-		}
-	}, [data]);
+				Promise.all(
+					data.advertiserHasComplianceReport.map(
+						async (d: CompetitiveUpload) => {
+							const LatLng = JSON.parse(d?.geolocations);
+							const address = await getHumanReadableAddress({
+								lat: LatLng[0].latitude,
+								lng: LatLng[0].longitude,
+							});
 
-	useEffect(() => {
-		if (dataToDisplay.length > 0) {
-			(async function () {
-				const newData = await Promise.all(
-					dataToDisplay.map(async (d) => {
+							return { ...d, address };
+						}
+					)
+				).then((val) => {
+					setDataToDisplay(val);
+				});
+			} else {
+				Promise.all(
+					data.advertiserCompetitiveData.map(async (d: CompetitiveUpload) => {
 						const LatLng = JSON.parse(d?.geolocations);
 						const address = await getHumanReadableAddress({
 							lat: LatLng[0].latitude,
@@ -62,12 +67,12 @@ export default function CompetitiveReportTable() {
 
 						return { ...d, address };
 					})
-				);
-
-				setDataToDisplay(newData);
-			})();
+				).then((val) => {
+					setDataToDisplay(val);
+				});
+			}
 		}
-	}, [dataToDisplay]);
+	}, [data]);
 
 	return (
 		<div className="h-full flex flex-col">

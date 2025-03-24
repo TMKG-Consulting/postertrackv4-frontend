@@ -67,26 +67,6 @@ export default function CompetitiveAnalysisMap() {
 		}
 	}, [data]);
 
-	// useEffect(() => {
-	// 	if (dataToDisplay.length > 0) {
-	// 		(async function () {
-	// 			const newData = await Promise.all(
-	// 				dataToDisplay.map(async (d) => {
-	// 					const LatLng = JSON.parse(d?.geolocations);
-	// 					const address = await getHumanReadableAddress({
-	// 						lat: LatLng[0].latitude,
-	// 						lng: LatLng[0].longitude,
-	// 					});
-
-	// 					return { ...d, address };
-	// 				})
-	// 			);
-
-	// 			setDataToDisplay(newData);
-	// 		})();
-	// 	}
-	// }, [dataToDisplay]);
-
 	if (isLoading) {
 		return (
 			<div className="w-full h-full flex items-center justify-center">
