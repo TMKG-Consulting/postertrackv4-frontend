@@ -18,19 +18,19 @@ export default async function layout({
 	let cities = [];
 
 	if (cookiesStore.has(ACCESS_TOKEN_COOKIE_NAME)) {
-		const statesRes = await ApiInstance.get("/api/states", {
+		const statesRes = await ApiInstance.get("/states", {
 			headers: {
 				"auth-token": cookiesStore.get(ACCESS_TOKEN_COOKIE_NAME)?.value,
 			},
 		});
 
-		const regionsRes = await ApiInstance.get("/api/regions", {
+		const regionsRes = await ApiInstance.get("/regions", {
 			headers: {
 				"auth-token": cookiesStore.get(ACCESS_TOKEN_COOKIE_NAME)?.value,
 			},
 		});
 
-		const citiesRes = await ApiInstance.get("/api/cities", {
+		const citiesRes = await ApiInstance.get("/cities", {
 			headers: {
 				"auth-token": cookiesStore.get(ACCESS_TOKEN_COOKIE_NAME)?.value,
 			},

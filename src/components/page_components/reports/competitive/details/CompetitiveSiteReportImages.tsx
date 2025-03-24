@@ -1,15 +1,16 @@
 "use client";
+import { useReportStore } from "@/components/shared/providers/ReportsProvider";
 import { useSiteStore } from "@/components/shared/providers/SiteProvider";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
-export default function SiteReportImages() {
-	const { reportBeingViewed } = useSiteStore();
+export default function CompetitiveSiteReportImages() {
+	const { reportBeingViewed } = useReportStore();
 	const [currentImage, setCurrentImage] = useState<string>("");
 
 	useEffect(() => {
 		if (reportBeingViewed && currentImage === "") {
-			setCurrentImage(reportBeingViewed.imageUrls[0]);
+			setCurrentImage(reportBeingViewed.images[0]);
 		}
 	}, [reportBeingViewed]);
 
@@ -29,7 +30,7 @@ export default function SiteReportImages() {
 				</div>
 			)}
 			<div className="flex items-center gap-8">
-				{reportBeingViewed?.imageUrls.map((image, i) => (
+				{reportBeingViewed?.images.map((image, i) => (
 					<button
 						onClick={() => setCurrentImage(image)}
 						className={` ${

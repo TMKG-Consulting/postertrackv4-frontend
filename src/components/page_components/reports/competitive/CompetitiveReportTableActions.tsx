@@ -10,9 +10,12 @@ import "air-datepicker/air-datepicker.css";
 import localeEn from "air-datepicker/locale/en";
 import CalendarIcon from "@/components/shared/icons/CalendarIcon";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 
 export default function CompetitiveReportTableActions() {
 	const calendarRef = useRef<AirDatepicker<HTMLElement> | null>(null);
+
+	const params = useParams();
 
 	useEffect(() => {
 		calendarRef.current = new AirDatepicker("#report-month", {
@@ -49,7 +52,7 @@ export default function CompetitiveReportTableActions() {
 				</div>
 			</div>
 			<div className="flex items-center gap-x-7">
-				<Link href={"/reports/competitive/map/jjjk"}>
+				<Link href={`/reports/competitive/map/${params.advertiserId}`}>
 					<AppButton
 						className="!w-1/2 md:!w-[150px] !bg-[#EB410B24] !text-primary border-primary border-[1.5px] font-medium"
 						fullyRounded>
@@ -59,7 +62,7 @@ export default function CompetitiveReportTableActions() {
 						</div>
 					</AppButton>
 				</Link>
-				<label htmlFor="report-month" className="cursor-pointer">
+				{/* <label htmlFor="report-month" className="cursor-pointer">
 					<input
 						type="button"
 						className=" h-[0px] opacity-0 absolute"
@@ -69,7 +72,7 @@ export default function CompetitiveReportTableActions() {
 						<CalendarIcon />
 						<span className="text-2xl font-medium">January 2024</span>
 					</div>
-				</label>
+				</label> */}
 			</div>
 		</div>
 	);

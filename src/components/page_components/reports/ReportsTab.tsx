@@ -41,6 +41,22 @@ export default function ReportsTab() {
 						Compliance Report
 					</span>
 				</button>
+				<button
+					onClick={() => setCurrentTab("all-competitive")}
+					className={`h-full p-[10px] border-b-[1.5px] transition-all duration-300 ${
+						currentTab === "all-competitive"
+							? "border-primary"
+							: "border-transparent"
+					}`}>
+					<span
+						className={`text-2xl ${
+							currentTab === "all-competitive"
+								? "text-primary font-bold"
+								: "text-[#868686] font-medium"
+						}`}>
+						All Competitive Reports
+					</span>
+				</button>
 			</div>
 		</section>
 	);

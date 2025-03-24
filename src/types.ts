@@ -165,3 +165,28 @@ export interface SiteAssignmentReport {
 	proximityCompetition: number;
 	pedestrianTraffic: number;
 }
+
+export interface CompetitiveUpload {
+	advertiser: Advertiser;
+	advertiserId: number;
+	boardType: { id: number; name: string };
+	boardTypeId: number;
+	brand: Brand;
+	brandId: number;
+	capturedTimestamps: string;
+	category: { id: number; name: string };
+	categoryId: number;
+	city: { id: number; name: string; stateId: number };
+	cityId: number;
+	createdAt: Date;
+	geolocations: string;
+	id: number;
+	images: string[];
+	region: { id: number; name: string };
+	regionId: number;
+	state: { id: number; name: string };
+	stateId: number;
+	uploadedBy: number;
+	FieldAuditor: FieldAuditor;
+	address?: string;
+}

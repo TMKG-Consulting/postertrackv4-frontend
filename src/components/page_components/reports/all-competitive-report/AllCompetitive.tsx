@@ -1,93 +1,50 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import Pagination from "@/components/shared/Pagination";
 import AppButton from "@/components/shared/AppButton";
-import CompetitiveReportTableActions from "./CompetitiveReportTableActions";
 import { useRouter } from "next/navigation";
-import { useParams } from "next/navigation";
-import useCredentials from "@/hooks/useCredentials";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { ApiInstance, getHumanReadableAddress } from "@/utils";
-import CampaignPlaceholder from "@/components/shared/CampaignPlaceholder";
+import useCredentials from "@/hooks/useCredentials";
+import ComplianceReportPlaceholder from "@/components/shared/ComplianceReportPlaceholder";
 import { CompetitiveUpload } from "@/types";
+import CampaignPlaceholder from "@/components/shared/CampaignPlaceholder";
 import Link from "next/link";
-import Portal from "@/components/shared/Portal";
 
-export default function CompetitiveReportTable() {
+export default function AllCompetitive() {
 	const router = useRouter();
-	const params = useParams();
 	const { accessToken } = useCredentials();
 	const [currentPage, setCurrentPage] = useState(1);
-	const [search, setSearch] = useState("");
-	const [dataToDisplay, setDataToDisplay] = useState<CompetitiveUpload[]>([]);
 
-	const { data, isLoading, error, isFetching } = useQuery({
-		queryKey: ["advertisers", currentPage, search, params.advertiserId],
+	const { data, isLoading, isFetching } = useQuery({
+		queryKey: ["all-competitive"],
 		queryFn: async () => {
-			const response = await ApiInstance.get(
-				`/competitive-map/${params.advertiserId}?page=${currentPage}&search=${search}`,
-				{
-					headers: {
-						"auth-token": accessToken,
-					},
-				}
+			const res = await ApiInstance.get(`/competitive-report`, {
+				headers: {
+					"auth-token": accessToken,
+				},
+			});
+
+			const newUploads = await Promise.all(
+				res.data.uploads.map(async (d: CompetitiveUpload) => {
+					const LatLng = JSON.parse(d?.geolocations);
+					const address = await getHumanReadableAddress({
+						lat: LatLng[0].latitude,
+						lng: LatLng[0].longitude,
+					});
+
+					return { ...d, address };
+				})
 			);
 
-			return response.data;
+			return { ...res.data, uploads: newUploads };
 		},
-		placeholderData: keepPreviousData,
-		retry: false,
+		gcTime: 0,
 	});
-
-	useEffect(() => {
-		console.log(data);
-		if (data) {
-			if (data.advertiserHasComplianceReport) {
-				setDataToDisplay(data.advertiserComplianceData);
-			} else {
-				setDataToDisplay(data.advertiserCompetitiveData);
-			}
-		}
-	}, [data]);
-
-	useEffect(() => {
-		if (dataToDisplay.length > 0) {
-			(async function () {
-				const newData = await Promise.all(
-					dataToDisplay.map(async (d) => {
-						const LatLng = JSON.parse(d?.geolocations);
-						const address = await getHumanReadableAddress({
-							lat: LatLng[0].latitude,
-							lng: LatLng[0].longitude,
-						});
-
-						return { ...d, address };
-					})
-				);
-
-				setDataToDisplay(newData);
-			})();
-		}
-	}, [dataToDisplay]);
 
 	return (
 		<div className="h-full flex flex-col">
-			<CompetitiveReportTableActions />
-
-			<Portal elementId="advertiser-name">
-				{dataToDisplay.length > 0 && (
-					<>
-						<span className="text-[1.7rem] font-bold">
-							{dataToDisplay[0]?.advertiser.name}
-						</span>
-						<span className="flex h-[24px] w-[1px] bg-appBlack"></span>
-						<span className="text-[1.7rem] font-medium">
-							Total Uploads:{" "}
-							<span className="font-bold">{dataToDisplay.length}</span>
-						</span>
-					</>
-				)}
-			</Portal>
-
+			{/* <CompetitiveReportTableActions /> */}
 			<div className="grow w-full overflow-auto xl:overflow-visible">
 				<table className="w-[250%] md:w-[150%] xl:w-full" cellPadding={15}>
 					<thead className="border-b border-t border-[#C7C7C7] border-t-[#C7C7C7] bg-[#f5f5f5]">
@@ -122,10 +79,9 @@ export default function CompetitiveReportTable() {
 					<tbody>
 						{(isLoading || isFetching) &&
 							[...Array(5)].map((d, i) => <CampaignPlaceholder key={i} />)}
-
 						{!isLoading &&
 							!isFetching &&
-							dataToDisplay.map((d: CompetitiveUpload, i: number) => (
+							data?.uploads.map((d: CompetitiveUpload, i: number) => (
 								<tr
 									key={i}
 									className="border-b-[#E6E6E6] border-b 
@@ -187,11 +143,13 @@ export default function CompetitiveReportTable() {
 							))}
 					</tbody>
 				</table>
-				{!isLoading && !isFetching && dataToDisplay?.length === 0 && (
-					<p className="text-4xl font-bold text-center my-10">
-						Reports Not Available
-					</p>
-				)}
+			</div>
+			<div className="my-12 flex items-center justify-center md:justify-end px-5 md:px-10">
+				<Pagination
+					currentPage={currentPage}
+					totalPages={Math.ceil(data?.total / data?.limit)}
+					setCurrentPage={setCurrentPage}
+				/>
 			</div>
 		</div>
 	);

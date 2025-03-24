@@ -1,8 +1,9 @@
 import CompetitiveReportTable from "@/components/page_components/reports/competitive/CompetitiveReportTable";
 import CompetitiveReportHeader from "@/components/page_components/reports/competitive/CompetitveReportHeader";
+import { cookies } from "next/headers";
 import React from "react";
 
-export default function page() {
+export default async function page() {
 	return (
 		<>
 			<CompetitiveReportHeader />

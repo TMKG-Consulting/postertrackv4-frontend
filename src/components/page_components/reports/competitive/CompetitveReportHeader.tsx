@@ -7,9 +7,11 @@ import CalendarIcon from "@/components/shared/icons/CalendarIcon";
 import AirDatepicker from "air-datepicker";
 import "air-datepicker/air-datepicker.css";
 import localeEn from "air-datepicker/locale/en";
+import { useParams } from "next/navigation";
 
 export default function CompetitiveReportHeader({ forMap = false }) {
 	const calendarRef = useRef<AirDatepicker<HTMLElement> | null>(null);
+	const params = useParams();
 
 	useEffect(() => {
 		calendarRef.current = new AirDatepicker("#report-month", {
@@ -24,7 +26,12 @@ export default function CompetitiveReportHeader({ forMap = false }) {
 		<>
 			<section className="w-full h-[15rem] md:h-[10rem] flex flex-col md:flex-row md:items-center justify-center gap-y-10 md:justify-between">
 				<div className="w-full flex items-center justify-between md:justify-start gap-5">
-					<Link href={forMap ? "/reports/competitive/jjjg" : "/reports"}>
+					<Link
+						href={
+							forMap
+								? `/reports/competitive/${params.advertiserId}`
+								: "/reports"
+						}>
 						<AppButton
 							fullyRounded
 							className="!w-[82px] !h-[39px] gap-x-3 !bg-transparent border-appBlack border-[1.5px]">
@@ -49,27 +56,24 @@ export default function CompetitiveReportHeader({ forMap = false }) {
 				)}
 			</section>
 			{!forMap && (
-				<section className="flex items-center py-8 gap-8 lg::mb-10">
-					<span className="text-[1.7rem] font-bold">ABC Company</span>
-					<span className="flex h-[24px] w-[1px] bg-appBlack"></span>
-					<span className="text-[1.7rem] font-medium">
-						Total Uploads: <span className="font-bold">250</span>
-					</span>
-				</section>
+				<section
+					id="advertiser-name"
+					className="flex items-center py-8 gap-8 lg::mb-10"></section>
 			)}
 			{forMap && (
 				<section className="flex items-center justify-between py-8 lg::mb-10">
 					<div className="flex items-center gap-8">
-						<div className="flex items-center justify-center gap-3">
+						<div
+							id="advertiser-name"
+							className="flex items-center justify-center gap-3">
 							<span className="w-[15px] h-[15px] bg-primary rounded-full flex"></span>
-							<span className="text-2xl font-medium">ABC Company</span>
 						</div>
 						<div className="flex items-center justify-center gap-3">
 							<span className="w-[15px] h-[15px] bg-[#032068] rounded-full flex"></span>
 							<span className="text-2xl font-medium">Others</span>
 						</div>
 					</div>
-					<label htmlFor="report-month" className="cursor-pointer">
+					{/* <label htmlFor="report-month" className="cursor-pointer">
 						<input
 							type="button"
 							className=" h-[0px] opacity-0 absolute"
@@ -79,7 +83,7 @@ export default function CompetitiveReportHeader({ forMap = false }) {
 							<CalendarIcon />
 							<span className="text-2xl font-medium">January 2024</span>
 						</div>
-					</label>
+					</label> */}
 				</section>
 			)}
 		</>
