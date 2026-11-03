@@ -60,32 +60,6 @@ export default function CompetitiveReportHeader({ forMap = false }) {
 					id="advertiser-name"
 					className="flex items-center py-8 gap-8 lg::mb-10"></section>
 			)}
-			{forMap && (
-				<section className="flex items-center justify-between py-8 lg::mb-10">
-					<div className="flex items-center gap-8">
-						<div
-							id="advertiser-name"
-							className="flex items-center justify-center gap-3">
-							<span className="w-[15px] h-[15px] bg-primary rounded-full flex"></span>
-						</div>
-						<div className="flex items-center justify-center gap-3">
-							<span className="w-[15px] h-[15px] bg-[#032068] rounded-full flex"></span>
-							<span className="text-2xl font-medium">Others</span>
-						</div>
-					</div>
-					{/* <label htmlFor="report-month" className="cursor-pointer">
-						<input
-							type="button"
-							className=" h-[0px] opacity-0 absolute"
-							id="report-month"
-						/>
-						<div className="!w-1/2 md:!w-[150px] h-[50px] !bg-transparent !text-appBlack border-[#bfbfbf] border-[1.5px] font-medium rounded-full flex items-center justify-center gap-3">
-							<CalendarIcon />
-							<span className="text-2xl font-medium">January 2024</span>
-						</div>
-					</label> */}
-				</section>
-			)}
 		</>
 	);
 }
