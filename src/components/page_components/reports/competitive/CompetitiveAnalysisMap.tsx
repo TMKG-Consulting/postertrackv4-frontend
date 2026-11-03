@@ -9,6 +9,7 @@ import { CompetitiveUpload } from "@/types";
 import { ApiInstance, getHumanReadableAddress } from "@/utils";
 import AppLoader from "@/components/shared/AppLoader";
 import Portal from "@/components/shared/Portal";
+import EmptyState from "@/components/shared/EmptyState";
 
 const advertiserPin = {
 	path: "M32 10.328c-8.284 0-15 6.716-15 15 0 6.605 9.537 21.113 13.402 26.723.872 1.265 2.324 1.265 3.196 0C37.463 46.44 47 31.934 47 25.328c0-8.284-6.716-15-15-15zm0 7a8 8 0 0 1 8 8 8 8 0 0 1-8 8 8 8 0 0 1-8-8 8 8 0 0 1 8-8z",
@@ -36,6 +37,7 @@ export default function CompetitiveAnalysisMap() {
 	const [search, setSearch] = useState("");
 	const [dataToDisplay, setDataToDisplay] = useState<CompetitiveUpload[]>([]);
 	const [competitorData, setCompetitorData] = useState<CompetitiveUpload[]>([]);
+	const [hasLoaded, setHasLoaded] = useState(false);
 
 	const { data, isLoading, error, isFetching } = useQuery({
 		queryKey: ["advertisers", currentPage, search, params.advertiserId],
@@ -64,15 +66,20 @@ export default function CompetitiveAnalysisMap() {
 			}
 
 			setCompetitorData(data.competitorData);
+			setHasLoaded(true);
 		}
 	}, [data]);
 
-	if (isLoading) {
+	if (isLoading || !hasLoaded) {
 		return (
 			<div className="w-full h-full flex items-center justify-center">
 				<AppLoader />
 			</div>
 		);
+	}
+
+	if (dataToDisplay.length === 0 && competitorData.length === 0) {
+		return <EmptyState className="mt-10" />;
 	}
 
 	let LatLng: any;

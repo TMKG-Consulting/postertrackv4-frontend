@@ -7,6 +7,14 @@ export const ApiInstance = axios.create({
 	baseURL: BASE_URL,
 });
 
+export function formatRole(role?: string) {
+	return role
+		?.toLowerCase()
+		.split("_")
+		.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+		.join(" ");
+}
+
 const loader = new Loader({
 	apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? "",
 	version: "weekly",

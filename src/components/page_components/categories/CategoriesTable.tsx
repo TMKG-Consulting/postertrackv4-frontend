@@ -13,6 +13,7 @@ import useAlert from "@/hooks/useAlert";
 import EditIcon from "@/components/shared/icons/EditIcon";
 import CreateACategoryForm from "./create/CreateCategoryForm";
 import { Category } from "@/types";
+import EmptyState from "@/components/shared/EmptyState";
 
 export default function CategoriesTable() {
 	const { accessToken } = useCredentials();
@@ -128,8 +129,8 @@ export default function CategoriesTable() {
 								<div className="bg-[#e5e5e5] anaimate-pulse h-[7px] rounded-full w-[50px]"></div>
 							</div>
 					  ))
-					: //@ts-ignore
-					  data.data.map((d, i) => (
+					: data?.data?.length
+					? data.data.map((d: Category, i: number) => (
 							<div
 								className="text-[1.7rem] py-[10px] border-b border-b-gray-100 font-medium flex flex-col md:flex-row items-center justify-between"
 								key={i}>
@@ -149,10 +150,11 @@ export default function CategoriesTable() {
 									</AppButton>
 								</div>
 							</div>
-					  ))}
+					  ))
+					: <EmptyState />}
 			</div>
 			<div className="my-12 flex items-center justify-center md:justify-end px-5 md:px-10">
-				{!isLoading && !isFetching && (
+				{!isLoading && !isFetching && data?.data?.length > 0 && (
 					<Pagination
 						currentPage={currentPage}
 						totalPages={data?.totalPages}

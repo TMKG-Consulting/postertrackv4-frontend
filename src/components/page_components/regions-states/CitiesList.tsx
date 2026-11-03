@@ -2,6 +2,7 @@
 import React from "react";
 import LocationIcon from "@/components/shared/icons/LocationIcon";
 import { useLocationsStore } from "@/components/shared/providers/LocationsProvider";
+import EmptyState from "@/components/shared/EmptyState";
 
 export default function CitiesList() {
 	const { currentTab, cities, states, citiesToShowByState } =
@@ -10,15 +11,14 @@ export default function CitiesList() {
 	if (currentTab !== "cities") {
 		return null;
 	}
+	const visibleCities = cities.filter((city) =>
+		citiesToShowByState.includes(Number(city.stateId))
+	);
 
 	return (
 		<section className="grid md:grid-cols-3 my-[20px] gap-5 pt-[15px] border-t border-t-[#e2e2e2]">
-			{cities.map((c) => {
+			{visibleCities.length === 0 ? <EmptyState className="col-span-full" /> : visibleCities.map((c) => {
 				const state = states.find((s) => s.id === c.stateId);
-
-				if (!citiesToShowByState.includes(Number(c.stateId))) {
-					return;
-				}
 
 				return (
 					<div

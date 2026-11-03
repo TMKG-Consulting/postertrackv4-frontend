@@ -8,7 +8,7 @@ import UserIcon from "@/components/shared/icons/UserIcon";
 import useCredentials from "@/hooks/useCredentials";
 import { useRouter } from "next/navigation";
 import useAlert from "@/hooks/useAlert";
-import { ApiInstance } from "@/utils";
+import { ApiInstance, formatRole } from "@/utils";
 import AppLoader from "@/components/shared/AppLoader";
 
 export default function DashboardHeader() {
@@ -60,9 +60,16 @@ export default function DashboardHeader() {
 
 	return (
 		<section className="w-full h-[10rem] flex items-center justify-between">
-			<h4 className="text-[2.5rem] md:text-[3rem] font-black">
-				Hello, {userDetails?.firstname}
-			</h4>
+			<div className="flex flex-col">
+				<h4 className="text-[2.5rem] md:text-[3rem] font-black">
+					Hello, {userDetails?.firstname}
+				</h4>
+				{userDetails?.role && (
+					<span className="text-[1.5rem] font-medium text-[#666666]">
+						Role: {formatRole(userDetails.role)}
+					</span>
+				)}
+			</div>
 			<Dropdown
 				renderButton={({ setOpen, open }) => (
 					<button className="h-[50px]" onClick={() => setOpen(!open)}>
@@ -71,9 +78,13 @@ export default function DashboardHeader() {
 								className="w-[50px] h-[50px] rounded-full object-cover"
 								width={50}
 								height={50}
-								alt="poster-track"
+								alt="Profile picture"
 								src={userDetails?.profilePicture}
 								priority
+								unoptimized
+								onError={(event) => {
+									event.currentTarget.src = "/no-avatar.svg";
+								}}
 							/>
 						)}
 
@@ -82,7 +93,7 @@ export default function DashboardHeader() {
 								className="w-[50px] h-[50px] rounded-full object-cover"
 								width={50}
 								height={50}
-								alt="poster-track"
+								alt="Profile picture"
 								src="/no-avatar.svg"
 								priority
 							/>

@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
-import Image from "next/image";
-import LogoText from "./icons/LogoText";
+import BrandLogo from "./BrandLogo";
 import Link from "next/link";
 import DashboardIcon from "./icons/DashboardIcon";
 import CampaignIcon from "./icons/CampaignIcon";
@@ -71,13 +70,7 @@ export const SidePanelContent = function ({ cb }: { cb?: () => void }) {
 	return (
 		<>
 			<div className="flex items-center gap-x-5 mb-12">
-				<Image
-					src={"/poster-track-logo.png"}
-					width={40}
-					height={40}
-					alt="poster-track-logo"
-				/>
-				<LogoText />
+				<BrandLogo />
 			</div>
 			<div className="flex flex-col xl:mt-20 gap-y-2 xl:gap-y-8">
 				{canSeeDashboard && (

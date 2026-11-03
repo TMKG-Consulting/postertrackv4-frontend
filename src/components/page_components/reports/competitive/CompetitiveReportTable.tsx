@@ -8,6 +8,7 @@ import useCredentials from "@/hooks/useCredentials";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { ApiInstance, getHumanReadableAddress } from "@/utils";
 import CampaignPlaceholder from "@/components/shared/CampaignPlaceholder";
+import EmptyTableRow from "@/components/shared/EmptyTableRow";
 import { CompetitiveUpload } from "@/types";
 import Link from "next/link";
 import Portal from "@/components/shared/Portal";
@@ -130,7 +131,7 @@ export default function CompetitiveReportTable() {
 
 						{!isLoading &&
 							!isFetching &&
-							dataToDisplay.map((d: CompetitiveUpload, i: number) => (
+							(dataToDisplay.length > 0 ? dataToDisplay.map((d: CompetitiveUpload, i: number) => (
 								<tr
 									key={i}
 									className="border-b-[#E6E6E6] border-b 
@@ -189,14 +190,9 @@ export default function CompetitiveReportTable() {
 										</div>
 									</td>
 								</tr>
-							))}
+							)) : <EmptyTableRow colSpan={9} />)}
 					</tbody>
 				</table>
-				{!isLoading && !isFetching && dataToDisplay?.length === 0 && (
-					<p className="text-4xl font-bold text-center my-10">
-						Reports Not Available
-					</p>
-				)}
 			</div>
 		</div>
 	);

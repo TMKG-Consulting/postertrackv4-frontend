@@ -14,6 +14,9 @@ export default function AccountManagerPlaceholder() {
 					<span className="text-2xl font-medium rounded-full flex w-[70px] h-[5px] bg-[#e2e2e2] animate-pulse"></span>
 				</div>
 			</td>
+			<td>
+				<span className="text-2xl font-medium rounded-full flex w-[110px] h-[5px] bg-[#e2e2e2] animate-pulse"></span>
+			</td>
 			<td className="">
 				<span className="text-2xl font-medium rounded-full flex w-full h-[5px] bg-[#e2e2e2] animate-pulse"></span>
 				<br />

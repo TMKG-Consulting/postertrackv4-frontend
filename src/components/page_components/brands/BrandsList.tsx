@@ -10,6 +10,7 @@ import Link from "next/link";
 import useCredentials from "@/hooks/useCredentials";
 import { ApiInstance } from "@/utils";
 import Pagination from "@/components/shared/Pagination";
+import EmptyState from "@/components/shared/EmptyState";
 import { Advertiser, Brand } from "@/types";
 import AppButton from "@/components/shared/AppButton";
 import EditIcon from "@/components/shared/icons/EditIcon";
@@ -183,7 +184,8 @@ export default function BrandsList() {
 								key={i}
 								className="w-full h-[100px] bg-[#e5e5e5] animate-pulse rounded-2xl"></div>
 					  ))
-					: data.data
+					: data?.data?.length
+					? data.data
 							//@ts-ignore
 							?.sort((a: Brand, b: Brand) => {
 								return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
@@ -200,7 +202,7 @@ export default function BrandsList() {
 													className="w-[50px] h-[50px] rounded-full object-cover"
 													width={50}
 													height={50}
-													alt="poster-track"
+														alt="Brand logo"
 													src={item.logo}
 												/>
 											)}
@@ -240,16 +242,17 @@ export default function BrandsList() {
 										</div>
 									</div>
 								);
-							})}
+							})
+					: <EmptyState className="col-span-full" />}
 			</section>
 			<section>
-				<div className="my-12 flex items-center justify-center md:justify-end px-5 md:px-10">
+				{data?.data?.length > 0 && <div className="my-12 flex items-center justify-center md:justify-end px-5 md:px-10">
 					<Pagination
 						currentPage={currentPage}
 						totalPages={data?.totalPages}
 						setCurrentPage={setCurrentPage}
 					/>
-				</div>
+				</div>}
 			</section>
 		</>
 	);

@@ -10,6 +10,7 @@ import ComplianceReportPlaceholder from "@/components/shared/ComplianceReportPla
 import { CompetitiveUpload } from "@/types";
 import CampaignPlaceholder from "@/components/shared/CampaignPlaceholder";
 import Link from "next/link";
+import EmptyTableRow from "@/components/shared/EmptyTableRow";
 
 export default function AllCompetitive() {
 	const router = useRouter();
@@ -81,7 +82,7 @@ export default function AllCompetitive() {
 							[...Array(5)].map((d, i) => <CampaignPlaceholder key={i} />)}
 						{!isLoading &&
 							!isFetching &&
-							data?.uploads.map((d: CompetitiveUpload, i: number) => (
+							(data?.uploads?.length ? data.uploads.map((d: CompetitiveUpload, i: number) => (
 								<tr
 									key={i}
 									className="border-b-[#E6E6E6] border-b 
@@ -140,17 +141,17 @@ export default function AllCompetitive() {
 										</div>
 									</td>
 								</tr>
-							))}
+							)) : <EmptyTableRow colSpan={9} />)}
 					</tbody>
 				</table>
 			</div>
-			<div className="my-12 flex items-center justify-center md:justify-end px-5 md:px-10">
+			{data?.uploads?.length > 0 && <div className="my-12 flex items-center justify-center md:justify-end px-5 md:px-10">
 				<Pagination
 					currentPage={currentPage}
 					totalPages={Math.ceil(data?.total / data?.limit)}
 					setCurrentPage={setCurrentPage}
 				/>
-			</div>
+			</div>}
 		</div>
 	);
 }

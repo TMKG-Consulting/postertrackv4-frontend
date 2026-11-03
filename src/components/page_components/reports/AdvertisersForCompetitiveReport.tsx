@@ -8,6 +8,7 @@ import { ApiInstance } from "@/utils";
 import useCredentials from "@/hooks/useCredentials";
 import { Advertiser } from "@/types";
 import Pagination from "@/components/shared/Pagination";
+import EmptyState from "@/components/shared/EmptyState";
 
 export default function AdvertisersForCompetitiveReport() {
 	const { accessToken } = useCredentials();
@@ -51,7 +52,8 @@ export default function AdvertisersForCompetitiveReport() {
 								key={d}
 								className="h-[60px] w-full bg-[#eaeaea] animate-pulse rounded-2xl"></div>
 					  ))
-					: data.data
+					: data?.data?.length
+					? data.data
 							.sort((a: Advertiser, b: Advertiser) =>
 								a.name.toLowerCase().localeCompare(b.name.toLowerCase())
 							)
@@ -62,16 +64,17 @@ export default function AdvertisersForCompetitiveReport() {
 									className="w-full rounded-2xl p-5 border-[1.5px] border-[#E2E2E2] bg-white flex items-center gap-5">
 									<span className="text-[15px] font-semibold">{d.name}</span>
 								</Link>
-							))}
+							))
+					: <EmptyState className="col-span-full" />}
 			</section>
 			<section>
-				<div className="my-12 flex items-center justify-center md:justify-end px-5 md:px-10">
+					{data?.data?.length > 0 && <div className="my-12 flex items-center justify-center md:justify-end px-5 md:px-10">
 					<Pagination
 						currentPage={currentPage}
 						totalPages={data?.totalPages}
 						setCurrentPage={setCurrentPage}
 					/>
-				</div>
+					</div>}
 			</section>
 		</>
 	);

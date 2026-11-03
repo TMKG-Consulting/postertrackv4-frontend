@@ -7,6 +7,7 @@ import Link from "next/link";
 import Pagination from "@/components/shared/Pagination";
 import PendingSitesPlaceholder from "@/components/shared/PendingSitesPlaceholder";
 import { SiteAssignmentReport } from "@/types";
+import EmptyTableRow from "@/components/shared/EmptyTableRow";
 
 export default function PendingSiteUploads() {
 	const { accessToken } = useCredentials();
@@ -67,7 +68,7 @@ export default function PendingSiteUploads() {
 								<PendingSitesPlaceholder key={i} />
 							))}
 						{!isLoading &&
-							data?.pendingSites.length > 0 &&
+							data?.pendingSites?.length > 0 &&
 							data?.pendingSites.map((d: SiteAssignmentReport, i: number) => {
 								const isPending = d.status === "pending";
 								const isApproved = d.status === "approved";
@@ -144,23 +145,21 @@ export default function PendingSiteUploads() {
 									</tr>
 								);
 							})}
+						{!isLoading && !isFetching && data?.pendingSites?.length === 0 && (
+							<EmptyTableRow colSpan={9} />
+						)}
 					</tbody>
 				</table>
-				{!isLoading && !isFetching && data.pendingSites?.length === 0 && (
-					<p className="text-4xl font-bold text-center my-10">
-						Reports Not Available
-					</p>
-				)}
 			</div>
-			<div className="my-12 flex items-center justify-center md:justify-end px-5 md:px-10">
-				{!isLoading && (
+			{!isLoading && !isFetching && data?.pendingSites?.length > 0 && (
+				<div className="my-12 flex items-center justify-center md:justify-end px-5 md:px-10">
 					<Pagination
 						currentPage={currentPage}
 						totalPages={data?.totalPages}
 						setCurrentPage={setCurrentPage}
 					/>
-				)}
-			</div>
+				</div>
+			)}
 		</div>
 	);
 }

@@ -11,6 +11,7 @@ import useCredentials from "@/hooks/useCredentials";
 import { AxiosError } from "axios";
 import ComplianceReportPlaceholder from "@/components/shared/ComplianceReportPlaceholder";
 import { useReportStore } from "@/components/shared/providers/ReportsProvider";
+import EmptyTableRow from "@/components/shared/EmptyTableRow";
 
 export default function ComplianceReportTable() {
 	const router = useRouter();
@@ -224,16 +225,14 @@ export default function ComplianceReportTable() {
 									</td>
 								</tr>
 							))}
+						{!isLoading && !isFetching && data?.data?.length === 0 && (
+							<EmptyTableRow colSpan={17} />
+						)}
 					</tbody>
 				</table>
-				{!isLoading && !isFetching && data.Reports?.length === 0 && (
-					<p className="text-4xl font-bold text-center my-10">
-						Reports Not Available
-					</p>
-				)}
 			</div>
-			<div className="my-12 flex items-center justify-center md:justify-end px-5 md:px-10">
-				{!isLoading && data && data.pagination && (
+			{!isLoading && !isFetching && data?.data?.length > 0 && data?.pagination && (
+				<div className="my-12 flex items-center justify-center md:justify-end px-5 md:px-10">
 					<Pagination
 						currentPage={currentPage}
 						totalPages={Math.ceil(
@@ -241,8 +240,8 @@ export default function ComplianceReportTable() {
 						)}
 						setCurrentPage={setCurrentPage}
 					/>
-				)}
-			</div>
+				</div>
+			)}
 		</div>
 	);
 }

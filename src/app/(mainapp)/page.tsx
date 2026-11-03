@@ -10,7 +10,7 @@ import { ApiInstance } from "@/utils";
 import { cookies } from "next/headers";
 import { ACCESS_TOKEN_COOKIE_NAME } from "@/constants";
 import { redirect } from "next/navigation";
-import { AccountManager, User } from "@/types";
+import { AccountManager } from "@/types";
 
 export default async function page() {
 	const cookieStore = await cookies();
@@ -22,25 +22,41 @@ export default async function page() {
 		totalSites: 0,
 		totalCampaigns: 0,
 	};
+	let analyticsAvailable = true;
 
 	let userDetails: AccountManager | null = null;
 
 	if (cookieStore.has(ACCESS_TOKEN_COOKIE_NAME)) {
-		const res = await ApiInstance.get("/analytics/overview", {
-			headers: {
-				"auth-token": cookieStore.get(ACCESS_TOKEN_COOKIE_NAME)?.value,
-			},
-		});
+		try {
+			const userDetailsRes = await ApiInstance.get("/user/detail", {
+				headers: {
+					"auth-token": cookieStore.get(ACCESS_TOKEN_COOKIE_NAME)?.value,
+				},
+			});
 
-		const userDetailsRes = await ApiInstance.get("/user/detail", {
-			headers: {
-				"auth-token": cookieStore.get(ACCESS_TOKEN_COOKIE_NAME)?.value,
-			},
-		});
+			userDetails = userDetailsRes.data;
+		} catch (error) {
+			console.error(
+				"Failed to load dashboard user details:",
+				error instanceof Error ? error.message : "Unknown error"
+			);
+		}
 
-		userDetails = userDetailsRes.data;
+		try {
+			const res = await ApiInstance.get("/analytics/overview", {
+				headers: {
+					"auth-token": cookieStore.get(ACCESS_TOKEN_COOKIE_NAME)?.value,
+				},
+			});
 
-		analytics = res.data;
+			analytics = res.data;
+		} catch (error) {
+			analyticsAvailable = false;
+			console.error(
+				"Failed to load dashboard analytics:",
+				error instanceof Error ? error.message : "Unknown error"
+			);
+		}
 	}
 
 	if (!userDetails) {
@@ -54,6 +70,11 @@ export default async function page() {
 	return (
 		<>
 			<DashboardHeader />
+			{!analyticsAvailable && (
+				<p className="mt-4 text-2xl text-[#666666]" role="status">
+					Dashboard metrics are currently unavailable. Please try again later.
+				</p>
+			)}
 			<section className="grid md:grid-cols-3 gap-10 mt-10">
 				<Link
 					href={hasAccess ? "/clients" : ""}
@@ -66,7 +87,7 @@ export default async function page() {
 						<ClientsIcon />
 					</div>
 					<span className="text-[4rem] font-extrabold text-appBlack">
-						{analytics.totalClients}
+						{analyticsAvailable ? analytics.totalClients : "N/A"}
 					</span>
 				</Link>
 				<Link
@@ -80,7 +101,7 @@ export default async function page() {
 						<ClientsIcon fill="#3632ED" />
 					</div>
 					<span className="text-[4rem] font-extrabold text-appBlack">
-						{analytics.totalBrands}
+						{analyticsAvailable ? analytics.totalBrands : "N/A"}
 					</span>
 				</Link>
 				<Link
@@ -94,7 +115,7 @@ export default async function page() {
 						<ClientsIcon fill="#139B9B" />
 					</div>
 					<span className="text-[4rem] font-extrabold text-appBlack">
-						{analytics.totalAdvertisers}
+						{analyticsAvailable ? analytics.totalAdvertisers : "N/A"}
 					</span>
 				</Link>
 				<Link
@@ -108,7 +129,7 @@ export default async function page() {
 						<ClientsIcon fill="#ED3D05" />
 					</div>
 					<span className="text-[4rem] font-extrabold text-appBlack">
-						{analytics.totalFieldAuditors}
+						{analyticsAvailable ? analytics.totalFieldAuditors : "N/A"}
 					</span>
 				</Link>
 				<Link href={""} className="w-full h-[128px] rounded-2xl bg-white p-8">
@@ -119,7 +140,7 @@ export default async function page() {
 						<TotalSitesIcon />
 					</div>
 					<span className="text-[4rem] font-extrabold text-appBlack">
-						{analytics.totalSites}
+						{analyticsAvailable ? analytics.totalSites : "N/A"}
 					</span>
 				</Link>
 				<Link
@@ -132,7 +153,7 @@ export default async function page() {
 						<TotalCampaignsIcon />
 					</div>
 					<span className="text-[4rem] font-extrabold text-appBlack">
-						{analytics.totalCampaigns}
+						{analyticsAvailable ? analytics.totalCampaigns : "N/A"}
 					</span>
 				</Link>
 			</section>

@@ -11,6 +11,7 @@ import ResetClientPassword from "./ResetClientPassword";
 import useUserManagement from "@/hooks/useUserManagement";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import ClientPlaceholder from "@/components/shared/ClientPlaceholder";
+import EmptyTableRow from "@/components/shared/EmptyTableRow";
 
 export default function ClientsTable() {
 	const { getClients } = useUserManagement();
@@ -63,8 +64,8 @@ export default function ClientsTable() {
 							? Array(5)
 									.fill("")
 									.map((d, index) => <ClientPlaceholder key={index} />)
-							: //@ts-ignore
-							  data.data.map((d, index) => (
+							: data?.data?.length
+							? data.data.map((d: any, index: number) => (
 									<tr
 										key={index}
 										className="border-b-[#E6E6E6] border-b 
@@ -121,17 +122,18 @@ export default function ClientsTable() {
 											/>
 										</td>
 									</tr>
-							  ))}
+							  ))
+							: <EmptyTableRow colSpan={7} />}
 					</tbody>
 				</table>
 			</div>
-			<div className="my-12 flex items-center justify-center md:justify-end px-5 md:px-10">
+			{data?.data?.length > 0 && <div className="my-12 flex items-center justify-center md:justify-end px-5 md:px-10">
 				<Pagination
 					currentPage={currentPage}
 					totalPages={data?.totalPages}
 					setCurrentPage={setCurrentPage}
 				/>
-			</div>
+			</div>}
 		</div>
 	);
 }

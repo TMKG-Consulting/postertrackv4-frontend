@@ -23,7 +23,7 @@ export default function CompetitiveSiteReportImages() {
 						overrideSrc={currentImage}
 						width={565}
 						height={470}
-						alt="poster-track"
+						alt="Competitive site report photo"
 						className="w-full h-full "
 						priority={true}
 					/>
@@ -42,7 +42,7 @@ export default function CompetitiveSiteReportImages() {
 							width={565}
 							overrideSrc={image}
 							height={370}
-							alt="poster-track"
+							alt="Competitive site report photo thumbnail"
 							className="w-[90px] h-[60px] object-cover"
 							priority={true}
 						/>

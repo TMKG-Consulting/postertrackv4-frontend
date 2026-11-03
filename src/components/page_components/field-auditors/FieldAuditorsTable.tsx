@@ -13,6 +13,7 @@ import ResetFieldAuditorPassword from "./ResetFieldAuditorPassword";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import useUserManagement from "@/hooks/useUserManagement";
 import AccountManagerPlaceholder from "@/components/shared/AccountManagerPlaceholder";
+import EmptyTableRow from "@/components/shared/EmptyTableRow";
 
 export default function FieldAuditorsTable() {
 	const { getUsers, getFieldAuditors } = useUserManagement();
@@ -65,8 +66,8 @@ export default function FieldAuditorsTable() {
 							? Array(5)
 									.fill("")
 									.map((d, ind) => <AccountManagerPlaceholder key={ind} />)
-							: //@ts-ignore
-							  data?.data?.map((d, ind) => (
+							: data?.data?.length
+							? data.data.map((d: any, ind: number) => (
 									<tr
 										key={ind}
 										className="border-b-[#E6E6E6] border-b 
@@ -82,12 +83,16 @@ export default function FieldAuditorsTable() {
 													className="w-[30px] h-[30px] rounded-full object-cover"
 													width={30}
 													height={30}
-													alt="poster-track"
+													alt="Profile picture"
 													src={
 														d.profilePicture
 															? d.profilePicture
 															: "/no-avatar.svg"
 													}
+													unoptimized
+													onError={(event) => {
+														event.currentTarget.src = "/no-avatar.svg";
+													}}
 												/>
 												<span className="text-2xl font-medium w-max max-w-[130px] truncate">
 													{d.firstname} {d.lastname}
@@ -137,12 +142,13 @@ export default function FieldAuditorsTable() {
 											/>
 										</td>
 									</tr>
-							  ))}
+							  ))
+							: <EmptyTableRow colSpan={7} />}
 					</tbody>
 				</table>
 			</div>
 			<div className="my-12 flex items-center justify-center md:justify-end px-5 md:px-10">
-				{!isLoading && (
+				{!isLoading && data?.data?.length > 0 && (
 					<Pagination
 						currentPage={currentPage}
 						totalPages={data?.totalPages}

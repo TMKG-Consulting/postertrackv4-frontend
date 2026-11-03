@@ -16,6 +16,7 @@ import { Advertiser } from "@/types";
 import Modal from "@/components/shared/Modal";
 import CreateAdvertiserForm from "./create/CreateAdvertiserForm";
 import useAlert from "@/hooks/useAlert";
+import EmptyState from "@/components/shared/EmptyState";
 
 export default function AdvertisersTable() {
 	const { accessToken } = useCredentials();
@@ -144,8 +145,8 @@ export default function AdvertisersTable() {
 								<div className="bg-[#e5e5e5] animate-pulse h-[7px] rounded-full w-[50px]"></div>
 							</div>
 					  ))
-					: //@ts-ignore
-					  data.data
+					: data?.data?.length
+					? data.data
 							.sort((a: Advertiser, b: Advertiser) =>
 								a.name.toLowerCase().localeCompare(b.name.toLowerCase())
 							)
@@ -169,15 +170,16 @@ export default function AdvertisersTable() {
 										</AppButton>
 									</div>
 								</div>
-							))}
+							))
+					: <EmptyState />}
 			</div>
-			<div className="my-12 flex items-center justify-center md:justify-end px-5 md:px-10">
+			{data?.data?.length > 0 && <div className="my-12 flex items-center justify-center md:justify-end px-5 md:px-10">
 				<Pagination
 					currentPage={currentPage}
 					totalPages={data?.totalPages}
 					setCurrentPage={setCurrentPage}
 				/>
-			</div>
+			</div>}
 		</div>
 	);
 }

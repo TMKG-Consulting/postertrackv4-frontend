@@ -20,7 +20,7 @@ export default function Error({
 	return (
 		<div className="w-full h-full flex flex-col items-center justify-center bg-white">
 			<Image
-				alt="postertrack"
+				alt="HighCrown"
 				src={"/error.jpg"}
 				width={500}
 				height={500}

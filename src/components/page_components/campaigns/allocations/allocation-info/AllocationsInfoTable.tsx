@@ -11,6 +11,7 @@ import { CampaignAllocation } from "@/types";
 import AllocationsInfoActions from "./AllocationsInfoActions";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import EmptyTableRow from "@/components/shared/EmptyTableRow";
 
 export default function AllocationsInfoTable() {
 	const { accessToken } = useCredentials();
@@ -66,7 +67,8 @@ export default function AllocationsInfoTable() {
 							? Array(5)
 									.fill("")
 									.map((d, index) => <CampaignPlaceholder key={index} />)
-							: data.data.map((d: any, i: number) => (
+							: data?.data?.length
+							? data.data.map((d: any, i: number) => (
 									<tr
 										key={i}
 										className="border-b-[#E6E6E6] border-b 
@@ -92,16 +94,17 @@ export default function AllocationsInfoTable() {
 
 										
 									</tr>
-							  ))}
+							  ))
+							: <EmptyTableRow colSpan={4} />}
 					</tbody>
 				</table>
-				<div className="my-12 flex items-center justify-center md:justify-end px-5 md:px-10">
+				{data?.data?.length > 0 && <div className="my-12 flex items-center justify-center md:justify-end px-5 md:px-10">
 					<Pagination
 						currentPage={currentPage}
 						totalPages={data?.totalPages}
 						setCurrentPage={setCurrentPage}
 					/>
-				</div>
+				</div>}
 			</div>
 		</div>
 	);

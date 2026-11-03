@@ -14,6 +14,7 @@ import useCredentials from "@/hooks/useCredentials";
 import { useParams } from "next/navigation";
 import { ApiInstance } from "@/utils";
 import SitePlaceholder from "@/components/shared/SitePlaceholder";
+import EmptyTableRow from "@/components/shared/EmptyTableRow";
 
 export default function CampaignSiteListTable({
 	campaign,
@@ -89,7 +90,8 @@ export default function CampaignSiteListTable({
 					<tbody>
 						{isLoading || isFetching
 							? [1, 2, 3, 4, 5, 6].map((d, i) => <SitePlaceholder key={i} />)
-							: data?.siteList
+							: data?.siteList?.length
+							? data.siteList
 									.slice(startIndex, endIndex)
 									.map((d: Site, i: number) => {
 										const siteAssignment = data?.siteAssignments.find(
@@ -196,17 +198,18 @@ export default function CampaignSiteListTable({
 												</td>
 											</tr>
 										);
-									})}
+									})
+							: <EmptyTableRow colSpan={10} />}
 					</tbody>
 				</table>
 			</div>
-			<div className="my-12 flex items-center justify-center md:justify-end px-5 md:px-10">
+			{data?.siteList?.length > 0 && <div className="my-12 flex items-center justify-center md:justify-end px-5 md:px-10">
 				<Pagination
 					currentPage={currentPage}
 					setCurrentPage={setCurrentPage}
 					totalPages={totalPages}
 				/>
-			</div>
+			</div>}
 		</div>
 	);
 }
